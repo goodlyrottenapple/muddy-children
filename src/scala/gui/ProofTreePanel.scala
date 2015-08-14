@@ -1,4 +1,4 @@
-import swing.{Action, Component, Dialog, Swing, MenuItem, Graphics2D, ListView}
+import swing.{Action, Component, Dialog, Swing, MenuItem, Graphics2D, ListView, PopupMenu}
 import swing.event.{ButtonClicked, MouseClicked, KeyPressed, KeyReleased, Key}
 
 import javax.swing.KeyStroke.getKeyStroke
@@ -224,7 +224,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		}
 		
 	})
-	popup.add(copy);
+	popup.contents += copy
 
 	val copy_isa_se = new MenuItem(Action("Copy (Isabelle SE)") {
 		selectedSequentInPt match {
@@ -238,7 +238,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		}
 		
 	})
-	popup.add(copy_isa_se);
+	popup.contents += copy_isa_se
 
 	
 	val addAssm = new MenuItem(Action("Add as assm") {
@@ -247,7 +247,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		}
 		
 	})
-	popup.add(addAssm);
+	popup.contents += addAssm
 
 	val merge = new MenuItem(Action("Merge above") {
 		selectedSequentInPt match {
@@ -266,7 +266,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		}
 		
 	})
-	popup.add(merge);
+	popup.contents += merge
 
 	val findPT = new MenuItem(new Action("FindPT") {
 		accelerator = Some(getKeyStroke('f'))
@@ -306,7 +306,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 			}
 		}
 	})
-	popup.add(findPT);
+	popup.contents += findPT
 
 
 	def addAbove() = {
@@ -368,7 +368,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		accelerator = Some(getKeyStroke('a'))
       	def apply = addAbove()
 	})
-	popup.add(add1);
+	popup.contents += add1
 
 	def addBelow() = {
 		selectedSequentInPt match {
@@ -410,7 +410,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		accelerator = Some(getKeyStroke('A'))
       	def apply = addBelow()		
 	})
-	//popup.add(add2);
+	//popup.contents += add2
 
 	val delete1 = new MenuItem(new Action("Delete above") {
 		accelerator = Some(getKeyStroke('d'))
@@ -423,7 +423,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 			}
 		}
 	})
-	popup.add(delete1);
+	popup.contents += delete1
 
 	val delete2 = new MenuItem(new Action("Delete below") {
 		accelerator = Some(getKeyStroke('D'))
@@ -437,7 +437,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 			}
 		}
 	})
-	popup.add(delete2)
+	popup.contents += delete2
 
 
 	def cut() = {
@@ -511,7 +511,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 		accelerator = Some(getKeyStroke('c'))
       	def apply = cut()
 	})
-	//popup.add(cutt);
+	//popup.contents += cutt
 
 
 	val refl_forwK = new MenuItem(new Action("Apply Refl_forwK") {
@@ -568,7 +568,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
       		}
       	}
 	})
-	//popup.add(refl_forwK)
+	//popup.contents += refl_forwK
 
 	val displaySeqTree = new MenuItem(new Action("Display Sequent tree") {
 		accelerator = Some(getKeyStroke('t'))
@@ -585,7 +585,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
       		}
       	}
 	})
-	popup.add(displaySeqTree)
+	popup.contents += displaySeqTree
 
 	val displayX = new MenuItem(new Action("Display X") {
 		accelerator = Some(getKeyStroke('x'))
@@ -613,13 +613,13 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
       		}*/
      	}
 	})
-	//popup.add(displayX)
+	//popup.contents += displayX
 
-	popup.add(new swing.Menu("Apply Rule") {
+	popup.contents += new swing.Menu("Apply Rule") {
 		contents += cutt
     	contents += refl_forwK
     	contents += displayX
-  	})
+  	}
 
 	/*val replaceIntPT = new MenuItem(new Action("Replace into PT") {
       	def apply = {
@@ -639,7 +639,7 @@ class ProofTreePanel(session : CalcSession, gapBetweenLevels:Int = 10, gapBetwee
 			}
 		}
 	})
-	popup.add(replaceIntPT);*/
+	popup.contents += replaceIntPT*/
 
 
 	def unselect() : Unit = {

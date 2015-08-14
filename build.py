@@ -27,6 +27,9 @@ def compile_scala(flags, classes):
 	if not os.path.exists("bin"):
 		os.makedirs("bin")
 
+	pathsJava = glob("src/scala/*.java")
+	pathsJava += glob("src/scala/gui/*.java")
+
 	paths = glob("src/scala/*.scala")
 	paths += glob("src/scala/gui/*.scala")
 	libs = glob("lib/*.jar")
@@ -37,6 +40,14 @@ def compile_scala(flags, classes):
 	libs.append(".")
 	libs.append("bin")
 
+	fPathsJava = []
+	if classes:
+		for c in classes:
+			for p in pathsJava:
+				if c in p: fPathsJava.append(p)
+	else : fPathsJava = pathsJava
+
+
 	fPaths = []
 	if classes:
 		for c in classes:
@@ -44,8 +55,17 @@ def compile_scala(flags, classes):
 				if c in p: fPaths.append(p)
 	else : fPaths = paths
 
+	for p in fPathsJava:
+		print "compiling java:", p
+
 	for p in fPaths:
 		print "compiling:", p
+
+	if fPathsJava:
+		cmd = "javac -d bin -classpath " + ":".join(libs) + " " + " ".join(fPathsJava)
+		response,err = Popen(shlex.split(cmd), stdout=PIPE, stderr=PIPE).communicate()
+		if cmd_output_throws_error(flags, response, err, "Build failed!"): return False
+
 
 	if fPaths:
 		cmd = "scalac -d bin -classpath " + ":".join(libs) + " " + " ".join(fPaths)

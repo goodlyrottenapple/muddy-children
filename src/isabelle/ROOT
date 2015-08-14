@@ -1,0 +1,4 @@
+session "out" = "HOL" +
+  options [document = false]
+  theories
+    DEAK

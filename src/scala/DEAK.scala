@@ -1510,20 +1510,31 @@ final case class FdiamA_R() extends RuleOpAct
 final case class One_L() extends RuleOpAct
 final case class One_R() extends RuleOpAct
 final case class Pre_L() extends RuleOpAct
+final case class Pre_R() extends RuleOpAct
 
 def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
+  case (Pre_L(), Pre_R()) => false
+  case (Pre_R(), Pre_L()) => false
+  case (One_R(), Pre_R()) => false
+  case (Pre_R(), One_R()) => false
   case (One_R(), Pre_L()) => false
   case (Pre_L(), One_R()) => false
+  case (One_L(), Pre_R()) => false
+  case (Pre_R(), One_L()) => false
   case (One_L(), Pre_L()) => false
   case (Pre_L(), One_L()) => false
   case (One_L(), One_R()) => false
   case (One_R(), One_L()) => false
+  case (FdiamA_R(), Pre_R()) => false
+  case (Pre_R(), FdiamA_R()) => false
   case (FdiamA_R(), Pre_L()) => false
   case (Pre_L(), FdiamA_R()) => false
   case (FdiamA_R(), One_R()) => false
   case (One_R(), FdiamA_R()) => false
   case (FdiamA_R(), One_L()) => false
   case (One_L(), FdiamA_R()) => false
+  case (FdiamA_L(), Pre_R()) => false
+  case (Pre_R(), FdiamA_L()) => false
   case (FdiamA_L(), Pre_L()) => false
   case (Pre_L(), FdiamA_L()) => false
   case (FdiamA_L(), One_R()) => false
@@ -1532,6 +1543,8 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (One_L(), FdiamA_L()) => false
   case (FdiamA_L(), FdiamA_R()) => false
   case (FdiamA_R(), FdiamA_L()) => false
+  case (FboxA_R(), Pre_R()) => false
+  case (Pre_R(), FboxA_R()) => false
   case (FboxA_R(), Pre_L()) => false
   case (Pre_L(), FboxA_R()) => false
   case (FboxA_R(), One_R()) => false
@@ -1542,6 +1555,8 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (FdiamA_R(), FboxA_R()) => false
   case (FboxA_R(), FdiamA_L()) => false
   case (FdiamA_L(), FboxA_R()) => false
+  case (FboxA_L(), Pre_R()) => false
+  case (Pre_R(), FboxA_L()) => false
   case (FboxA_L(), Pre_L()) => false
   case (Pre_L(), FboxA_L()) => false
   case (FboxA_L(), One_R()) => false
@@ -1554,6 +1569,8 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (FdiamA_L(), FboxA_L()) => false
   case (FboxA_L(), FboxA_R()) => false
   case (FboxA_R(), FboxA_L()) => false
+  case (BdiamA_R(), Pre_R()) => false
+  case (Pre_R(), BdiamA_R()) => false
   case (BdiamA_R(), Pre_L()) => false
   case (Pre_L(), BdiamA_R()) => false
   case (BdiamA_R(), One_R()) => false
@@ -1568,6 +1585,8 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (FboxA_R(), BdiamA_R()) => false
   case (BdiamA_R(), FboxA_L()) => false
   case (FboxA_L(), BdiamA_R()) => false
+  case (BdiamA_L(), Pre_R()) => false
+  case (Pre_R(), BdiamA_L()) => false
   case (BdiamA_L(), Pre_L()) => false
   case (Pre_L(), BdiamA_L()) => false
   case (BdiamA_L(), One_R()) => false
@@ -1584,6 +1603,8 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (FboxA_L(), BdiamA_L()) => false
   case (BdiamA_L(), BdiamA_R()) => false
   case (BdiamA_R(), BdiamA_L()) => false
+  case (BboxA_R(), Pre_R()) => false
+  case (Pre_R(), BboxA_R()) => false
   case (BboxA_R(), Pre_L()) => false
   case (Pre_L(), BboxA_R()) => false
   case (BboxA_R(), One_R()) => false
@@ -1602,6 +1623,8 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (BdiamA_R(), BboxA_R()) => false
   case (BboxA_R(), BdiamA_L()) => false
   case (BdiamA_L(), BboxA_R()) => false
+  case (BboxA_L(), Pre_R()) => false
+  case (Pre_R(), BboxA_L()) => false
   case (BboxA_L(), Pre_L()) => false
   case (Pre_L(), BboxA_L()) => false
   case (BboxA_L(), One_R()) => false
@@ -1622,6 +1645,7 @@ def equal_RuleOpAct(x0: RuleOpAct, x1: RuleOpAct): Boolean = (x0, x1) match {
   case (BdiamA_L(), BboxA_L()) => false
   case (BboxA_L(), BboxA_R()) => false
   case (BboxA_R(), BboxA_L()) => false
+  case (Pre_R(), Pre_R()) => true
   case (Pre_L(), Pre_L()) => true
   case (One_R(), One_R()) => true
   case (One_L(), One_L()) => true
@@ -5002,6 +5026,29 @@ Structure_Comma(), Structure_Freevar(List('Y'))),
                           Structure_Freevar(List('X')))))))
 }
 
+def pre_r(a: Action, x1: Sequent): Boolean = (a, x1) match {
+  case (a, Sequenta(x, Structure_Formula(Formula_Precondition(alpha)))) =>
+    equal_Actiona(a, alpha)
+  case (a, Sequenta(v, Structure_Action_Structure(vb, vc, vd))) => false
+  case (a, Sequenta(v, Structure_Agent_Structure(vb, vc, vd))) => false
+  case (a, Sequenta(v, Structure_Bigcomma(vb))) => false
+  case (a, Sequenta(v, Structure_Bin(vb, vc, vd))) => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Action(vc)))) => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Action_Formula(vc, vd, ve))))
+    => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Agent(vc)))) => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Agent_Formula(vc, vd, ve)))) =>
+    false
+  case (a, Sequenta(v, Structure_Formula(Formula_Atprop(vc)))) => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Bin(vc, vd, ve)))) => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Freevar(vc)))) => false
+  case (a, Sequenta(v, Structure_Formula(Formula_Zer(vc)))) => false
+  case (a, Sequenta(v, Structure_Freevar(vb))) => false
+  case (a, Sequenta(v, Structure_Phi(vb))) => false
+  case (a, Sequenta(v, Structure_Zer(vb))) => false
+  case (a, Sequent_Structure(v)) => false
+}
+
 def pre_l(a: Action, x1: Sequent): Boolean = (a, x1) match {
   case (a, Sequenta(Structure_Formula(Formula_Precondition(alpha)), x)) =>
     equal_Actiona(a, alpha)
@@ -5129,6 +5176,40 @@ def ruleRuleOpAct(x: Locale, xa1: RuleOpAct): ruleder = (x, xa1) match {
               (_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
            Structure_Freevar(List('X'))))))
+  case (x, Pre_R()) =>
+    (x match {
+       case CutFormula(_) =>
+         ruledera(Sequenta(Structure_Freevar(List('X')),
+                            Structure_Freevar(List('Y'))),
+                   (_: Sequent) => None)
+       case Premise(_) =>
+         ruledera(Sequenta(Structure_Freevar(List('X')),
+                            Structure_Freevar(List('Y'))),
+                   (_: Sequent) => None)
+       case Part(_) =>
+         ruledera(Sequenta(Structure_Freevar(List('X')),
+                            Structure_Freevar(List('Y'))),
+                   (_: Sequent) => None)
+       case RelAKA(_) =>
+         ruledera(Sequenta(Structure_Freevar(List('X')),
+                            Structure_Freevar(List('Y'))),
+                   (_: Sequent) => None)
+       case PreFormula(alpha, f) =>
+         ruleder_cond((a: Sequent) => pre_r(alpha, a),
+                       Sequenta(Structure_Freevar(List('X')),
+                                 Structure_Freevar(List('Y'))),
+                       (_: Sequent) =>
+                         Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
+                    Structure_Formula(f)))))
+       case LAgent(_) =>
+         ruledera(Sequenta(Structure_Freevar(List('X')),
+                            Structure_Freevar(List('Y'))),
+                   (_: Sequent) => None)
+       case Empty() =>
+         ruledera(Sequenta(Structure_Freevar(List('X')),
+                            Structure_Freevar(List('Y'))),
+                   (_: Sequent) => None)
+     })
   case (x, BdiamA_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Action_Formula(Formula_BdiamA(),
                         Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
@@ -5824,7 +5905,8 @@ def ruleList: List[Rule] =
                         Rule]((a: RuleOpAct) => RuleOpActa(a),
                                List(FdiamA_L(), One_R(), BdiamA_R(), FboxA_R(),
                                      Pre_L(), BboxA_R(), BboxA_L(), FboxA_L(),
-                                     BdiamA_L(), One_L(), FdiamA_R())) ++
+                                     Pre_R(), BdiamA_L(), One_L(),
+                                     FdiamA_R())) ++
                     (map[RuleOpK,
                           Rule]((a: RuleOpK) => RuleOpKa(a),
                                  List(BdiamK_L(), FdiamK_R(), FboxK_R(),

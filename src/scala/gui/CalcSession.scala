@@ -1,4 +1,3 @@
-
 import swing.{Button, ListView, FileChooser, Publisher}
 import swing.event.Event
 
@@ -171,7 +170,7 @@ case class CalcSession() extends Publisher {
     def currentLocale : List[Locale] = {
     	val buff = ListBuffer[Locale]()
 		buff ++= assmsBuffer.toList.map({case (i,s) => Premise(s)}) 
-    	/*uncommentL?Action?Agent-BEGIN*//*/*uncommentL?Action?Agent-END*/*/
+    	/*/*uncommentL?Action?Agent-BEGIN*/*//*uncommentL?Action?Agent-END*/
     	if (relAKAreflexive) buff += RelAKA(relAKA) 
     	/*uncommentR?Action?Agent-BEGIN*//*/*uncommentR?Action?Agent-END*/*/
 		/*/*uncommentL?Action?Formula-BEGIN*/*//*uncommentL?Action?Formula-END*/

@@ -541,7 +541,7 @@ object Parser extends JavaTokenParsers with OperatorPrecedenceParsers {
 
 
 	lazy val ruleopactParser : PackratParser[RuleOpAct] = 
-		pre_lParser | one_rParser | one_lParser | fdiama_rParser | fdiama_lParser | fboxa_rParser | fboxa_lParser | bdiama_rParser | bdiama_lParser | bboxa_rParser | bboxa_lParser | "(" ~> ruleopactParser <~ ")"
+		pre_rParser | pre_lParser | one_rParser | one_lParser | fdiama_rParser | fdiama_lParser | fboxa_rParser | fboxa_lParser | bdiama_rParser | bdiama_lParser | bboxa_rParser | bboxa_lParser | "(" ~> ruleopactParser <~ ")"
 
 	lazy val fdiama_lParser : PackratParser[RuleOpAct] =
 		"FdiamA_L" ^^ { _ => FdiamA_L() }
@@ -566,6 +566,9 @@ object Parser extends JavaTokenParsers with OperatorPrecedenceParsers {
 
 	lazy val fboxa_lParser : PackratParser[RuleOpAct] =
 		"FboxA_L" ^^ { _ => FboxA_L() }
+
+	lazy val pre_rParser : PackratParser[RuleOpAct] =
+		"Pre_R" ^^ { _ => Pre_R() }
 
 	lazy val bdiama_lParser : PackratParser[RuleOpAct] =
 		"BdiamA_L" ^^ { _ => BdiamA_L() }

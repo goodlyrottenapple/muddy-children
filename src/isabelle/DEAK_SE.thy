@@ -103,10 +103,10 @@ One_R: "l \<turnstile>d ((Phi\<^sub>S alpha) \<turnstile>\<^sub>S ((One\<^sub>F 
 BdiamA_R: "l \<turnstile>d (X \<turnstile>\<^sub>S (A \<^sub>S)) \<Longrightarrow> l \<turnstile>d ((backA\<^sub>S alpha X) \<turnstile>\<^sub>S ((bdiamA\<^sub>F alpha A) \<^sub>S))"|
 FboxA_R: "l \<turnstile>d (X \<turnstile>\<^sub>S (forwA\<^sub>S alpha (A \<^sub>S))) \<Longrightarrow> l \<turnstile>d (X \<turnstile>\<^sub>S ((fboxA\<^sub>F alpha A) \<^sub>S))"|
 Pre_L: "(PreFormula alpha f) \<in> set l \<Longrightarrow> l \<turnstile>d (f \<^sub>S \<turnstile>\<^sub>S X) \<Longrightarrow> l \<turnstile>d ((One\<^sub>F alpha)\<^sub>S \<turnstile>\<^sub>S X)"|
-Pre_R: "(PreFormula alpha f) \<in> set l \<Longrightarrow> l \<turnstile>d (X \<turnstile>\<^sub>S f \<^sub>S) \<Longrightarrow> l \<turnstile>d (X \<turnstile>\<^sub>S (One\<^sub>F alpha)\<^sub>S)"|
 BboxA_R: "l \<turnstile>d (X \<turnstile>\<^sub>S (backA\<^sub>S alpha (A \<^sub>S))) \<Longrightarrow> l \<turnstile>d (X \<turnstile>\<^sub>S ((bboxA\<^sub>F alpha A) \<^sub>S))"|
 BboxA_L: "l \<turnstile>d ((A \<^sub>S) \<turnstile>\<^sub>S X) \<Longrightarrow> l \<turnstile>d (((bboxA\<^sub>F alpha A) \<^sub>S) \<turnstile>\<^sub>S (backA\<^sub>S alpha X))"|
 FboxA_L: "l \<turnstile>d ((A \<^sub>S) \<turnstile>\<^sub>S X) \<Longrightarrow> l \<turnstile>d (((fboxA\<^sub>F alpha A) \<^sub>S) \<turnstile>\<^sub>S (forwA\<^sub>S alpha X))"|
+Pre_R: "(PreFormula alpha f) \<in> set l \<Longrightarrow> l \<turnstile>d (X \<turnstile>\<^sub>S f \<^sub>S) \<Longrightarrow> l \<turnstile>d (X \<turnstile>\<^sub>S (One\<^sub>F alpha)\<^sub>S)"|
 BdiamA_L: "l \<turnstile>d ((backA\<^sub>S alpha (A \<^sub>S)) \<turnstile>\<^sub>S X) \<Longrightarrow> l \<turnstile>d (((bdiamA\<^sub>F alpha A) \<^sub>S) \<turnstile>\<^sub>S X)"|
 One_L: "l \<turnstile>d ((Phi\<^sub>S alpha) \<turnstile>\<^sub>S X) \<Longrightarrow> l \<turnstile>d (((One\<^sub>F alpha) \<^sub>S) \<turnstile>\<^sub>S X)"|
 FdiamA_R: "l \<turnstile>d (X \<turnstile>\<^sub>S (A \<^sub>S)) \<Longrightarrow> l \<turnstile>d ((forwA\<^sub>S alpha X) \<turnstile>\<^sub>S ((fdiamA\<^sub>F alpha A) \<^sub>S))"
