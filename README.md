@@ -4,4 +4,4 @@ This is the compiled version of the D.EAK calculus using the Calculus toolbox. N
 Requires scala and java to be installed though.
 
 
-To run navigate to the project folder in terminal and run `make gui`.
+To run, navigate to the project folder in terminal and run `./build.py` to compile the scala classes. Once compiled, run `make gui`.
