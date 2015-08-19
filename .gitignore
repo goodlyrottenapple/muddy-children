@@ -1,0 +1,4 @@
+# Isabelle temp files
+*.thy~
+
+.DS_Store
