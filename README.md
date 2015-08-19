@@ -1,2 +1,2 @@
-# muddy-children
-The Muddy Children Puzzle formalised in Isabelle 2015
+# The Muddy children puzzle formalization in Isabelle 2015
+This repository contains the muddy children puzzle formalised in Isabelle 2015.
