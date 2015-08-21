@@ -1666,7 +1666,6 @@ case goal1
 qed
 
 
-
 definition preFormula_father :: "nat \<Rightarrow> Locale" where
 "preFormula_father n = PreFormula (''father''@(nat_to_string n)) (father n)"
 
@@ -2288,22 +2287,20 @@ sorry
   case (Suc k)
 
 
-then obtain j' where "j' \<in> set J" by fastforce
-then obtain J' where "set J' = set J - {j'}" by (meson set_removeAll)
-with Suc have "card (set J') = Suc k" by (simp add: `j' \<in> set J`)
+then obtain J' where J'_def: "set J' = set J - {j}" by (meson set_removeAll)
+then obtain j' where j'_def: "j' \<in> set J'" by (metis Diff_empty List.finite_set Suc(4) Suc.prems(4) card_Diff_insert card_eq_SucD diff_Suc_1 empty_iff insert_subset order_refl)
+
+with Suc J'_def have "card (set J') = Suc k" by simp
 with Suc have ih: " \<forall>j\<in>set J'. loc \<turnstile>d (dirty2 (Suc n) J' \<and>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) )\<^sub>S \<turnstile>\<^sub>S (
-  fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j (nat_to_string j \<^sub>F)) \<^sub>S" using Diff_subset Suc_leD `set J' = set J - {j'}` subsetCE subsetI
+  fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j (nat_to_string j \<^sub>F)) \<^sub>S" using Diff_subset Suc_leD J'_def subsetCE subsetI
 proof -
   have "set J' \<subseteq> {1..Suc n}"
-    by (metis (no_types) Diff_subset Suc.prems(2) `set J' = set J - {j'}` subsetCE subsetI)
+    by (metis (no_types) Diff_subset Suc.prems(2) J'_def subsetCE subsetI)
   thus ?thesis
     by (meson Suc.hyps Suc.prems(1) Suc_leD `card (set J') = Suc k`)
 qed
 
-
-show ?case
-
-proof (cases "j \<in> set J'")
+(*proof (cases "j \<in> set J'")
 case goal1
 show ?case
         apply (rule_tac f="fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j nat_to_string j \<^sub>F" in derivable.SingleCut)
@@ -2342,12 +2339,13 @@ apply (rule_tac derivable.And_R)
 unfolding k_apply.simps
 thm E_impl4
 value "dirty2 3 [1,2]"
-value "dirty2 3 [1]"
+value "dirty2 3 [1]"*)
+
 
 (* ------------------ start of claim 1 ------------------ *)
 
-    have claim10: "loc \<turnstile>d (dirty (Suc (Suc n)) (Suc (Suc k)) \<and>\<^sub>F E (Suc (Suc n)) \<^sup>Suc (Suc k) vision (Suc (Suc n))) \<^sub>S \<turnstile>\<^sub>S 
-    (dirty (Suc (Suc n)) (Suc (Suc k)) \<and>\<^sub>F ( vision (Suc (Suc n)) \<and>\<^sub>F fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)))))\<^sub>S"
+    have claim10: "loc \<turnstile>d (dirty2 (Suc n) J \<and>\<^sub>F E (Suc n) \<^sup>Suc (Suc k) vision (Suc n)) \<^sub>S \<turnstile>\<^sub>S 
+    (dirty2 (Suc n) J \<and>\<^sub>F ( vision (Suc n) \<and>\<^sub>F fboxK\<^sub>F (nat_to_string j) ( E (Suc n) \<^sup>Suc k vision (Suc n))))\<^sub>S"
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.And_R)
     defer
@@ -2356,13 +2354,13 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.And_R)
     apply(subst k_apply.simps)
     apply (rule E_impl3)
-    using Suc apply simp
+    using Suc j'_def apply auto[1]
     apply(rule E_impl4)
     using assms by simp
   
   
-    have claim11:  "loc \<turnstile>d (dirty (Suc (Suc n)) (Suc (Suc k)) \<and>\<^sub>F ( vision (Suc (Suc n)) \<and>\<^sub>F fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)))))\<^sub>S \<turnstile>\<^sub>S 
-    ( (fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) )) \<and>\<^sub>F (fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S"
+    have claim11:  "loc \<turnstile>d (dirty2 (Suc n) J \<and>\<^sub>F ( vision (Suc n) \<and>\<^sub>F fboxK\<^sub>F (nat_to_string j) ( E (Suc n) \<^sup>Suc k vision (Suc n))))\<^sub>S \<turnstile>\<^sub>S 
+    ( (fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' )) \<and>\<^sub>F (fboxK\<^sub>F (nat_to_string j) ( E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S"
   
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.Comma_impR_disp2)
@@ -2377,12 +2375,13 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.Back_forw_K2)
     apply (rule_tac derivable.ImpR_R)
     apply (rule_tac derivable.Comma_impR_disp)
-    apply(rule_tac dirty_vision_der2)
-    using Suc(2,3) cut by auto
+    (*apply(rule_tac dirty_vision_der2)
+    using Suc(2,3) cut by auto*)
+sorry
   
   
-    have claim12: "loc \<turnstile>d ( (fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) )) \<and>\<^sub>F (fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S \<turnstile>\<^sub>S 
-    ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) ) \<and>\<^sub>F ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S"
+    have claim12: "loc \<turnstile>d ( (fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' )) \<and>\<^sub>F (fboxK\<^sub>F (nat_to_string j) ( E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S \<turnstile>\<^sub>S 
+    ( fboxK\<^sub>F (nat_to_string j) (( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' ) \<and>\<^sub>F ( E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S"
     apply (rule_tac derivable.FboxK_R)
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.Back_forw_K2)
@@ -2400,8 +2399,8 @@ value "dirty2 3 [1]"
     apply (rule_tac Id)
     by (rule_tac Id)
   
-    have claim13: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) ) \<and>\<^sub>F ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S \<turnstile>\<^sub>S 
-    ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) ) \<and>\<^sub>F ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S"
+    have claim13: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string j) (( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' ) \<and>\<^sub>F ( E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S \<turnstile>\<^sub>S 
+    ( fboxK\<^sub>F (nat_to_string j) (( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' ) \<and>\<^sub>F ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S"
   
     apply (rule_tac derivable.FboxK_R)
     apply (rule_tac derivable.FboxK_L)
@@ -2419,8 +2418,8 @@ value "dirty2 3 [1]"
     apply (rule_tac Id)
     by (rule_tac Id)
     
-    have claim14: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) ) \<and>\<^sub>F ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S \<turnstile>\<^sub>S 
-    ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( dirty (Suc (Suc n)) (Suc k) \<and>\<^sub>F E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S"
+    have claim14: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string j) (( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' ) \<and>\<^sub>F ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S \<turnstile>\<^sub>S 
+    ( fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( dirty2 (Suc n) J' \<and>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S"
     apply (rule_tac derivable.FboxK_R)
     apply (rule_tac derivable.FboxK_L)
     apply (rule_tac derivable.And_L)
@@ -2450,41 +2449,23 @@ value "dirty2 3 [1]"
     by (rule_tac Id)
     
 
-    have ih0: "\<forall>j\<in>{1..Suc k}.
-      loc \<turnstile>d (dirty (Suc n) (Suc k) \<and>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n)) \<^sub>S \<turnstile>\<^sub>S 
-             (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j (nat_to_string j \<^sub>F)) \<^sub>S"
-    using Suc(2) Suc.prems(2) by blast
-
-
-    from Suc have "0 < Suc k" by simp
-    with ih0 Suc(1) have ih: "\<forall>j\<in>{1..Suc k}.
-      loc \<turnstile>d ((dirty (Suc (Suc n)) (Suc k)) \<and>\<^sub>F (E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)))) \<^sub>S \<turnstile>\<^sub>S 
-             (fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string j nat_to_string j \<^sub>F )\<^sub>S"
-    apply(cases "Suc k \<le> Suc (Suc n)")
-    using Suc.prems(1) apply blast
-    proof -
-    case goal1 
-      then have "Suc k > Suc (Suc n)" by simp
-      with Suc(3) have False by simp
-      thus ?case ..
-    qed
     
-    have claim15: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( dirty (Suc (Suc n)) (Suc k) \<and>\<^sub>F E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) )) )\<^sub>S \<turnstile>\<^sub>S 
-    ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) )) )\<^sub>S"
+    have claim15: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( dirty2 (Suc n) J' \<and>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) )) )\<^sub>S \<turnstile>\<^sub>S 
+    ( fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) )) )\<^sub>S"
     apply (rule_tac derivable.FboxK_R)
     apply (rule_tac derivable.FboxK_L)
     apply (rule_tac derivable.ImpR_R)
     apply (rule_tac derivable.ImpR_L)
     defer
     apply (rule Id)
-    using ih Id by (metis One_nat_def Suc_le_mono atLeastAtMost_iff le_0_eq nat_le_linear)
+    using ih Id j'_def by simp
     
     
-    have claim16: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S 
-    ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) )) )\<^sub>S"
+    have claim16: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S 
+    ( fboxK\<^sub>F (nat_to_string j) ( (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) )) )\<^sub>S"
     apply (rule_tac derivable.FboxK_R)
     apply (rule_tac derivable.FboxK_L)
     apply (rule_tac derivable.ImpR_R)
@@ -2497,38 +2478,37 @@ value "dirty2 3 [1]"
     by (rule_tac Id)
 
 
-    have claim1: "loc \<turnstile>d (dirty (Suc (Suc n)) (Suc (Suc k)) \<and>\<^sub>F E (Suc (Suc n)) \<^sup>Suc (Suc k) vision (Suc (Suc n))) \<^sub>S \<turnstile>\<^sub>S 
-     ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-         nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) )) )\<^sub>S"
-    
-    apply (rule_tac f="dirty (Suc (Suc n)) (Suc (Suc k)) \<and>\<^sub>F (vision (Suc (Suc n)) \<and>\<^sub>F fboxK\<^sub>F nat_to_string (Suc (Suc k)) E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)))" in derivable.SingleCut)
+    have claim1: "loc \<turnstile>d (dirty2 (Suc n) J \<and>\<^sub>F E (Suc n) \<^sup>Suc (Suc k) vision (Suc n)) \<^sub>S \<turnstile>\<^sub>S 
+     ( fboxK\<^sub>F (nat_to_string j) ( (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+         nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) )) )\<^sub>S"
+    apply (rule_tac f="dirty2 (Suc n) J \<and>\<^sub>F (vision (Suc n) \<and>\<^sub>F fboxK\<^sub>F nat_to_string j E (Suc n) \<^sup>Suc k vision (Suc n))" in derivable.SingleCut)
     using cut apply simp
     using claim10 apply simp
     
-    apply (rule_tac f="fboxK\<^sub>F nat_to_string (Suc (Suc k)) ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) \<and>\<^sub>F
-      fboxK\<^sub>F nat_to_string (Suc (Suc k)) E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n))" in derivable.SingleCut)
+    apply (rule_tac f="fboxK\<^sub>F nat_to_string j ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F dirty2 (Suc n) J' \<and>\<^sub>F
+      fboxK\<^sub>F nat_to_string j E (Suc n) \<^sup>Suc k vision (Suc n)" in derivable.SingleCut)
     using cut apply simp
     using claim11 apply simp
     
-    apply (rule_tac f="fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) ) \<and>\<^sub>F ( E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) ))" in derivable.SingleCut)
+    apply (rule_tac f="fboxK\<^sub>F (nat_to_string j) (( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' ) \<and>\<^sub>F ( E (Suc n) \<^sup>Suc k vision (Suc n) ))" in derivable.SingleCut)
     using cut apply simp
     using claim12 apply simp
     
-    apply (rule_tac f=" fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty (Suc (Suc n)) (Suc k) ) \<and>\<^sub>F ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) ))" in derivable.SingleCut)
+    apply (rule_tac f=" fboxK\<^sub>F (nat_to_string j) (( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F dirty2 (Suc n) J' ) \<and>\<^sub>F ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) ))" in derivable.SingleCut)
     using cut apply simp
     using claim13 apply simp
     
-    apply (rule_tac f="fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( dirty (Suc (Suc n)) (Suc k) \<and>\<^sub>F E (Suc (Suc n)) \<^sup>Suc k vision (Suc (Suc n)) ))" in derivable.SingleCut)
+    apply (rule_tac f="fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( dirty2 (Suc n) J' \<and>\<^sub>F E (Suc n) \<^sup>Suc k vision (Suc n) ))" in derivable.SingleCut)
     using cut apply simp
     using claim14 apply simp
     
-    apply (rule_tac f="fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-         nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ))" in derivable.SingleCut)
+    apply (rule_tac f="fboxK\<^sub>F (nat_to_string j) ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+         nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ))" in derivable.SingleCut)
     using cut apply simp
     using claim15 apply simp
     
-    apply (rule_tac f="fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-         nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ))" in derivable.SingleCut)
+    apply (rule_tac f="fboxK\<^sub>F (nat_to_string j) ( (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+         nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ))" in derivable.SingleCut)
     using cut apply simp
     using claim16 apply simp
     
@@ -2541,17 +2521,16 @@ value "dirty2 3 [1]"
 
 (* In lem363_ we prove the different steps of Lemma 36.3 -- see p23 of the paper Ma Pal Sad*) 
     
-    have lem363a: "loc \<turnstile>d ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ))) \<and>\<^sub>F 
+    have lem363a: "loc \<turnstile>d ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ))) \<and>\<^sub>F 
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k (no (Suc(Suc n)) )) )\<^sub>S
-     \<turnstile>\<^sub>S ( ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ) ) )\<and>\<^sub>F (
-     ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k (no (Suc n) )) )\<^sub>S
+     \<turnstile>\<^sub>S ( ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ) ) )\<and>\<^sub>F (
+     ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k(no (Suc(Suc n)) )) ) )
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k(no (Suc n) )) ) )
      )\<^sub>S" 
-    
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.And_R)
     
@@ -2571,19 +2550,18 @@ value "dirty2 3 [1]"
     
     
     have lem363b: "loc \<turnstile>d
-     ( ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ) ) )\<and>\<^sub>F (
-     ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F
+     ( ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ) ) )\<and>\<^sub>F (
+     ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k (no (Suc(Suc n)) )) ) )
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k (no (Suc n) )) ) )
      )\<^sub>S
      \<turnstile>\<^sub>S 
-     ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ) \<and>\<^sub>F 
+     ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ) \<and>\<^sub>F 
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k(no (Suc(Suc n)) )) )
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k(no (Suc n) )) )
     ) )\<^sub>S" 
-    
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.ImpR_R)
     apply (rule_tac derivable.Comma_impR_disp)
@@ -2614,18 +2592,17 @@ value "dirty2 3 [1]"
 
 (****************************************************************** NEW ******************************************************************)
     have lem363c: "loc \<turnstile>d
-     ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ) \<and>\<^sub>F 
+     ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ) \<and>\<^sub>F 
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k(no (Suc(Suc n)))) )
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k(no (Suc n))) )
     ) )\<^sub>S
      \<turnstile>\<^sub>S 
-     ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ) \<and>\<^sub>F 
+     ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ) \<and>\<^sub>F 
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )
     ) )\<^sub>S" 
-    
     apply (rule_tac derivable.ImpR_R)
     apply (rule_tac derivable.ImpR_L)
     defer
@@ -2641,7 +2618,7 @@ value "dirty2 3 [1]"
     
     apply(subst k_apply_elim_diamA)
     defer apply(simp)
-    apply (rule_tac f = "( (fdiamK\<^sub>F (nat_to_string 1) ( (nat_to_string 1 \<^sub>F) )) \<and>\<^sub>F (fdiamK\<^sub>F (nat_to_string 1) ( (nat_to_string 1 \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F )) )" in derivable.SingleCut)
+    apply (rule_tac f = "( (fdiamK\<^sub>F (nat_to_string j') ( (nat_to_string j' \<^sub>F) )) \<and>\<^sub>F (fdiamK\<^sub>F (nat_to_string j') ( (nat_to_string j' \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F )) )" in derivable.SingleCut)
     using cut apply simp
     defer
     
@@ -2649,18 +2626,17 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.Comma_impL_disp2)
     apply (rule_tac derivable.W_impL_L)
     apply (rule Id)
-    by (metis One_nat_def Suc_leI no_imp zero_less_Suc)
+    sorry
     
     
     have lem363d: "loc \<turnstile>d
      ( ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ) \<and>\<^sub>F 
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ) \<and>\<^sub>F 
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )
     ) )\<^sub>S \<turnstile>\<^sub>S ( (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) 
-     \<and>\<^sub>F ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S" 
-    
+     nat_to_string (Suc n)) ( ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) 
+     \<and>\<^sub>F ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S" 
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.Comma_impR_disp2)
     apply (rule_tac derivable.FdiamA_L)
@@ -2679,10 +2655,10 @@ value "dirty2 3 [1]"
     
     
     have lem363e: "loc \<turnstile>d
-     ( ( ( ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k ( fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) )) \<and>\<^sub>F 
-     ( ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k (fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F))) )
-    ) )\<^sub>S \<turnstile>\<^sub>S ( ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k ( ( fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) 
-     \<and>\<^sub>F ( fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S" 
+     ( ( ( ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k ( fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) )) \<and>\<^sub>F 
+     ( ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k (fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F))) )
+    ) )\<^sub>S \<turnstile>\<^sub>S ( ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k ( ( fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) 
+     \<and>\<^sub>F ( fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S" 
     
     apply (subst k_apply_BoxDiam)
     using cut apply simp
@@ -2690,10 +2666,9 @@ value "dirty2 3 [1]"
     done
     
     have lem363f: "loc \<turnstile>d
-     ( ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k ( ( fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) 
-     \<and>\<^sub>F ( fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k ( \<bottom>\<^sub>F )) \<^sub>S" 
-    
-    apply ( rule k_apply_elim_diamA )
+     ( ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k ( ( fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) 
+     \<and>\<^sub>F ( fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k ( \<bottom>\<^sub>F )) \<^sub>S" 
+    apply (rule k_apply_elim_diamA )
     apply (rule_tac derivable.Bot_R)
     apply (rule_tac derivable.Refl_ForwK)
     using agent apply simp
@@ -2711,33 +2686,32 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.Bot_L) 
     done
     
-    (*have LEM363: *)have lem363: "loc \<turnstile>d ( ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ))) \<and>\<^sub>F 
+    (*have LEM363: *)have lem363: "loc \<turnstile>d ( ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ))) \<and>\<^sub>F 
      (fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k (no (Suc(Suc n)) )) )\<^sub>S
-     \<turnstile>\<^sub>S ( ((nat_to_string (Suc (Suc k)) \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F
+     nat_to_string (Suc n)) ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k (no (Suc n) )) )\<^sub>S
+     \<turnstile>\<^sub>S ( ((nat_to_string j \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F
      )\<^sub>S" 
-    
-    apply(rule_tac f=" (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
+    apply(rule_tac f=" (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
           fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 nat_to_string 1 \<^sub>F) \<and>\<^sub>F
-         (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' nat_to_string j' \<^sub>F) \<and>\<^sub>F
+         (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
           fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k no (Suc (Suc n)))" in derivable.SingleCut)
+     nat_to_string (Suc n)) Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k no (Suc n))" in derivable.SingleCut)
     using cut apply simp
     using lem363a apply simp
     
     
-    apply (rule_tac f="((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
-     ( (fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F (nat_to_string 1) (nat_to_string 1 )\<^sub>F ) \<and>\<^sub>F
-    ( fdiamA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k no (Suc (Suc n))))" in derivable.SingleCut)
+    apply (rule_tac f="((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
+     ( (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F (nat_to_string j') (nat_to_string j' )\<^sub>F ) \<and>\<^sub>F
+    ( fdiamA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k no (Suc n)))" in derivable.SingleCut)
     using cut apply simp
     using lem363b apply simp
     
-    apply (rule_tac f=" ((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
-     ( (fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F (nat_to_string 1) (nat_to_string 1) \<^sub>F ) \<and>\<^sub>F
+    apply (rule_tac f=" ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F
+     ( (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F (nat_to_string j') (nat_to_string j') \<^sub>F ) \<and>\<^sub>F
      ( fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fdiamK\<^sub>F (nat_to_string 1) ( (nat_to_string 1 \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) )) " in derivable.SingleCut)
+     nat_to_string (Suc n)) Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k fdiamK\<^sub>F (nat_to_string j') ( (nat_to_string j' \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) )) " in derivable.SingleCut)
     using cut apply simp
     using lem363c apply simp
     
@@ -2750,8 +2724,8 @@ value "dirty2 3 [1]"
     thm lem363d
     
     apply (rule_tac f="(fdiamA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) ( ( Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) 
-     \<and>\<^sub>F ( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) ))" in derivable.SingleCut)
+     nat_to_string (Suc n)) ( ( Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) 
+     \<and>\<^sub>F ( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) ))" in derivable.SingleCut)
     using cut apply simp
 
     using lem363d apply simp
@@ -2760,12 +2734,12 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.Forw_back_A2)
     
         
-    apply (rule_tac f="( Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k ( ( fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) 
-     \<and>\<^sub>F ( fdiamK\<^sub>F nat_to_string 1 ((nat_to_string 1 \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) ))" in derivable.SingleCut)
+    apply (rule_tac f="( Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k ( ( fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) 
+     \<and>\<^sub>F ( fdiamK\<^sub>F nat_to_string j' ((nat_to_string j' \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) ))" in derivable.SingleCut)
     using cut apply simp
     using lem363e apply simp
         
-    apply (rule_tac f=" Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k \<bottom>\<^sub>F " in derivable.SingleCut)
+    apply (rule_tac f=" Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k \<bottom>\<^sub>F " in derivable.SingleCut)
     using cut apply simp
     using lem363f apply simp
     
@@ -2783,16 +2757,15 @@ value "dirty2 3 [1]"
 (* ----------------------------------- On going proof of claim 2 -- Work in progress -----------------------------------*)
 
   
-    have claim2: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S 
-    ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k (nat_to_string (Suc (Suc k)) \<^sub>F)) )) )\<^sub>S"
-    
+    have claim2: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string j) ( (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S 
+    ( fboxK\<^sub>F (nat_to_string j) (( father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k (nat_to_string j \<^sub>F)) )) )\<^sub>S"
     apply (rule_tac derivable.FboxK_R)
     apply (rule_tac derivable.FboxK_L)
     apply (rule_tac derivable.ImpR_R)
-    apply (rule_tac f = "(father (Suc (Suc n))) \<rightarrow>\<^sub>F ((((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-     nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ))" in derivable.SingleCut)
+    apply (rule_tac f = "(father (Suc n)) \<rightarrow>\<^sub>F ((((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+     nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ))" in derivable.SingleCut)
     using cut apply simp
     apply (rule_tac derivable.ImpR_R)
     apply (rule_tac derivable.Comma_impR_disp)
@@ -2821,7 +2794,7 @@ value "dirty2 3 [1]"
     apply(subst k_apply_S_display_2)
     
     apply (rule_tac derivable.FboxA_R)
-    apply (rule_tac f=" ( One\<^sub>F ((''no'' @ nat_to_string (Suc (Suc n))))) \<rightarrow>\<^sub>F ( nat_to_string (Suc (Suc k)) \<^sub>F) " in derivable.SingleCut)
+    apply (rule_tac f=" ( One\<^sub>F ((''no'' @ nat_to_string (Suc n)))) \<rightarrow>\<^sub>F ( nat_to_string j \<^sub>F) " in derivable.SingleCut)
     using cut apply simp
     defer
     
@@ -2848,21 +2821,21 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.E_L)
     
     
-    apply (rule_tac f= "(((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 nat_to_string 1 \<^sub>F) \<and>\<^sub>F
-      fdiamA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FdiamA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k no (Suc (Suc n))" in derivable.SingleCut)
+    apply (rule_tac f= "(((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' nat_to_string j' \<^sub>F) \<and>\<^sub>F
+      fdiamA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FdiamA (''no'' @ nat_to_string (Suc n)) \<^sup>k no (Suc n)" in derivable.SingleCut)
     using cut apply blast
     apply (rule_tac derivable.And_R)
     apply (rule_tac derivable.FdiamA_R)
 
     apply (rule_tac k_apply_S_F_forw_diam)
-    apply (rule_tac f="no (Suc (Suc n))" in derivable.Pre_L)
+    apply (rule_tac f="no (Suc n)" in derivable.Pre_L)
     using preNo unfolding preFormula_no_def apply blast
     apply(rule Id)+
     
-    apply(rule_tac f = "((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F" in derivable.SingleCut)
+    apply(rule_tac f = "((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F" in derivable.SingleCut)
     using cut apply blast
     using lem363 apply simp
-    apply (rule_tac f="( nat_to_string (Suc (Suc k)) \<^sub>F) " in derivable.SingleCut)
+    apply (rule_tac f="( nat_to_string j \<^sub>F) " in derivable.SingleCut)
     using cut apply blast
     defer
     apply (rule k_apply_S_Atom)
@@ -2894,9 +2867,9 @@ value "dirty2 3 [1]"
 
 (* ------------------ start of claim 3 ------------------ *)
 
-    have claim3: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-      nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k (nat_to_string (Suc (Suc k)) \<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S 
-      ( (fboxA\<^sub>F (''father'' @  nat_to_string (Suc (Suc n)))  fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (  Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k (nat_to_string (Suc (Suc k)) \<^sub>F)) ) )\<^sub>S"
+    have claim3: "loc \<turnstile>d ( fboxK\<^sub>F (nat_to_string j) (( father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+      nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k (nat_to_string j \<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S 
+      ( (fboxA\<^sub>F (''father'' @  nat_to_string (Suc n))  fboxK\<^sub>F (nat_to_string j) (  Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k (nat_to_string j \<^sub>F)) ) )\<^sub>S"
     apply (rule_tac derivable.FboxA_R)
     apply (rule_tac derivable.Back_forw_A2)
     apply (rule_tac derivable.FboxK_R)
@@ -2905,7 +2878,7 @@ value "dirty2 3 [1]"
     apply (rule_tac derivable.Bigcomma_Nil_L)
     apply (rule_tac derivable.Comma_impR_disp)
     apply (rule_tac derivable.Bigcomma_Cons_L)
-    apply(rule_tac rel=rel and beta="''father'' @ nat_to_string (Suc (Suc n))" in Swapout_R_1)
+    apply(rule_tac rel=rel and beta="''father'' @ nat_to_string (Suc n)" in Swapout_R_1)
     using rel_refl apply (simp,simp)
     
     
@@ -2915,11 +2888,11 @@ value "dirty2 3 [1]"
     
     apply (rule_tac derivable.FboxA_L)
     apply (rule_tac Id)
-    apply (rule_tac f="One\<^sub>F (''father'' @ nat_to_string (Suc (Suc n)))" in derivable.SingleCut)
+    apply (rule_tac f="One\<^sub>F (''father'' @ nat_to_string (Suc n))" in derivable.SingleCut)
     using cut apply simp
     apply (rule_tac derivable.One_R)
     
-    apply (rule_tac f="father (Suc (Suc n))" in derivable.Pre_L)
+    apply (rule_tac f="father (Suc n)" in derivable.Pre_L)
     using preFather unfolding preFormula_father_def apply blast
     by (rule_tac Id)
 
@@ -2928,8 +2901,8 @@ value "dirty2 3 [1]"
 (* ------------------ start of claim 4 ------------------ *)
 
     have claim4: "loc \<turnstile>d 
-      ( (fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n)))  fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (  Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k (nat_to_string (Suc (Suc k)) \<^sub>F)) ) )\<^sub>S \<turnstile>\<^sub>S 
-      (fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k fboxK\<^sub>F nat_to_string (Suc (Suc k)) nat_to_string (Suc (Suc k)) \<^sub>F) \<^sub>S"
+      ( (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n))  fboxK\<^sub>F (nat_to_string j) (  Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k (nat_to_string j \<^sub>F)) ) )\<^sub>S \<turnstile>\<^sub>S 
+      (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k fboxK\<^sub>F nat_to_string j nat_to_string j \<^sub>F) \<^sub>S"
     apply (rule_tac derivable.FboxA_R)
     apply (rule_tac derivable.FboxA_L)
     
@@ -2943,39 +2916,24 @@ value "dirty2 3 [1]"
 (* ------------------- end of claim 4 ------------------- *)
 
     show ?case
-    proof rule
-    case goal1
-      thus ?case 
-      proof (cases "j \<in> {1..Suc k}")
-      case goal1
-      thus ?case sorry
-
-      next
-      case goal2
-        then have j_def: "j = Suc (Suc k)" by simp
-        thus ?case
-        unfolding j_def
-        apply (rule_tac f="fboxK\<^sub>F (nat_to_string (Suc (Suc k))) ( (((nat_to_string (Suc (Suc k)) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-          nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>k fboxK\<^sub>F nat_to_string 1 (nat_to_string 1 \<^sub>F)) ))" in derivable.SingleCut)
+        apply (rule_tac f="fboxK\<^sub>F (nat_to_string j) ( (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) \<and>\<^sub>F father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+          nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>k fboxK\<^sub>F nat_to_string j' (nat_to_string j' \<^sub>F)) ))" in derivable.SingleCut)
         using cut apply simp
-        using claim1 apply blast
+        using claim1 Suc apply blast
       
-        apply (rule_tac f="fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (( father (Suc (Suc n)) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
-          nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k (nat_to_string (Suc (Suc k)) \<^sub>F)) ))" in derivable.SingleCut)
+        apply (rule_tac f="fboxK\<^sub>F (nat_to_string j) (( father (Suc n) ) \<rightarrow>\<^sub>F ( (fboxA\<^sub>F (''father'' @
+          nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k (nat_to_string j \<^sub>F)) ))" in derivable.SingleCut)
         using cut apply simp
-        using claim2 apply blast
+        using claim2 Suc apply blast
 
         apply (rule_tac f="(fboxA\<^sub>F (''father'' @
-          nat_to_string (Suc (Suc n)))  fboxK\<^sub>F (nat_to_string (Suc (Suc k))) (  Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k (nat_to_string (Suc (Suc k)) \<^sub>F)) )" in derivable.SingleCut)
+          nat_to_string (Suc n))  fboxK\<^sub>F (nat_to_string j) (  Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k (nat_to_string j \<^sub>F)) )" in derivable.SingleCut)
         using cut apply simp
         using claim3 apply simp
       
-        apply (rule_tac f="fboxA\<^sub>F (''father'' @ nat_to_string (Suc (Suc n))) Formula_FboxA (''no'' @ nat_to_string (Suc (Suc n))) \<^sup>Suc k fboxK\<^sub>F nat_to_string (Suc (Suc k)) nat_to_string (Suc (Suc k)) \<^sub>F" in derivable.SingleCut)
+        apply (rule_tac f="fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>Suc k fboxK\<^sub>F nat_to_string j nat_to_string j \<^sub>F" in derivable.SingleCut)
         using cut apply simp
         using claim4 apply simp
-        by (rule_tac Id)
-      qed
-    qed
-  qed
+        using Id by blast 
 qed
 end
