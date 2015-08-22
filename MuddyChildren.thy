@@ -1618,8 +1618,8 @@ proof -
 case goal1
   from assms have cond: "\<forall>j\<in>set J. j \<le> n \<and> 0 < j" "\<forall>j\<in>set J'. j \<le> n \<and> 0 < j" by auto
 
-  have 1: "loc \<turnstile>d (\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J) @ (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J]))) \<^sub>S \<turnstile>\<^sub>S ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F (\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J') @ (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J']))) \<^sub>S"
-  apply(rule_tac f= "(\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J))) \<and>\<^sub>F ((\<And>\<^sub>F (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])))" in derivable.SingleCut)
+  have 1: "loc \<turnstile>d (\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J') @ (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J]))) \<^sub>S \<turnstile>\<^sub>S ((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F (\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J') @ (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J']))) \<^sub>S"
+  apply(rule_tac f= "(\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J'))) \<and>\<^sub>F ((\<And>\<^sub>F (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])))" in derivable.SingleCut)
   using cut apply blast
   apply(rule_tac conj_unfold_2)
   using cut apply blast
@@ -1691,22 +1691,26 @@ case goal1
   qed
 
 
-  have subst1: "map ((\<lambda>x. fboxK\<^sub>F nat_to_string j x \<^sub>F) \<circ> nat_to_string) J @ map ((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J] = 
-    map (\<lambda>x. fboxK\<^sub>F nat_to_string j x) (map ((\<lambda>x. x \<^sub>F) \<circ> nat_to_string) J @ map ((\<lambda>x. ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n .  x \<notin> set J])" by simp
+  have subst1: "map ((\<lambda>x. fboxK\<^sub>F nat_to_string j x \<^sub>F) \<circ> nat_to_string) J' @ map ((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J] = 
+    map (\<lambda>x. fboxK\<^sub>F nat_to_string j x) (map ((\<lambda>x. x \<^sub>F) \<circ> nat_to_string) J' @ map ((\<lambda>x. ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n .  x \<notin> set J])" by simp
 
+  have subst2: "((\<lambda>x. ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) = ((\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F))" by (meson comp_apply)
+  have subst3: "((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) = (\<lambda>x. (nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)" by auto
+  have subst4: "((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) = (\<lambda>x. fboxK\<^sub>F nat_to_string j ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F))" by (meson comp_apply)
+  have subst5: "((\<lambda>x. fboxK\<^sub>F nat_to_string j x \<^sub>F) \<circ> nat_to_string) = (\<lambda>x. fboxK\<^sub>F nat_to_string j nat_to_string x \<^sub>F)" by (meson comp_apply)
 
   have "loc \<turnstile>d ((\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J) @ (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J]))) \<^sub>S) ;\<^sub>S (vision n \<^sub>S) \<turnstile>\<^sub>S 
     (fboxK\<^sub>F nat_to_string j (((nat_to_string j \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F (\<And>\<^sub>F ((map (Formula_Atprop \<circ> nat_to_string) J') @ (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J']))))) \<^sub>S"
-  apply(rule_tac f ="fboxK\<^sub>F nat_to_string j (\<And>\<^sub>F map (Formula_Atprop \<circ> nat_to_string) J @ map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
+  apply(rule_tac f ="fboxK\<^sub>F nat_to_string j (\<And>\<^sub>F map (Formula_Atprop \<circ> nat_to_string) J' @ map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
   using cut apply blast
   defer
   using FboxK_L FboxK_R 1 apply blast
-  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. fboxK\<^sub>F nat_to_string j (x \<^sub>F)) \<circ> nat_to_string) J @ map ((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
+  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. fboxK\<^sub>F nat_to_string j (x \<^sub>F)) \<circ> nat_to_string) J' @ map ((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
   using cut apply simp
   defer
   apply(subst subst1)
   using cut conj_box_distrib apply blast
-  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. fboxK\<^sub>F nat_to_string j (x \<^sub>F)) \<circ> nat_to_string) J) \<and>\<^sub>F (\<And>\<^sub>F map ((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
+  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. fboxK\<^sub>F nat_to_string j (x \<^sub>F)) \<circ> nat_to_string) J') \<and>\<^sub>F (\<And>\<^sub>F map ((\<lambda>x. fboxK\<^sub>F nat_to_string j ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
   using cut apply simp
   defer
   apply(rule_tac conj_unfold_2b)
@@ -1729,120 +1733,82 @@ case goal1
   apply (rule_tac derivable.E_L)
   apply (rule_tac derivable.A_L2)
   apply (rule_tac derivable.And_R)
-unfolding vision_def
-value "vision 2"
-thm conj_der2b
-  sorry
-  
-  thus ?case unfolding dirty2_def using cond by simp
-qed
 
-lemma dirty_vision_der2 : 
-  assumes "0 \<le> (Suc k) \<and> (Suc k) \<le> n" 
-  and cut: "\<And>f. CutFormula f \<in> set loc"
-  shows "loc \<turnstile>d ((nat_to_string (Suc k) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F \<^sub>S) ;\<^sub>S
-  (backK\<^sub>S nat_to_string (Suc k) (dirty n (Suc k) \<^sub>S) ;\<^sub>S (vision n \<^sub>S)) \<turnstile>\<^sub>S dirty n k \<^sub>S"
-proof -
-case goal1
-  def dv_l1 \<equiv> "map (\<lambda>i. (nat_to_string i)\<^sub>F) (upto' 1 k)"
-  def dv_l2 \<equiv> "map (\<lambda>i. (((nat_to_string i)\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F )) (upto' ((Suc k)+1) n)"
-
-  have 0: "{i::nat. 0 < i \<and> i < (Suc k)} = {1::nat..k}" "{i::nat. (Suc k) < i \<and> i \<le> n} = {((Suc k)+1)..n}" by auto
-  with goal1 have 1: "(set (upto' 1 k)) = {1::nat..k}" "(set (upto' ((Suc k)+1) n)) = {((Suc k)+1)..n}" using upto'_simp1
-  apply (metis One_nat_def Suc_eq_plus1 atLeastatMost_empty discrete less_Suc_eq list.set(1) upto'.simps(1) zero_less_Suc)
-  using upto'_simp1 upto'_simp2 by (metis assms(1) discrete le_eq_less_or_eq)
-
-  obtain dv_s1 dv_s2 where d_and_v_set_def: "dv_s1 = {(nat_to_string i)\<^sub>F | i . 0 < i \<and> i < (Suc k)}" "dv_s2 = {((nat_to_string i)\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F | i . (Suc k) < i \<and> i \<le> n}" by simp
-  then have 2: "set dv_l1 = image (\<lambda>i. nat_to_string i \<^sub>F) (set (upto' 1 k))" "set dv_l2 = image (\<lambda>i. (((nat_to_string i)\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F )) (set (upto' ((Suc k)+1) n))" unfolding dv_l1_def dv_l2_def by simp+
-  with 0 1 have "image (\<lambda>i. nat_to_string i \<^sub>F) (set (upto' 1 k)) = dv_s1" "image (\<lambda>i. (((nat_to_string i)\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F )) (set (upto' ((Suc k)+1) n)) = dv_s2" unfolding d_and_v_set_def by blast+
-  with 2 have "set dv_l1 = dv_s1" "set dv_l2 = dv_s2" by simp+
-  then have 3: "set (dv_l1@dv_l2) = dv_s1 \<union> dv_s2" by simp
-
-  have 30: "set (dirty'_aux n (n - k)) = {(nat_to_string i)\<^sub>F | i . 0 < i \<and> i \<le> k} \<union> {((nat_to_string i)\<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F | i . k < i \<and> i \<le> n}"
-  using assms dirty_set by simp
-
-  have "{i . 0 < i \<and> i \<le> k} = {i . 0 < i \<and> i < Suc k}" by fastforce
-  then have 31: "{nat_to_string i \<^sub>F | i . 0 < i \<and> i \<le> k} = {nat_to_string i \<^sub>F | i . 0 < i \<and> i < Suc k}" by blast
-
-  from assms have "{i::nat. k < i \<and> i \<le> n} = {i::nat. Suc k < i \<and> i \<le> n} \<union> {(Suc k)}" by auto
-  then have 32: "{(nat_to_string i \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F |i. k < i \<and> i \<le> n} = {(nat_to_string i \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F |i. Suc k < i \<and> i \<le> n} \<union> {(nat_to_string (Suc k) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F}" by blast
-  with 30 31 have "set (dirty'_aux n (n - k)) = dv_s1 \<union> dv_s2 \<union> {(nat_to_string (Suc k) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F}" unfolding d_and_v_set_def by simp
-
-  with 3 have 4: "set (dirty'_aux n (n - k)) = set (((nat_to_string (Suc k) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)#dv_l1@dv_l2)" by simp
-
-  def bdv_s1 \<equiv> "image (Formula_FboxK (nat_to_string (Suc k))) dv_s1"
-  def bdv_s2 \<equiv> "image (Formula_FboxK (nat_to_string (Suc k))) dv_s2"
-
-  def bdv_l1 \<equiv> "map (Formula_FboxK (nat_to_string (Suc k))) dv_l1"
-  def bdv_l2 \<equiv> "map (Formula_FboxK (nat_to_string (Suc k))) dv_l2"
-
-
-  have "\<And>i. 0 < i \<and> i < (Suc k) \<Longrightarrow> loc \<turnstile>d dirty n (Suc k) \<and>\<^sub>F vision n \<^sub>S \<turnstile>\<^sub>S (fboxK\<^sub>F nat_to_string (Suc k) (nat_to_string i \<^sub>F)) \<^sub>S" using assms dirty_vision_der
-  proof -
-    fix i :: nat
-    assume a1: "0 < i \<and> i < Suc k"
-    have "\<And>na. \<not> na < Suc k \<or> na < n" using assms
-    by (meson goal1 less_imp_le_nat less_le_trans)
-    hence "i < n" using a1 by blast
-    thus "loc \<turnstile>d dirty n (Suc k) \<and>\<^sub>F vision n \<^sub>S \<turnstile>\<^sub>S fboxK\<^sub>F nat_to_string (Suc k) nat_to_string i \<^sub>F \<^sub>S"
-    using a1 dirty_vision_der goal1 less_imp_le_nat nat_neq_iff assms by blast
-  qed
-
-  then have 5: "\<forall>x\<in>bdv_s1. (loc \<turnstile>d ((dirty n (Suc k)) \<and>\<^sub>F vision n) \<^sub>S \<turnstile>\<^sub>S (x \<^sub>S))"
-  unfolding bdv_s1_def d_and_v_set_def by blast
-
-  have "\<And>i. (Suc k) < i \<and> i \<le> n \<Longrightarrow> loc \<turnstile>d dirty n (Suc k) \<and>\<^sub>F vision n \<^sub>S \<turnstile>\<^sub>S (fboxK\<^sub>F nat_to_string (Suc k) ((nat_to_string i \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<^sub>S" using assms dirty_vision_der
-  proof -
-    fix i :: nat
-    assume a1: "(Suc k) < i \<and> i \<le> n"
-    thus "loc \<turnstile>d dirty n (Suc k) \<and>\<^sub>F vision n \<^sub>S \<turnstile>\<^sub>S (fboxK\<^sub>F nat_to_string (Suc k) ((nat_to_string i \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<^sub>S"
-    using dirty_vision_der goal1 by (metis assms(1) le_less_trans nat_neq_iff zero_less_Suc)
-  qed
-
-  then have 6: "\<forall>x\<in>bdv_s2. (loc \<turnstile>d ((dirty n (Suc k)) \<and>\<^sub>F vision n) \<^sub>S \<turnstile>\<^sub>S (x \<^sub>S))"
-  unfolding bdv_s2_def d_and_v_set_def by blast
-
-  with 3 5 have "\<forall>x\<in>set (bdv_l1 @ bdv_l2).(loc \<turnstile>d ((dirty n (Suc k)) \<and>\<^sub>F vision n) \<^sub>S \<turnstile>\<^sub>S (x \<^sub>S))"
-  by (metis UnE `set dv_l1 = dv_s1` `set dv_l2 = dv_s2` bdv_l1_def bdv_l2_def bdv_s1_def bdv_s2_def set_append set_map)
-
-  then have 7: "loc \<turnstile>d (dirty n (Suc k) \<and>\<^sub>F vision n)\<^sub>S \<turnstile>\<^sub>S (\<And>\<^sub>F bdv_l1 @ bdv_l2)\<^sub>S" 
-  apply(rule_tac conj_All) by simp
-
-  show ?case
-  apply (rule_tac f = "((nat_to_string (Suc k) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<and>\<^sub>F (\<And>\<^sub>F dv_l1@dv_l2)" in derivable.SingleCut)
+  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow>upto' 1 n . x \<notin> set J]) \<and>\<^sub>F (\<And>\<^sub>F map ((\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F)) \<and>\<^sub>F (((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)))) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
   using cut apply simp
   apply (rule_tac derivable.And_R)
   defer
   apply (rule Id)
-  defer
-  apply (rule_tac derivable.Back_forw_K)
-  apply (rule_tac f = "fboxK\<^sub>F nat_to_string (Suc k) (\<And>\<^sub>F dv_l1@dv_l2)" in derivable.SingleCut)
+  apply (rule_tac derivable.And_L)
+  apply (rule_tac derivable.Comma_impR_disp2)
+
+  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F)))) [x\<leftarrow>upto' 1 n . x \<notin> set J]) \<and>\<^sub>F (\<And>\<^sub>F map (\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) [x\<leftarrow>upto' 1 n . x \<notin> set J])" in SingleCut)
   using cut apply simp
+  apply(rule conj_fold)
+  using cut apply simp
+  apply (rule_tac derivable.And_L)
+  apply (rule_tac derivable.Comma_impL_disp2)
+  apply (rule_tac derivable.W_impL_L)
+  apply (rule_tac derivable.Comma_impR_disp)
+
+  apply(subst subst3)
+  apply(subst subst4)
+  
+  apply(rule_tac conj_impl_fold)
+  using cut apply simp
+
+  apply(rule_tac f ="(\<And>\<^sub>F map (\<lambda>x. (nat_to_string x \<^sub>F)) J') \<and>\<^sub>F (\<And>\<^sub>F map ((\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F)) \<and>\<^sub>F (((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)))) J')" in SingleCut)
+  using cut apply simp
+  apply (rule_tac derivable.E_L)
+  apply (rule_tac derivable.And_R)
   defer
-  apply (rule_tac derivable.FboxK_L)
-  apply (rule_tac Id)
+  apply (rule_tac conj_der2)
+  using cut apply simp
+  apply (rule Id)
+  using assms apply auto[1]
+  apply (rule_tac derivable.And_L)
+  apply (rule_tac derivable.Comma_impR_disp2)
+
+  apply(rule_tac f ="(\<And>\<^sub>F map ((\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F)))) J') \<and>\<^sub>F (\<And>\<^sub>F map (\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) J')" in SingleCut)
+  using cut apply simp
+  apply(rule conj_fold)
+  using cut apply simp
+  apply (rule_tac derivable.And_L)
+  apply (rule_tac derivable.Comma_impR_disp2)
+  apply (rule_tac derivable.W_impR_R)
+  apply (rule_tac derivable.Comma_impR_disp)
+
+  apply(subst subst5)
+  apply(rule_tac conj_impl_fold)
+  using cut apply simp
+  unfolding vision_def
+  apply(rule_tac conj_der1b)
+  apply rule
+  apply(rule_tac conj_der1)
+  apply(rule Id)
+  defer
+  apply(rule_tac conj_der1b)
+  apply rule
+  apply(rule_tac conj_der1)
+  apply(rule Id)
   proof -
   case goal1 
-    have "loc \<turnstile>d (\<And>\<^sub>F ((nat_to_string (Suc k) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)#dv_l1 @ dv_l2) \<^sub>S \<turnstile>\<^sub>S dirty n k \<^sub>S"
-    apply (rule_tac l'="dirty'_aux n (n - k)" in conj_der2)
-    using cut apply simp unfolding dirty_def using assms 
-    apply (simp add: MuddyChildren.Id)
-    using 4 by simp
-    thus ?case using conj_unfold_1 by simp
+    then have 0: "f \<in> image (\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j nat_to_string x \<^sub>F) \<and>\<^sub>F (((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) (set J')" by (metis list.set_map)
+    from assms have "\<forall>x \<in> set J'. 0 < x \<and> x \<le> n" "\<forall>x \<in> set J'. x \<noteq> j" by auto
+    then have "\<forall>x \<in> (set J'). ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j nat_to_string x \<^sub>F) \<and>\<^sub>F (((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<in> set (vision'' n)" by (metis (no_types, lifting) assms(3) cond(1) vision_contains)
+    with 0 show ?case by blast
   next
   case goal2
-    show ?case
-    apply (rule_tac f="(\<And>\<^sub>F bdv_l1 @ bdv_l2)" in derivable.SingleCut)
-    using cut apply simp
-    apply (rule_tac f="dirty n (Suc k) \<and>\<^sub>F vision n" in derivable.SingleCut)
-    using cut apply simp
-    apply (rule_tac derivable.And_R)
-    apply (rule_tac Id)+
-    using 7 apply simp
-    unfolding bdv_l1_def bdv_l2_def using conj_FboxK_distrib by (metis map_append cut)
+    then have 0: "f \<in> image (\<lambda>x. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j nat_to_string x \<^sub>F) \<and>\<^sub>F (((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) (set [x\<leftarrow>upto' 1 n . x \<notin> set J])" by (metis list.set_map)
+    from assms have "\<forall>x \<in> set [x\<leftarrow>upto' 1 n . x \<notin> set J]. 0 < x \<and> x \<le> n" "\<forall>x \<in> set [x\<leftarrow>upto' 1 n . x \<notin> set J]. x \<noteq> j" 
+    apply (metis One_nat_def Suc_eq_plus1 atLeastAtMost_iff atLeastatMost_empty_iff discrete filter_is_subset insert_Diff insert_not_empty subsetCE upto'_simp1)
+    using assms(3) by auto
+    then have "\<forall>x \<in> set [x\<leftarrow>upto' 1 n . x \<notin> set J]. ((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j nat_to_string x \<^sub>F) \<and>\<^sub>F (((nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F nat_to_string j (nat_to_string x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<in> set (vision'' n)" by (metis (no_types, lifting) assms(3) cond(1) vision_contains)
+    with 0 show ?case by blast
   qed
-qed
 
+  thus ?case unfolding dirty2_def using cond by simp
+qed
 
 definition preFormula_father :: "nat \<Rightarrow> Locale" where
 "preFormula_father n = PreFormula (''father''@(nat_to_string n)) (father n)"
