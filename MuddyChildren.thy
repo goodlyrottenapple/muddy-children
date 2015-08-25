@@ -485,11 +485,11 @@ lemma dirtyChildren:
   and cut: "\<And>f. CutFormula f \<in> set loc"
   and agent: "\<And>agent. LAgent agent \<in> set loc"
   shows "loc \<turnstile>d ((dirty (Suc n) J) \<and>\<^sub>F (k_apply (E (Suc n)) (Suc k) (vision (Suc n))))\<^sub>S \<turnstile>\<^sub>S 
-    (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) (k_apply (Formula_FboxA (''no'' @ nat_to_string (Suc n))) k (fboxK\<^sub>F (nat_to_string j) (nat_to_string j) \<^sub>F)) )\<^sub>S"
+    (fboxA\<^sub>F (''father'' @ `Suc n`) (k_apply (Formula_FboxA (''no'' @ `Suc n`)) k (fboxK\<^sub>F `j` `j` \<^sub>F)) )\<^sub>S"
 using assms(1,2,3,4)
 proof(induct k arbitrary:j J)
 case 0
-  then obtain j where J_contains: "set J = {j}" using card_eq_SucD by blast
+  then have J_contains: "set J = {j}" using card_eq_SucD by fastforce
   
   have set_eq: "{1..Suc n} - {j} = set ([x \<leftarrow> upto' 1 (Suc n). x\<noteq>j])" by auto
   
@@ -654,8 +654,7 @@ case 0
 
   then have map_subs2: "set (upto' 1 (Suc n)) = set (j#[h\<leftarrow>upto' 1 (Suc n) .  h \<noteq> j])" by simp
 
-  have "loc \<turnstile>d (dirty (Suc n) J \<and>\<^sub>F E (Suc n) \<^sup>Suc 0 vision (Suc n)) \<^sub>S \<turnstile>\<^sub>S 
-    (fboxA\<^sub>F (''father'' @ nat_to_string (Suc n)) Formula_FboxA (''no'' @ nat_to_string (Suc n)) \<^sup>0 fboxK\<^sub>F nat_to_string j (nat_to_string j \<^sub>F)) \<^sub>S"
+  thus ?case
   apply (subst k_apply.simps(1))
   
   
@@ -740,16 +739,12 @@ case 0
   apply (rule_tac derivable.W_impR_R)
   apply (rule_tac derivable.Id)
   using map_subs2 by (metis (mono_tags, lifting) set_eq_subset set_map)
-  
-  
-  thus ?case using J_contains 0 by simp
 
 next
 (* -------------------- case N = suc, K = suc -------------------- 
  n children, k+1 dirty children *)
 case (Suc k)
 
-    
   then obtain J' where J'_def: "set J' = set J - {j}" by (meson set_removeAll)
   then obtain j' where j'_def: "j' \<in> set J'" by (metis Diff_empty List.finite_set Suc(4) Suc.prems(4) card_Diff_insert card_eq_SucD diff_Suc_1 empty_iff insert_subset order_refl)
   

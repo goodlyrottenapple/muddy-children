@@ -18,11 +18,10 @@ unfolding digit_char_list_def using distinct.simps(2)
 by simp
 
 
-fun nat_to_string :: "nat \<Rightarrow> string"
+fun nat_to_string :: "nat \<Rightarrow> string" ("`_`")
 where
 "nat_to_string n = (if n < (length digit_char_list) then [digit_char_list ! n] else 
 nat_to_string (n div (length digit_char_list)) @ [digit_char_list ! (n mod (length digit_char_list))])"
-
 
 lemma nEq_exE:
   fixes s s'
