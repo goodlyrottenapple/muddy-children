@@ -719,8 +719,8 @@ apply simp
 apply (rule_tac Atom)
 apply simp+
 apply (rule_tac derivable.Back_forw_A2)
-apply (rule_tac f="(X \<^sub>F)" in derivable.SingleCut)
-using cut apply blast
+apply (rule_tac f="X \<^sub>F" in derivable.SingleCut)
+using cut apply simp
 apply (rule_tac Atom)
 by simp+
 
