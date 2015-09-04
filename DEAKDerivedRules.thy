@@ -2,7 +2,6 @@ theory DEAKDerivedRules
 imports Main "calculus/src/isabelle/DEAK_SE"
 begin
 
-
 (* The Id rule where for every formula f, f \<^sub>S \<turnstile>\<^sub>S f \<^sub>S is derivable *)
 lemma Id:
   fixes f :: Formula
@@ -65,12 +64,10 @@ apply (rule_tac derivable.Bot_R)
 apply (rule_tac derivable.Bot_L)
 done
 
-
 definition disj :: "Formula list \<Rightarrow> Formula" ("\<Or>\<^sub>F _" 300) where
 "disj list = foldr (Formula_Or) list \<bottom>\<^sub>F"
 
 lemma disj_unfold_1: "\<Or>\<^sub>F x#list = x \<or>\<^sub>F (\<Or>\<^sub>F list)" unfolding disj_def by simp
-
 
 definition conj :: "Formula list \<Rightarrow> Formula" ("\<And>\<^sub>F _" 300) where
 "conj list = foldr (Formula_And) list \<top>\<^sub>F"
@@ -78,7 +75,6 @@ definition conj :: "Formula list \<Rightarrow> Formula" ("\<And>\<^sub>F _" 300)
 lemma conj_unfold_1: "\<And>\<^sub>F x#list = x \<and>\<^sub>F (\<And>\<^sub>F list)" unfolding conj_def by simp
 
 lemma conj_unfold_1a: "\<And>\<^sub>F (map f (x#list)) = (f x) \<and>\<^sub>F (\<And>\<^sub>F map f list)" unfolding conj_def by simp
-
 
 lemma conj_unfold_2:
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
@@ -125,7 +121,6 @@ case goal1
   by (rule_tac Id)
 qed
 
-
 lemma conj_unfold_2b:
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
   shows "loc \<turnstile>d ((\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)) \<^sub>S \<turnstile>\<^sub>S (\<And>\<^sub>F list1@list2) \<^sub>S"
@@ -142,7 +137,6 @@ case goal1
   show ?case unfolding 1
   apply(subst conj_unfold_1)
   apply(subst conj_unfold_1)
-
 
   apply (rule_tac derivable.C_L)
   apply (rule_tac derivable.And_R)
@@ -187,7 +181,6 @@ apply (rule_tac derivable.Top_R)
 apply (rule_tac derivable.Top_R)
 apply(subst conj_unfold_1a)+
 
-
 apply (rule_tac f="(f a \<and>\<^sub>F f' a) \<and>\<^sub>F ((\<And>\<^sub>F map f l) \<and>\<^sub>F (\<And>\<^sub>F map f' l))" in derivable.SingleCut)
 using cut apply simp
 apply (rule_tac derivable.And_L)
@@ -225,7 +218,6 @@ apply (rule_tac derivable.Comma_impR_disp2)
 apply (rule_tac derivable.W_impR_R)
 apply (rule_tac Id)
 done
-
 
 lemma conj_impl_fold:
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
@@ -267,8 +259,6 @@ apply (rule_tac derivable.W_impL_L)
 apply (rule_tac derivable.Comma_impR_disp)
 by simp
 
-
-
 lemma conj_der1: "loc \<turnstile>d ( f )\<^sub>S \<turnstile>\<^sub>S X \<Longrightarrow> f \<in> set list \<Longrightarrow> loc \<turnstile>d ( \<And>\<^sub>F list )\<^sub>S \<turnstile>\<^sub>S X"
 apply(induct list)
 proof simp
@@ -292,7 +282,6 @@ case goal1
   qed
 qed
 
-
 lemma conj_der1b: " \<forall>f \<in> set list. loc \<turnstile>d X  \<turnstile>\<^sub>S ( f )\<^sub>S \<Longrightarrow> loc \<turnstile>d X \<turnstile>\<^sub>S ( \<And>\<^sub>F list )\<^sub>S"
 apply(induct list)
 apply simp 
@@ -307,9 +296,6 @@ case goal1
   using goal1 apply simp
   using goal1 using IW_L Top_R conj_def by fastforce
 qed
-
-
-
 
 lemma conj_der2_aux: 
   fixes l'
@@ -357,7 +343,6 @@ case (Cons x xs)
   using conj_der2_aux cut Cons.prems(1) apply blast
   using Cons by simp
 qed
-
 
 lemma conj_der2b: 
   fixes l'
@@ -413,8 +398,6 @@ case (Cons x xs)
   by (rule_tac Id)
 qed
 
-
-
 lemma conj_All: 
  shows "(\<And>x. x \<in> set List \<Longrightarrow> (loc \<turnstile>d X \<turnstile>\<^sub>S (x \<^sub>S))) \<Longrightarrow> loc \<turnstile>d X \<turnstile>\<^sub>S (\<And>\<^sub>F List)\<^sub>S"
 apply (induct List arbitrary:X)
@@ -426,7 +409,6 @@ apply (subst conj_unfold_1)
 apply (rule_tac derivable.C_L)
 apply (rule_tac derivable.And_R)
 by simp+
-
 
 lemma conj_FboxK_distrib : 
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
@@ -486,7 +468,6 @@ apply (rule_tac derivable.E_L)
 apply (rule_tac derivable.Comma_impR_disp2)
 apply simp
 
-
 apply (rule_tac derivable.Comma_impR_disp)
 apply (rule_tac derivable.Comma_impL_disp2)
 apply (rule_tac derivable.Comma_impR_disp2)
@@ -500,17 +481,13 @@ apply (rule_tac Id)
 apply (rule_tac Id)
 done
 
-
-
 fun k_apply :: "('a \<Rightarrow> 'a) \<Rightarrow> nat \<Rightarrow> 'a \<Rightarrow> 'a" ("_ \<^sup>_ _") where 
 "k_apply Fun 0 f = f" |
 "k_apply Fun (Suc x) f = Fun (k_apply Fun x f)"
 
-
 lemma k_apply_unfold_bis: "k_apply Fun (Suc k) f = k_apply Fun k (Fun f) "
 apply(induction k)
 unfolding k_apply.simps by simp+
-
 
 lemma k_apply_S_Formula_FboxA_Structure_ForwA:
   fixes loc 
@@ -521,7 +498,6 @@ apply (rule Id)
 unfolding k_apply.simps
 apply (rule_tac derivable.FboxA_L)
 by simp
-
 
 lemma k_apply_S_display_1:
   fixes loc 
@@ -549,7 +525,6 @@ case goal1
   by (simp add: goal1(1))
 qed
 
-
 lemma k_apply_S_display_1a:
   fixes loc 
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
@@ -562,11 +537,9 @@ lemma k_apply_S_display_1b:
   shows "loc \<turnstile>d X \<turnstile>\<^sub>S k_apply (Structure_ForwA a) k (form \<^sub>S) \<Longrightarrow> loc \<turnstile>d X \<turnstile>\<^sub>S (k_apply (Formula_FboxA a) k form)\<^sub>S"
 using k_apply_S_display_1 using cut by blast
 
-
 lemma k_apply_S_display_1diam:
   fixes loc 
   shows "loc \<turnstile>d (Structure_ForwA a) \<^sup>k (form \<^sub>S) \<turnstile>\<^sub>S X \<Longrightarrow> loc \<turnstile>d ((Formula_FdiamA a) \<^sup>k form)\<^sub>S \<turnstile>\<^sub>S X"
-
 apply(induct k arbitrary:X)
 unfolding k_apply.simps
 apply simp
@@ -583,7 +556,6 @@ case goal1
   by simp
 qed
 
-
 lemma k_apply_S_F_forw_diam:
   fixes loc
   shows "loc \<turnstile>d  X \<^sub>S \<turnstile>\<^sub>S Y \<^sub>S \<Longrightarrow> loc \<turnstile>d Structure_ForwA a \<^sup>k X \<^sub>S \<turnstile>\<^sub>S Formula_FdiamA a \<^sup>k Y \<^sub>S"
@@ -592,7 +564,6 @@ apply simp
 apply simp
 apply (rule_tac derivable.FdiamA_R)
 by simp
-
 
 lemma k_apply_S_display_2:
   fixes loc 
@@ -605,18 +576,15 @@ apply (induct k arbitrary: X)
 apply simp
 by (metis Back_forw_A2 k_apply.simps(2) k_apply_unfold_bis)
 
-
 lemma k_apply_S_display_2a:
   fixes loc 
   shows "loc \<turnstile>d X \<turnstile>\<^sub>S k_apply (Structure_ForwA a) k Y \<Longrightarrow> loc \<turnstile>d k_apply (Structure_BackA a) k X \<turnstile>\<^sub>S Y"
 by (simp add: k_apply_S_display_2)
 
-
 lemma k_apply_S_display_2b:
   fixes loc 
   shows "loc \<turnstile>d k_apply (Structure_BackA a) k X \<turnstile>\<^sub>S Y \<Longrightarrow> loc \<turnstile>d X \<turnstile>\<^sub>S k_apply (Structure_ForwA a) k Y"
 by (simp add: k_apply_S_display_2)
-
 
 lemma k_apply_S_display_2back:
   fixes loc 
@@ -629,14 +597,12 @@ apply (induct k arbitrary: X)
 apply simp
 using k_apply_S_display_2 by blast
 
-
 lemma k_apply_elim_diamA:
   fixes loc 
   shows "loc \<turnstile>d forma \<^sub>S \<turnstile>\<^sub>S formb \<^sub>S \<Longrightarrow> loc \<turnstile>d (k_apply (Formula_FdiamA a) k forma)\<^sub>S \<turnstile>\<^sub>S (k_apply (Formula_FdiamA a) k formb)\<^sub>S "
 apply (induct k)
 apply simp
 using FdiamA_L FdiamA_R by auto
-
 
 lemma k_apply_DiamBot: 
   fixes loc
@@ -649,7 +615,6 @@ apply (rule_tac derivable.Forw_back_A2)
 apply (rule_tac derivable.A_nec_R)
 by simp
 
-
 lemma k_apply_DiamBot_Is: 
   fixes loc
   shows "loc \<turnstile>d ( k_apply ( Formula_FdiamA A ) k \<bottom>\<^sub>F ) \<^sub>S \<turnstile>\<^sub>S I\<^sub>S"
@@ -660,7 +625,6 @@ apply (rule_tac derivable.FdiamA_L)
 apply (rule_tac derivable.Forw_back_A2)
 apply (rule_tac derivable.A_nec_R)
 by simp
-
 
 lemma k_apply_BoxDiam: 
   fixes loc
@@ -693,7 +657,6 @@ apply (rule_tac derivable.FdiamA_L)
 apply (rule_tac derivable.FdiamA_R)
 by simp
 
-
 lemma k_apply_S_FS:
   fixes loc 
   shows "loc \<turnstile>d X \<turnstile>\<^sub>S (k_apply (Structure_ForwA a) k Y) \<rightarrow>\<^sub>S (k_apply (Structure_ForwA a) k Z) \<Longrightarrow> loc \<turnstile>d X \<turnstile>\<^sub>S k_apply (Structure_ForwA a) k (Y \<rightarrow>\<^sub>S Z)"
@@ -701,7 +664,6 @@ apply(induct k arbitrary: X Y Z)
 apply simp
 apply simp
 using Back_forw_A Back_forw_A2 FS_A_R by blast
-
 
 lemma k_apply_S_Atom:
   fixes loc 
@@ -724,7 +686,6 @@ using cut apply simp
 apply (rule_tac Atom)
 by simp+
 
-
 lemma k_apply_F_FboxA:
   fixes loc 
   shows "loc \<turnstile>d X \<^sub>S \<turnstile>\<^sub>S (Formula_FboxA a X) \<^sub>S \<Longrightarrow> loc \<turnstile>d (k_apply (Formula_FboxA a) k X) \<^sub>S \<turnstile>\<^sub>S (k_apply (Formula_FboxA a) (Suc k) X) \<^sub>S"
@@ -735,7 +696,6 @@ apply (rule_tac derivable.FboxA_R)
 apply (rule_tac derivable.FboxA_L)
 by simp
 
-
 lemma Swapout_R_1:
   fixes loc
   assumes "RelAKA rel \<in> set loc" and "rel alpha a = [beta]"
@@ -743,12 +703,10 @@ lemma Swapout_R_1:
 apply (rule derivable.Swapout_R)
 using assms by auto
 
-
 lemma Bot_imp_all: "loc \<turnstile>d \<bottom>\<^sub>F \<^sub>S \<turnstile>\<^sub>S X"
 apply (rule_tac derivable.IW_R)
 apply (rule_tac derivable.Bot_L)
 done
-
 
 lemma Swapout_R_2aux:
   fixes loc
@@ -774,7 +732,6 @@ apply (rule_tac rel=rel and beta=alpha in Swapout_R_1)
 using assms apply (simp,simp)
 apply(rule_tac k_apply_S_display_2a)
 by simp
-
 
 lemma Swapout_R_2:
   fixes loc

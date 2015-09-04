@@ -3,9 +3,10 @@ imports Main DEAKDerivedRules "calculus/src/isabelle/DEAK_SE" NatToString
 begin
 
 (*
-We consider classical logic, we take being dirty as the primary definition and we define being clean as the negation of being dirty.
+Implements and follows closely the proof of Proposition 24 in (Ma-Palmigiano-Sadrzadeh, 2014), 
+referred to in the comments below as [MPS].
+We consider classical logic and define clean as the negation of dirty.
 *)
-
 
 (* as upto is not defined for nats in isabelle core theories, we introduce a sugar notation for constructing a list of nats from x to y: [[x .. y]] *)
 fun upto' :: "nat \<Rightarrow> nat \<Rightarrow> nat list" ("[[_ .. _]]") where
@@ -18,13 +19,10 @@ by (induct y, auto)
 lemma upto'_simp2[simp]: "x > y \<Longrightarrow> set ([[x .. y]]) = {x..y}"
 by (induct y, auto)
 
-
-
 (* E f := \<And>n i=1 fboxK i f. The intended meaning of the defined connective E is ‘Everybody knows’ *)
 fun E :: "nat \<Rightarrow> Formula \<Rightarrow> Formula" where
 "E 0 formula = \<top>\<^sub>F" |
 "E (Suc x) formula = (fboxK\<^sub>F (`Suc x`) formula) \<and>\<^sub>F (E x formula)"
-
 
 lemma E_der_simp: 
   fixes x A
@@ -79,11 +77,8 @@ using assms apply simp
 apply (rule_tac derivable.FboxK_L)
 by simp
 
-
-
 definition father :: "nat \<Rightarrow> Formula" where
 "father n = \<Or>\<^sub>F map (Formula_Atprop \<circ> nat_to_string) [[1 .. n]]"
-
 
 (* vision expresses the fact that every child knows whether each other child is clean or dirty *)
 fun vision_aux :: "nat \<Rightarrow> nat \<Rightarrow> Formula list" where
@@ -99,15 +94,12 @@ fun vision_aux :: "nat \<Rightarrow> nat \<Rightarrow> Formula list" where
 )
 # vision_aux m n"
 
-
 fun vision' :: "nat \<Rightarrow> Formula list" where
 "vision' 0 = []" |
 "vision' (Suc x) = (vision_aux (Suc x) x) @ (vision' x)"
 
-
 definition vision :: "nat \<Rightarrow> Formula" where
 "vision x = \<And>\<^sub>F (vision' x)"
-
 
 lemma vision_aux_contains1 :
   assumes "0 < i \<and> i < (Suc x)"
@@ -209,13 +201,11 @@ case goal1
   qed
 qed
 
-
 (* no expresses the ignorance of the children about their own status *)
 fun no :: "nat \<Rightarrow> Formula" where
 "no 0 = \<top>\<^sub>F"|
 "no (Suc x) = ( ( fdiamK\<^sub>F (`Suc x`) (`Suc x`) \<^sub>F )
   \<and>\<^sub>F ( fdiamK\<^sub>F (`Suc x`) (( (`Suc x` ) \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F ) ) ) \<and>\<^sub>F ( no x)"
-
 
 lemma no_imp: 
   fixes loc
@@ -248,16 +238,12 @@ case goal2
   using Id goal2(2) le_SucE by blast
 qed
 
-
-(* the first parameter encodes n - the number of children - 
-and the second encodes list J - the list of dirty children which is a subset of {1..n} *)
-
+(* the first parameter n encodes the number of children - 
+   the second parameter J encodes the list of dirty children which is a subset of {1..n} *)
 definition dirty :: "nat \<Rightarrow> nat list \<Rightarrow> Formula " where
 "dirty n J = (if \<forall>j \<in> (set J). n \<ge> j \<and> j > 0 then 
   \<And>\<^sub>F (map (Formula_Atprop \<circ> nat_to_string) J) @
      (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) (filter (\<lambda>x. x \<notin> set J) [[1 .. n]])) else \<top>\<^sub>F )"
-
-
 
 lemma dirty_vision_der:
   fixes k n J J' j
@@ -345,7 +331,6 @@ case goal1
       by (rule_tac Id)
     qed
   qed
-
 
   have subst1: "map ((\<lambda>x. fboxK\<^sub>F `j` x \<^sub>F) \<circ> nat_to_string) J' @ map ((\<lambda>x. fboxK\<^sub>F `j` ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow> [[1 .. n]] . x \<notin> set J] = 
     map (\<lambda>x. fboxK\<^sub>F `j` x) (map ((\<lambda>x. x \<^sub>F) \<circ> nat_to_string) J' @ map ((\<lambda>x. ((x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<circ> nat_to_string) [x\<leftarrow> [[1 .. n]] .  x \<notin> set J])" by simp
@@ -467,14 +452,11 @@ case goal1
   thus ?case unfolding dirty_def using cond by simp
 qed
 
-
-
 definition preFormula_father :: "nat \<Rightarrow> Locale" where
 "preFormula_father n = PreFormula (''father''@`n`) (father n)"
 
 definition preFormula_no :: "nat \<Rightarrow> Locale" where
 "preFormula_no n = PreFormula (''no''@`n`) (no n)"
-
 
 lemma dirtyChildren:
   fixes J::"nat list" and j and n
@@ -491,7 +473,7 @@ lemma dirtyChildren:
     (fboxA\<^sub>F (''father'' @ `Suc n`) (k_apply (Formula_FboxA (''no'' @ `Suc n`)) k (fboxK\<^sub>F `j` `j` \<^sub>F)) )\<^sub>S"
 using assms(1,2,3,4)
 proof(induct k arbitrary:j J)
-case 0
+case 0 (* k=0, hence there is Suc k = 1 dirty child, called j, J={j} *)
   then have J_contains: "set J = {j}" using card_eq_SucD by fastforce
   
   have set_eq: "{1..Suc n} - {j} = set ([x \<leftarrow>  [[1 .. Suc n]]. x\<noteq>j])" by auto
@@ -507,20 +489,19 @@ case 0
   have f_subst3: "\<And>j. (\<lambda>h. (\<lambda>x. ((`x` \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F `j` `x` \<^sub>F)) h \<and>\<^sub>F (\<lambda>y. (((`y` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F `j` (`y` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) h ) = 
   (\<lambda>h. ((`h` \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F `j` `h` \<^sub>F) \<and>\<^sub>F (((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F `j` (`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F))" by simp
   
-  
   def left \<equiv> "(\<lambda>x. ((`x` \<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F `j` `x` \<^sub>F))"
   def right \<equiv> "(\<lambda>y. (((`y` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<rightarrow>\<^sub>F fboxK\<^sub>F `j` (`y` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F))"
   
   have 1: "\<forall>h \<in> {1..Suc n} - {j}.
     loc \<turnstile>d (dirty (Suc n) J \<and>\<^sub>F E (Suc n) \<^sup>Suc 0 vision (Suc n) \<^sub>S) ;\<^sub>S (father (Suc n) \<^sub>S) \<turnstile>\<^sub>S ((fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F)))  \<^sub>S)"
-  apply rule
+  apply rule (* Display 4 on page 21 of [MPS] *)
   apply(rule_tac FboxK_R)
   apply(rule_tac Back_forw_K2)
   apply(rule_tac ImpR_R)
   apply(rule_tac Back_forw_K)
   apply(rule_tac FS_K_R)
-  apply (rule_tac derivable.Comma_impR_disp)
-  
+  apply (rule_tac derivable.Comma_impR_disp) (* Display 6 on page 21 of [MPS] *)
+
   apply (rule_tac f="fdiamK\<^sub>F `j` (((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<and>\<^sub>F (`h` \<^sub>F))" in derivable.SingleCut)
   using cut apply blast
   defer
@@ -536,11 +517,13 @@ case 0
   apply (rule_tac derivable.Bot_L)
   apply (rule_tac derivable.Id)
   apply (rule_tac derivable.IW_R)
-  apply (rule_tac derivable.Bot_L)
+  apply (rule_tac derivable.Bot_L) (* Display 8 on page 21 of [MPS] *)
   
   apply (rule_tac f="(fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<and>\<^sub>F (fdiamK\<^sub>F `j` (`h` \<^sub>F))" in derivable.SingleCut)
   using cut apply blast
-  defer
+  defer 
+
+  (* Display 11/12 on page 21 of [MPS] *)
   
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impR_disp2)
@@ -555,27 +538,31 @@ case 0
   apply (rule_tac derivable.Forw_back_K)
   apply (rule_tac derivable.FdiamK_R)
   apply (rule_tac derivable.And_R)
+  apply (rule_tac Id)  
   apply (rule_tac Id)
   
-  apply (rule_tac Id)
+  (* Display 10/11 on page 21 of [MPS] *)
   
   apply (rule_tac derivable.E_L)
-  
   apply (rule_tac derivable.And_R)
   apply (rule_tac derivable.FdiamK_R)
   apply (rule_tac Id)
   
+  (* Display 9 on page 21 of [MPS] *)
+
   apply (rule_tac derivable.Comma_impR_disp2)
-  apply (rule_tac derivable.W_impR_R)
-  
-  
+  apply (rule_tac derivable.W_impR_R)    
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impR_disp2)
+
   apply (rule_tac f="vision (Suc n)" in derivable.SingleCut)
   using cut apply blast
+
   apply(rule E_der_simp2)
   using agent apply simp
+
   apply (rule_tac derivable.Comma_impR_disp)
+
   apply (rule_tac f="\<And>\<^sub>F map (\<lambda>h. fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) [h\<leftarrow> [[1 .. (Suc n)]] .  h \<noteq> j]" in derivable.SingleCut)
   using cut apply blast
   defer
@@ -598,11 +585,11 @@ case 0
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impL_disp2)
   apply (rule_tac derivable.W_impL_L)
-  
   apply (rule_tac derivable.Comma_impR_disp)
   apply (rule_tac derivable.E_L)
   apply (rule_tac derivable.Comma_impR_disp2)
   unfolding dirty_def
+
   apply(rule_tac f="\<And>\<^sub>F map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow> [[1 .. (Suc n)]] . x \<noteq> j]" in SingleCut)
   using cut apply simp
   apply(subst list_eq)
@@ -614,7 +601,7 @@ case 0
   apply (rule_tac derivable.Comma_impR_disp)
   
   apply(subst f_subst)
-  
+    
   apply (rule_tac E_L)
   apply (simp add: conj_impl_fold cut)
   proof -
@@ -644,8 +631,7 @@ case 0
     thus ?thesis
       using set_map by (metis (no_types, lifting) imageE)
   qed
-    
-    
+        
   have fboxK_map_subst: "\<And>list. map (\<lambda>h. fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F))) list =  map (Formula_FboxK `j`)  (map (\<lambda>h. ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F))) list)" by simp
   have map_subst2: "map (\<lambda>h. (`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F)) ( [[1 .. Suc n]]) = map (\<lambda>B. B \<rightarrow>\<^sub>F (`j` \<^sub>F)) (map (Formula_Atprop \<circ> nat_to_string) ( [[1 .. Suc n]]))" by simp
   have map_subs1: "set ( [[1 .. Suc n]]) = set ([h\<leftarrow> [[1 .. Suc n]] .  h \<noteq> j]) \<union> {j}" 
@@ -655,8 +641,9 @@ case 0
 
   thus ?case
   apply (subst k_apply.simps(1))
-  
-  
+   
+  (* Display 1 on page 21 of [MPS] *)
+
   apply (rule_tac derivable.FboxA_R)
   apply (rule_tac derivable.Back_forw_A2)
   apply (rule_tac derivable.FboxK_R)
@@ -670,8 +657,8 @@ case 0
   apply (rule_tac derivable.Bigcomma_Cons_L)
   apply (rule_tac rel=rel and beta="(''father'' @ `Suc n`)" in Swapout_R_1)
   using rel_refl apply (simp, simp)
-
   apply (rule_tac derivable.Back_forw_K2)
+
   apply (rule_tac f = "(One\<^sub>F (''father'' @ `Suc n`)) \<rightarrow>\<^sub>F (`j` \<^sub>F)" in derivable.SingleCut)
   using cut apply simp
 
@@ -695,9 +682,11 @@ case 0
   apply (rule_tac derivable.Comma_impR_disp2)
   
   defer
+
+  (* Display 2 on page 21 of [MPS] *)
+
   apply (rule_tac derivable.Reduce_R)
   apply (rule_tac derivable.ImpR_L)
-  
   apply (rule_tac derivable.Atom)
   apply simp
   
@@ -706,24 +695,30 @@ case 0
   apply (rule_tac derivable.Comma_impR_disp)
   apply (rule_tac derivable.E_L)
   
+  (* Display 3 on page 21 of [MPS] *)
+
   apply (rule_tac f = "\<And>\<^sub>F map (\<lambda>h. fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F))) [h \<leftarrow>  [[1 .. Suc n]]. h\<noteq>j]" in derivable.SingleCut)
   using cut apply simp
   apply(rule_tac conj_der1b)
   using 3 apply blast
+
   apply (rule_tac f = "fboxK\<^sub>F `j` (\<And>\<^sub>F map (\<lambda>h. ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F))) [h \<leftarrow>  [[1 .. Suc n]]. h\<noteq>j])" in derivable.SingleCut)
   using cut apply simp
+
   apply(subst fboxK_map_subst)
   apply(rule_tac conj_box_distrib)
+
   using cut apply blast
   apply (rule_tac derivable.FboxK_L)
   unfolding father_def
+
   apply (rule_tac f = "(\<And>\<^sub>F map (\<lambda>h. (`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F)) ( [[1 .. Suc n]]))" in derivable.SingleCut)
   using cut apply simp
+
   defer
   apply(subst map_subst2)
   apply(rule_tac disj_lub)
   using cut apply simp
-  
   
   apply(rule_tac l="map (\<lambda>h. (`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F)) (j#[h\<leftarrow> [[1 .. Suc n]] .  h \<noteq> j])" in conj_der2b)
   using cut apply simp
@@ -740,9 +735,8 @@ case 0
   using map_subs2 by (metis (mono_tags, lifting) set_eq_subset set_map)
 
 next
-(* -------------------- case N = suc, K = suc -------------------- 
- n children, k+1 dirty children *)
-case (Suc k)
+(* -------------------- successor case for k  --------------------  *)
+case (Suc k) (* the number of dirty children is Suc(Suc k) *)
 
   then obtain J' where J'_def: "set J' = set J - {j}" by (meson set_removeAll)
   then obtain j' where j'_def: "j' \<in> set J'" by (metis Diff_empty List.finite_set Suc(4) Suc.prems(4) card_Diff_insert card_eq_SucD diff_Suc_1 empty_iff insert_subset order_refl)
