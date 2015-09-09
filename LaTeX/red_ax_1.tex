@@ -1,0 +1,40 @@
+\RightLabel{ $One_R$ }
+\AxiomC{$ Phi( father\_Suc\_n ) \vdash 1_{ father\_Suc\_n } $}
+
+\RightLabel{ $Prem$ }
+\AxiomC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash father\_Suc\_n >> \{ j \} (father\_Suc\_n >> Dj) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ father\_Suc\_n ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ j \} (father\_Suc\_n >> Dj) $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ father\_Suc\_n \vdash \{ j \} (father\_Suc\_n >> Dj) << dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n $}\RightLabel{ $Pre_L$ }
+\UnaryInfC{$ 1_{ father\_Suc\_n } \vdash \{ j \} (father\_Suc\_n >> Dj) << dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ Phi( father\_Suc\_n ) \vdash \{ j \} (father\_Suc\_n >> Dj) << dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ j \} (father\_Suc\_n >> Dj) $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) \vdash father\_Suc\_n >> Dj $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ father\_Suc\_n ; \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) \vdash Dj $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ father\_Suc\_n \vdash Dj << \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) $}\RightLabel{ $Pre_L$ }
+\UnaryInfC{$ 1_{ father\_Suc\_n } \vdash Dj << \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ 1_{ father\_Suc\_n } ; \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) \vdash Dj $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) \vdash 1_{ father\_Suc\_n } >> Dj $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) \vdash 1_{ father\_Suc\_n } \rightarrow Dj $}
+
+\RightLabel{ $One_R$ }
+\AxiomC{$ Phi( father\_Suc\_n ) \vdash 1_{ father\_Suc\_n } $}
+
+\RightLabel{ $Atom$ }
+\AxiomC{$ Dj \vdash \{ father\_Suc\_n \} Dj $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ 1_{ father\_Suc\_n } \rightarrow Dj \vdash Phi( father\_Suc\_n ) >> \{ father\_Suc\_n \} Dj $}\RightLabel{ $Reduce'R$ }
+\UnaryInfC{$ 1_{ father\_Suc\_n } \rightarrow Dj \vdash \{ father\_Suc\_n \} Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) \vdash \{ father\_Suc\_n \} Dj $}\RightLabel{ $Back_forw_K2$ }
+\UnaryInfC{$ Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ j \} \{ father\_Suc\_n \} Dj $}\RightLabel{ $Swapout'R$ }
+\UnaryInfC{$ \mbox{\Large {\bf ;}} [Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n]  \vdash \{ father\_Suc\_n \} \{ j \} Dj $}\RightLabel{ $Bigcomma_Cons_L$ }
+\UnaryInfC{$ (Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n) ; \mbox{\Large {\bf ;}} []  \vdash \{ father\_Suc\_n \} \{ j \} Dj $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ \mbox{\Large {\bf ;}} []  ; Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ father\_Suc\_n \} \{ j \} Dj $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ \mbox{\Large {\bf ;}} []  \vdash \{ father\_Suc\_n \} \{ j \} Dj << Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n $}\RightLabel{ $Bigcomma_Nil_L$ }
+\UnaryInfC{$ I \vdash \{ father\_Suc\_n \} \{ j \} Dj << Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n $}\RightLabel{ $I <_R$ }
+\UnaryInfC{$ Phi( father\_Suc\_n ) ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ father\_Suc\_n \} \{ j \} Dj $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash Phi( father\_Suc\_n ) >> \{ father\_Suc\_n \} \{ j \} Dj $}\RightLabel{ $Reduce'R$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ father\_Suc\_n \} \{ j \} Dj $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ j \} Dj $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash [ j ] Dj $}\RightLabel{ $Back_forw_A2$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash \{ father\_Suc\_n \} [ j ] Dj $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash [ father\_Suc\_n ] [ j ] Dj $}
+\DisplayProof

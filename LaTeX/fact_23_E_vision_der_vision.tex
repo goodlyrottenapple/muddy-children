@@ -1,0 +1,38 @@
+\RightLabel{ $Prem$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash vision_Suc_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ dirty\_Suc\_n\_J ; vision_Suc_n \vdash [ j ] (Dh \rightarrow \bot) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ vision_Suc_n \vdash dirty\_Suc\_n\_J >> [ j ] (Dh \rightarrow \bot) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash dirty\_Suc\_n\_J >> [ j ] (Dh \rightarrow \bot) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J ; E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash [ j ] (Dh \rightarrow \bot) $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n \vdash [ j ] (Dh \rightarrow \bot) $}\RightLabel{ $W >_R$ }
+\UnaryInfC{$ father_Suc_n \vdash dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n >> [ j ] (Dh \rightarrow \bot) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n ; father_Suc_n \vdash [ j ] (Dh \rightarrow \bot) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dh \vdash Dh $}\RightLabel{ $FdiamK_R$ }
+\UnaryInfC{$ \{ j \} Dh \vdash \langle j \rangle Dh $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ (dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n ; father_Suc_n) ; \{ j \} Dh \vdash [ j ] (Dh \rightarrow \bot) \wedge \langle j \rangle Dh $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ \{ j \} Dh ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n ; father_Suc_n \vdash [ j ] (Dh \rightarrow \bot) \wedge \langle j \rangle Dh $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dh \vdash Dh $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dh \rightarrow \bot \vdash Dh >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dh \rightarrow \bot \vdash Dh \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dh \vdash Dh $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ Dh \rightarrow \bot ; Dh \vdash (Dh \rightarrow \bot) \wedge Dh $}\RightLabel{ $FdiamK_R$ }
+\UnaryInfC{$ \{ j \} (Dh \rightarrow \bot ; Dh) \vdash \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $Forw_back_K$ }
+\UnaryInfC{$ Dh \rightarrow \bot ; Dh \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ Dh \rightarrow \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) << Dh $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] (Dh \rightarrow \bot) \vdash \{ j \} (\,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) << Dh) $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] (Dh \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) << Dh $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] (Dh \rightarrow \bot) ; Dh \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ Dh \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] (Dh \rightarrow \bot) >> \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $K_FS_R$ }
+\UnaryInfC{$ Dh \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, ([ j ] (Dh \rightarrow \bot) >> \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh)) $}\RightLabel{ $Forw_back_K2$ }
+\UnaryInfC{$ \{ j \} Dh \vdash [ j ] (Dh \rightarrow \bot) >> \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $FdiamK_L$ }
+\UnaryInfC{$ \langle j \rangle Dh \vdash [ j ] (Dh \rightarrow \bot) >> \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ [ j ] (Dh \rightarrow \bot) ; \langle j \rangle Dh \vdash \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ [ j ] (Dh \rightarrow \bot) \wedge \langle j \rangle Dh \vdash \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \{ j \} Dh ; dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_0\_vision\_Suc_n ; father_Suc_n \vdash \langle j \rangle ((Dh \rightarrow \bot) \wedge Dh) $}\DisplayProof
