@@ -611,45 +611,49 @@ case 0 (* k=0, hence there is Suc k = 1 dirty child, called j, J={j} *)
     (\<And>h. h \<in> {1..Suc n} - {j} \<Longrightarrow>
     loc \<turnstile>d (forwK\<^sub>S `j` `h` \<^sub>F \<^sub>S) ;\<^sub>S ((dirty (Suc n) J \<and>\<^sub>F E (Suc n) \<^sup>Suc 0 vision (Suc n) \<^sub>S) ;\<^sub>S (father (Suc n) \<^sub>S)) \<turnstile>\<^sub>S 
     fdiamK\<^sub>F `j` (((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<and>\<^sub>F (`h` \<^sub>F)) \<^sub>S)"
-  apply (rule_tac f="(fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<and>\<^sub>F (fdiamK\<^sub>F `j` (`h` \<^sub>F))" in derivable.SingleCut)
-  using cut apply blast
-  defer
-  
-  apply (rule_tac derivable.And_L)
-  apply (rule_tac derivable.Comma_impR_disp2)
-  apply (rule_tac derivable.FdiamK_L)
-  apply (rule_tac derivable.Forw_back_K2)
-  apply (rule_tac derivable.K_FS_R)
-  apply (rule_tac derivable.Comma_impR_disp)
-  apply (rule_tac derivable.Comma_impL_disp2)
-  apply (rule_tac derivable.Back_forw_K)
-  apply (rule_tac derivable.FboxK_L)
-  apply (rule_tac derivable.Comma_impL_disp)
-  apply (rule_tac derivable.Forw_back_K)
-  apply (rule_tac derivable.FdiamK_R)
-  apply (rule_tac derivable.And_R)
-  apply (rule_tac Id)
-  
-  apply (rule_tac Id)
-  
-  apply (rule_tac derivable.E_L)
-  
-  apply (rule_tac derivable.And_R)
-  apply (rule_tac derivable.FdiamK_R)
-  apply (rule_tac Id)
-  
-  apply (rule_tac derivable.Comma_impR_disp2)
-  apply (rule_tac derivable.W_impR_R)
-  
-  
-  apply (rule_tac derivable.And_L)
-  apply (rule_tac derivable.Comma_impR_disp2)
-  apply (rule_tac f="vision (Suc n)" in derivable.SingleCut)
-  using cut apply blast
-  apply(rule E_der_simp2)
-  using agent apply simp
-  apply (rule_tac derivable.Comma_impR_disp)
-  by simp
+  proof -
+  case goal1 
+    thus ?case
+    apply (rule_tac f="(fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F)) \<and>\<^sub>F (fdiamK\<^sub>F `j` (`h` \<^sub>F))" in derivable.SingleCut)
+    using cut apply blast
+    defer
+    
+    apply (rule_tac derivable.And_L)
+    apply (rule_tac derivable.Comma_impR_disp2)
+    apply (rule_tac derivable.FdiamK_L)
+    apply (rule_tac derivable.Forw_back_K2)
+    apply (rule_tac derivable.K_FS_R)
+    apply (rule_tac derivable.Comma_impR_disp)
+    apply (rule_tac derivable.Comma_impL_disp2)
+    apply (rule_tac derivable.Back_forw_K)
+    apply (rule_tac derivable.FboxK_L)
+    apply (rule_tac derivable.Comma_impL_disp)
+    apply (rule_tac derivable.Forw_back_K)
+    apply (rule_tac derivable.FdiamK_R)
+    apply (rule_tac derivable.And_R)
+    apply (rule_tac Id)
+    
+    apply (rule_tac Id)
+    
+    apply (rule_tac derivable.E_L)
+    
+    apply (rule_tac derivable.And_R)
+    apply (rule_tac derivable.FdiamK_R)
+    apply (rule_tac Id)
+    
+    apply (rule_tac derivable.Comma_impR_disp2)
+    apply (rule_tac derivable.W_impR_R)
+    
+    
+    apply (rule_tac derivable.And_L)
+    apply (rule_tac derivable.Comma_impR_disp2)
+    apply (rule_tac f="vision (Suc n)" in derivable.SingleCut)
+    using cut apply blast
+    apply(rule E_der_simp2)
+    using agent apply simp
+    apply (rule_tac derivable.Comma_impR_disp)
+    by simp
+  qed
 
 
 
