@@ -1,0 +1,93 @@
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ father\_Suc\_n \vdash father\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ Dj \rightarrow \bot ; father\_Suc\_n \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash Dj \rightarrow \bot ; father\_Suc\_n >> [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (Dj \rightarrow \bot ; father\_Suc\_n) ; (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $A_L$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; father\_Suc\_n ; (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ father\_Suc\_n ; (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash Dj \rightarrow \bot >> [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ father\_Suc\_n ; (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash father\_Suc\_n >> (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash father\_Suc\_n \rightarrow (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}
+\RightLabel{ $Id$ }
+\AxiomC{$ father\_Suc\_n \vdash father\_Suc\_n $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash Dj \rightarrow \bot >> [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}
+\RightLabel{ $Id$ }
+\AxiomC{$ no\_Suc\_n \vdash no\_Suc\_n $}\RightLabel{ $Pre_L$ }
+\UnaryInfC{$ 1_{ no\_Suc\_n } \vdash no\_Suc\_n $}\RightLabel{ $FdiamA_R$ }
+\UnaryInfC{$ \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } \vdash \langle no\_Suc\_n\_k \rangle no\_Suc\_n $}\RightLabel{ $FdiamA_R$ }
+\UnaryInfC{$ \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } \vdash \langle father\_Suc\_n \rangle \langle no\_Suc\_n\_k \rangle no\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime ; \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } \vdash ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \wedge \langle father\_Suc\_n \rangle \langle no\_Suc\_n\_k \rangle no\_Suc\_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \wedge \langle father\_Suc\_n \rangle \langle no\_Suc\_n\_k \rangle no\_Suc\_n \vdash (Dj \rightarrow \bot) \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}\RightLabel{ $W <_R$ }
+\UnaryInfC{$ Dj << Dj \vdash \bot $}\RightLabel{ $(<, ;)$ }
+\UnaryInfC{$ Dj \vdash \bot ; Dj $}\RightLabel{ $W >_R$ }
+\UnaryInfC{$ I \vdash Dj >> \bot ; Dj $}\RightLabel{ $Grishin_R$ }
+\UnaryInfC{$ I \vdash (Dj >> \bot) ; Dj $}\RightLabel{ $E_R$ }
+\UnaryInfC{$ I \vdash Dj ; (Dj >> \bot) $}\RightLabel{ $(>, ;)$ }
+\UnaryInfC{$ Dj >> I \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj >> I \vdash Dj \rightarrow \bot $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\textrm{I} W_{R}$ }
+\UnaryInfC{$ \bot \vdash Dj $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow \bot \vdash (Dj >> I) >> Dj $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (Dj >> I) ; (Dj \rightarrow \bot) \rightarrow \bot \vdash Dj $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow \bot ; (Dj >> I) \vdash Dj $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ Dj >> I \vdash (Dj \rightarrow \bot) \rightarrow \bot >> Dj $}\RightLabel{ $(>, ;)$ }
+\UnaryInfC{$ I \vdash Dj ; ((Dj \rightarrow \bot) \rightarrow \bot >> Dj) $}\RightLabel{ $E_R$ }
+\UnaryInfC{$ I \vdash ((Dj \rightarrow \bot) \rightarrow \bot >> Dj) ; Dj $}\RightLabel{ $Grishin_R$ }
+\UnaryInfC{$ I \vdash (Dj \rightarrow \bot) \rightarrow \bot >> Dj ; Dj $}\RightLabel{ $I >_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow \bot \vdash Dj ; Dj $}\RightLabel{ $C_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow \bot \vdash Dj $}
+\RightLabel{ $Atom$ }
+\AxiomC{$ Dj \vdash \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow \bot \vdash \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \wedge \langle father\_Suc\_n \rangle \langle no\_Suc\_n\_k \rangle no\_Suc\_n \vdash \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime ; \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } \vdash \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } ; (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } >> \{ father\_Suc\_n \} \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $FS\_A\_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ father\_Suc\_n \} (\{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } >> \{ no\_Suc\_n\_k \} Dj) $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ no\_Suc\_n\_k \} 1_{ no\_Suc\_n } >> \{ no\_Suc\_n\_k \} Dj $}\RightLabel{ $FS\_A\_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ no\_Suc\_n\_k \} (1_{ no\_Suc\_n } >> Dj) $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ no\_Suc\_n\_k $}\}$}\, \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash 1_{ no\_Suc\_n } >> Dj $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ no\_Suc\_n\_k $}\}$}\, \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash 1_{ no\_Suc\_n } \rightarrow Dj $}
+\RightLabel{ $One_R$ }
+\AxiomC{$ Phi( no\_Suc\_n ) \vdash 1_{ no\_Suc\_n } $}
+\RightLabel{ $Atom$ }
+\AxiomC{$ Dj \vdash \{ no\_Suc\_n \} Dj $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ 1_{ no\_Suc\_n } \rightarrow Dj \vdash Phi( no\_Suc\_n ) >> \{ no\_Suc\_n \} Dj $}\RightLabel{ $Reduce'R$ }
+\UnaryInfC{$ 1_{ no\_Suc\_n } \rightarrow Dj \vdash \{ no\_Suc\_n \} Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ no\_Suc\_n\_k $}\}$}\, \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ no\_Suc\_n \} Dj $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ no\_Suc\_n\_k $}\}$}\, \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ no\_Suc\_n ] Dj $}\RightLabel{ $Back_forw_A2$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ no\_Suc\_n\_k \} [ no\_Suc\_n ] Dj $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ no\_Suc\_n\_k ] [ no\_Suc\_n ] Dj $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ no\_Suc\_n\_k ] [ no\_Suc\_n ] Dj \vdash [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ father\_Suc\_n $}\}$}\, (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $Back_forw_A2$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash \{ father\_Suc\_n \} [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ father\_Suc\_n \rightarrow (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash father\_Suc\_n >> [ father\_Suc\_n ] [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash father\_Suc\_n >> [ father\_Suc\_n ] [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash \{ j \} father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n_Suc_k ] Dj $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash [ j ] (father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n_Suc_k ] Dj) $}\DisplayProof

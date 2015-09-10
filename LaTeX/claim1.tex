@@ -1,0 +1,157 @@
+\RightLabel{ $Id$ }
+\AxiomC{$ dirty\_Suc\_n\_J \vdash dirty\_Suc\_n\_J $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash vision\_Suc\_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n ; E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $C_L$ }
+\UnaryInfC{$ E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ dirty\_Suc\_n\_J ; E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_J \wedge vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_J \wedge vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ dirty\_Suc\_n\_J ; vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash \{ j \} E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ (dirty\_Suc\_n\_J ; vision\_Suc\_n) ; [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $A_L$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J ; vision\_Suc\_n ; [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ vision\_Suc\_n ; [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_J >> [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_J >> [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J ; vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ dirty\_Suc\_n\_J \wedge vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash Dj \rightarrow \bot >> dirty\_Suc\_n\_j\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \vdash \{ j \} (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \vdash (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime $}
+\RightLabel{ $Id$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash \{ j \} E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) ; \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $K_mon_L$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, ([ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) ; [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $Back_forw_K2$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) ; [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash \{ j \} ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash \{ j \} ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash Dj \rightarrow \bot >> dirty\_Suc\_n\_j\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime $}
+\RightLabel{ $Id$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $W <_L$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n << E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash Dj \rightarrow \bot >> E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime ; E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash \{ j \} ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n)) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash Dj \rightarrow \bot >> dirty\_Suc\_n\_j\_prime $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash Dj \rightarrow \bot >> E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n ; Dj \rightarrow \bot \vdash E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ (Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n ; Dj \rightarrow \bot \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n ; Dj \rightarrow \bot) ; Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $A_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n ; Dj \rightarrow \bot ; Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot ; Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n << (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $A_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot ; Dj \rightarrow \bot) ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n << (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; Dj \rightarrow \bot \vdash (dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n << (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) << (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime $}\RightLabel{ $C_L$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash (dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n << (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) << (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n << (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ (Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $A_L$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash Dj \rightarrow \bot >> dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime ; (Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n)) \vdash \{ j \} (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n)) \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash Dj \rightarrow \bot >> [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash \{ j \} (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash [ j ] ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}\RightLabel{ $W >_R$ }
+\UnaryInfC{$ father\_Suc\_n \vdash Dj \rightarrow \bot >> Dj \rightarrow \bot $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ Dj \rightarrow \bot ; father\_Suc\_n \vdash Dj \rightarrow \bot $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n >> [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash \{ j \} (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}
+\RightLabel{ $Id$ }
+\AxiomC{$ Dj \vdash Dj $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ Dj \rightarrow \bot \vdash Dj >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ Dj \rightarrow \bot \vdash Dj \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ father\_Suc\_n \vdash father\_Suc\_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ Dj \rightarrow \bot ; father\_Suc\_n \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n $}\RightLabel{ $\wedge_L$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n >> [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime \vdash (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash \{ j \} (Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge ((Dj \rightarrow \bot) \rightarrow E\_Suc\_n\_Suc\_k\_vision\_Suc\_n)) \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ [ j ] (((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge E\_Suc\_n\_Suc\_k\_vision\_Suc\_n) \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ [ j ] ((Dj \rightarrow \bot) \rightarrow dirty\_Suc\_n\_j\_prime) \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ dirty\_Suc\_n\_J \wedge vision\_Suc\_n \wedge [ j ] E\_Suc\_n\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ dirty\_Suc\_n\_J \wedge E\_Suc\_n\_Suc\_Suc\_k\_vision\_Suc\_n \vdash [ j ] ((Dj \rightarrow \bot) \wedge father\_Suc\_n \rightarrow [ father\_Suc\_n ] [ no\_Suc\_n\_k ] [ j\_prime ] Dj\_prime) $}\DisplayProof
