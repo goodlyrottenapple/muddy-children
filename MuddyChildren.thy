@@ -479,12 +479,13 @@ case 0 (* k=0, hence there is Suc k = 1 dirty child, called j, J={j} *)
   have set_eq: "{1..Suc n} - {j} = set ([x \<leftarrow>  [[1 .. Suc n]]. x\<noteq>j])" by auto
 
 
+  
   have red_ax_1: "loc \<turnstile>d (dirty (Suc n) J \<and>\<^sub>F E (Suc n) \<^sup>Suc 0 vision (Suc n)) \<^sub>S \<turnstile>\<^sub>S 
     ((father (Suc n) \<^sub>S) \<rightarrow>\<^sub>S (forwK\<^sub>S `j` (father (Suc n) \<^sub>S) \<rightarrow>\<^sub>S (`j` \<^sub>F \<^sub>S))) \<Longrightarrow> 
     loc \<turnstile>d (dirty (Suc n) J \<and>\<^sub>F  E (Suc n) \<^sup>Suc 0 vision (Suc n)) \<^sub>S \<turnstile>\<^sub>S 
     (fboxA\<^sub>F (''father'' @ `Suc n`) Formula_FboxA (''no'' @ `Suc n`) \<^sup>0 fboxK\<^sub>F `j` (`j` \<^sub>F) )\<^sub>S"
   apply (subst k_apply.simps(1))
-
+  (* begin proof red_ax_1.cs *)
   apply (rule_tac derivable.FboxA_R)
   apply (rule_tac derivable.Back_forw_A2)
   apply (rule_tac derivable.FboxK_R)
@@ -529,7 +530,7 @@ case 0 (* k=0, hence there is Suc k = 1 dirty child, called j, J={j} *)
   apply simp
   
   by (rule_tac derivable.One_R)
-
+  (* end proof red_ax_1.cs *)
 
   have fboxK_map_subst: "\<And>list. map (\<lambda>h. fboxK\<^sub>F `j` ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F))) list =  map (Formula_FboxK `j`)  (map (\<lambda>h. ((`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F))) list)" by simp
   have map_subst: "map (\<lambda>h. (`h` \<^sub>F) \<rightarrow>\<^sub>F (`j` \<^sub>F)) ( [[1 .. Suc n]]) = map (\<lambda>B. B \<rightarrow>\<^sub>F (`j` \<^sub>F)) (map (Formula_Atprop \<circ> nat_to_string) ( [[1 .. Suc n]]))" by simp
@@ -1096,7 +1097,7 @@ case (Suc k) (* the number of dirty children is Suc(Suc k) *)
    \<and>\<^sub>F ( fdiamK\<^sub>F `j'` ((`j'` \<^sub>F)\<rightarrow>\<^sub>F \<bottom>\<^sub>F)) )) )\<^sub>S \<turnstile>\<^sub>S ( Formula_FdiamA (''no'' @ `Suc n`) \<^sup>k ( \<bottom>\<^sub>F )) \<^sub>S" 
   apply (rule k_apply_elim_diamA )
   apply (rule_tac derivable.Bot_R)
-  apply (rule_tac derivable.Refl_ForwK)
+  apply (rule_tac a="`j'`" in derivable.Refl_ForwK)
   using agent apply simp
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impR_disp2)
@@ -1159,7 +1160,7 @@ case (Suc k) (* the number of dirty children is Suc(Suc k) *)
   apply (rule_tac f="Formula_FdiamA (''no'' @ `Suc n`) \<^sup>k \<bottom>\<^sub>F" in derivable.SingleCut)
   using cut apply simp
   using lem363f apply simp
-  
+
   
   apply (rule_tac derivable.Forw_back_A)
   apply (rule_tac derivable.Bot_R)
