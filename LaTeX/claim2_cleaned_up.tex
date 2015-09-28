@@ -1,0 +1,93 @@
+\RightLabel{ $Id$ }
+\AxiomC{$ D_j \vdash D_j $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ D_j \rightarrow \bot \vdash D_j >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ D_j \rightarrow \bot \vdash D_j \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ \textsf{father}_n \vdash \textsf{father}_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ D_j \rightarrow \bot ; \textsf{father}_n \vdash (D_j \rightarrow \bot) \wedge \textsf{father}_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash D_j \rightarrow \bot ; \textsf{father}_n >> [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (D_j \rightarrow \bot ; \textsf{father}_n) ; (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $A_L$ }
+\UnaryInfC{$ D_j \rightarrow \bot ; \textsf{father}_n ; (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ \textsf{father}_n ; (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash D_j \rightarrow \bot >> [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ \textsf{father}_n ; (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \textsf{father}_n >> (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \textsf{father}_n \rightarrow (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}
+\RightLabel{ $Id$ }
+\AxiomC{$ \textsf{father}_n \vdash \textsf{father}_n $}
+\RightLabel{ $Id$ }
+\AxiomC{$ D_j \vdash D_j $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\bot_R$ }
+\UnaryInfC{$ \bot \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ D_j \rightarrow \bot \vdash D_j >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ D_j \rightarrow \bot \vdash D_j \rightarrow \bot $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash D_j \rightarrow \bot >> [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} $}
+\RightLabel{ $Id$ }
+\AxiomC{$ \textsf{no}_n \vdash \textsf{no}_n $}\RightLabel{ $Pre_L$ }
+\UnaryInfC{$ 1_{ \textsf{no}_n } \vdash \textsf{no}_n $}\RightLabel{ $FdiamA_R$ }
+\UnaryInfC{$ \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } \vdash \langle \textsf{no}_n \rangle^{k-1} \textsf{no}_n $}\RightLabel{ $FdiamA_R$ }
+\UnaryInfC{$ \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } \vdash \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^{k-1} \textsf{no}_n $}\RightLabel{ $\wedge_R$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} ; \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } \vdash ((D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'}) \wedge \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^{k-1} \textsf{no}_n $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ ((D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'}) \wedge \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^{k-1} \textsf{no}_n \vdash (D_j \rightarrow \bot) \rightarrow \bot $}
+\RightLabel{ $Id$ }
+\AxiomC{$ D_j \vdash D_j $}\RightLabel{ $W <_R$ }
+\UnaryInfC{$ D_j << D_j \vdash \bot $}\RightLabel{ $(<, ;)$ }
+\UnaryInfC{$ D_j \vdash \bot ; D_j $}\RightLabel{ $W >_R$ }
+\UnaryInfC{$ I \vdash D_j >> \bot ; D_j $}\RightLabel{ $Grishin_R$ }
+\UnaryInfC{$ I \vdash (D_j >> \bot) ; D_j $}\RightLabel{ $E_R$ }
+\UnaryInfC{$ I \vdash D_j ; (D_j >> \bot) $}\RightLabel{ $(>, ;)$ }
+\UnaryInfC{$ D_j >> I \vdash D_j >> \bot $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ D_j >> I \vdash D_j \rightarrow \bot $}
+\RightLabel{ $\bot_L$ }
+\AxiomC{$ \bot \vdash I $}\RightLabel{ $\textrm{I} W_{R}$ }
+\UnaryInfC{$ \bot \vdash D_j $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \rightarrow \bot \vdash (D_j >> I) >> D_j $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (D_j >> I) ; (D_j \rightarrow \bot) \rightarrow \bot \vdash D_j $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow \bot ; (D_j >> I) \vdash D_j $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ D_j >> I \vdash (D_j \rightarrow \bot) \rightarrow \bot >> D_j $}\RightLabel{ $(>, ;)$ }
+\UnaryInfC{$ I \vdash D_j ; ((D_j \rightarrow \bot) \rightarrow \bot >> D_j) $}\RightLabel{ $E_R$ }
+\UnaryInfC{$ I \vdash ((D_j \rightarrow \bot) \rightarrow \bot >> D_j) ; D_j $}\RightLabel{ $Grishin_R$ }
+\UnaryInfC{$ I \vdash (D_j \rightarrow \bot) \rightarrow \bot >> D_j ; D_j $}\RightLabel{ $I >_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow \bot \vdash D_j ; D_j $}\RightLabel{ $C_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow \bot \vdash D_j $}
+\RightLabel{ $Atom$ }
+\AxiomC{$ D_j \vdash \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \rightarrow \bot \vdash \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ ((D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'}) \wedge \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^{k-1} \textsf{no}_n \vdash \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} ; \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } \vdash \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } ; (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } >> \{ \textsf{father}_n \} \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $FS\_A\_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{father}_n \} (\{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } >> \{ \textsf{no}_n \}^{k-1} D_j) $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{no}_n \}^{k-1} 1_{ \textsf{no}_n } >> \{ \textsf{no}_n \}^{k-1} D_j $}\RightLabel{ $FS\_A\_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{no}_n \}^{k-1} (1_{ \textsf{no}_n } >> D_j) $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{no}_n $}\}$}\, ^{k-1} \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash 1_{ \textsf{no}_n } >> D_j $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{no}_n $}\}$}\, ^{k-1} \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash 1_{ \textsf{no}_n } \rightarrow D_j $}
+\RightLabel{ $One_R$ }
+\AxiomC{$ \Phi_{ \textsf{no}_n } \vdash 1_{ \textsf{no}_n } $}
+\RightLabel{ $Atom$ }
+\AxiomC{$ D_j \vdash \{ \textsf{no}_n \} D_j $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ 1_{ \textsf{no}_n } \rightarrow D_j \vdash \Phi_{ \textsf{no}_n } >> \{ \textsf{no}_n \} D_j $}\RightLabel{ $Reduce'R$ }
+\UnaryInfC{$ 1_{ \textsf{no}_n } \rightarrow D_j \vdash \{ \textsf{no}_n \} D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{no}_n $}\}$}\, ^{k-1} \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{no}_n \} D_j $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{no}_n $}\}$}\, ^{k-1} \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{no}_n ] D_j $}\RightLabel{ $Back_forw_A2$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{no}_n \}^{k-1} [ \textsf{no}_n ] D_j $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{no}_n ]^{k-1} [ \textsf{no}_n ] D_j $}
+\RightLabel{ $Prem$ }
+\AxiomC{$ [ \textsf{no}_n ]^{k-1} [ \textsf{no}_n ] D_j \vdash [ \textsf{no}_n ]^k D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{no}_n ]^k D_j $}\RightLabel{ $Back_forw_A2$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \{ \textsf{father}_n \} [ \textsf{no}_n ]^k D_j $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^k D_j $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ \textsf{father}_n \rightarrow (D_j \rightarrow \bot) \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \textsf{father}_n >> [ \textsf{father}_n ] [ \textsf{no}_n ]^k D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \textsf{father}_n >> [ \textsf{father}_n ] [ \textsf{no}_n ]^k D_j $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ (D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'} \vdash \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^k D_j $}\RightLabel{ $FboxK_L$ }
+\UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'}) \vdash \{ j \} \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^k D_j $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \wedge \textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^{k-1} \Box_{j'} D_{j'}) \vdash \Box_j (\textsf{father}_n \rightarrow [ \textsf{father}_n ] [ \textsf{no}_n ]^k D_j) $}\DisplayProof

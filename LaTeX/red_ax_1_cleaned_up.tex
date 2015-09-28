@@ -1,0 +1,40 @@
+\RightLabel{ $One_R$ }
+\AxiomC{$ \Phi_{ \textsf{father}_n } \vdash 1_{ \textsf{father}_n } $}
+
+\RightLabel{ $Prem$ }
+\AxiomC{$ \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \textsf{father}_n >> \{ j \} (\textsf{father}_n >> D_j) $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ \textsf{father}_n ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ j \} (\textsf{father}_n >> D_j) $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ \textsf{father}_n \vdash \{ j \} (\textsf{father}_n >> D_j) << \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) $}\RightLabel{ $Pre_L$ }
+\UnaryInfC{$ 1_{ \textsf{father}_n } \vdash \{ j \} (\textsf{father}_n >> D_j) << \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \Phi_{ \textsf{father}_n } \vdash \{ j \} (\textsf{father}_n >> D_j) << \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ \Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ j \} (\textsf{father}_n >> D_j) $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) \vdash \textsf{father}_n >> D_j $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ \textsf{father}_n ; \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) \vdash D_j $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ \textsf{father}_n \vdash D_j << \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) $}\RightLabel{ $Pre_L$ }
+\UnaryInfC{$ 1_{ \textsf{father}_n } \vdash D_j << \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ 1_{ \textsf{father}_n } ; \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) \vdash D_j $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) \vdash 1_{ \textsf{father}_n } >> D_j $}\RightLabel{ $\rightarrow_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) \vdash 1_{ \textsf{father}_n } \rightarrow D_j $}
+
+\RightLabel{ $One_R$ }
+\AxiomC{$ \Phi_{ \textsf{father}_n } \vdash 1_{ \textsf{father}_n } $}
+
+\RightLabel{ $Atom$ }
+\AxiomC{$ D_j \vdash \{ \textsf{father}_n \} D_j $}\RightLabel{ $\rightarrow_L$ }
+\BinaryInfC{$ 1_{ \textsf{father}_n } \rightarrow D_j \vdash \Phi_{ \textsf{father}_n } >> \{ \textsf{father}_n \} D_j $}\RightLabel{ $Reduce'R$ }
+\UnaryInfC{$ 1_{ \textsf{father}_n } \rightarrow D_j \vdash \{ \textsf{father}_n \} D_j $}\RightLabel{ $Cut$ }
+\BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) \vdash \{ \textsf{father}_n \} D_j $}\RightLabel{ $Back_forw_K2$ }
+\UnaryInfC{$ \Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ j \} \{ \textsf{father}_n \} D_j $}\RightLabel{ $Swapout'R$ }
+\UnaryInfC{$ \mbox{\Large {\bf ;}} [\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)]  \vdash \{ \textsf{father}_n \} \{ j \} D_j $}\RightLabel{ $Bigcomma_Cons_L$ }
+\UnaryInfC{$ (\Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n)) ; \mbox{\Large {\bf ;}} []  \vdash \{ \textsf{father}_n \} \{ j \} D_j $}\RightLabel{ $E_L$ }
+\UnaryInfC{$ \mbox{\Large {\bf ;}} []  ; \Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ \textsf{father}_n \} \{ j \} D_j $}\RightLabel{ $(;, <)$ }
+\UnaryInfC{$ \mbox{\Large {\bf ;}} []  \vdash \{ \textsf{father}_n \} \{ j \} D_j << \Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) $}\RightLabel{ $Bigcomma_Nil_L$ }
+\UnaryInfC{$ I \vdash \{ \textsf{father}_n \} \{ j \} D_j << \Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) $}\RightLabel{ $I <_R$ }
+\UnaryInfC{$ \Phi_{ \textsf{father}_n } ; \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ \textsf{father}_n \} \{ j \} D_j $}\RightLabel{ $(;, >)$ }
+\UnaryInfC{$ \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \Phi_{ \textsf{father}_n } >> \{ \textsf{father}_n \} \{ j \} D_j $}\RightLabel{ $Reduce'R$ }
+\UnaryInfC{$ \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ \textsf{father}_n \} \{ j \} D_j $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ j \} D_j $}\RightLabel{ $FboxK_R$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \Box_j D_j $}\RightLabel{ $Back_forw_A2$ }
+\UnaryInfC{$ \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash \{ \textsf{father}_n \} \Box_j D_j $}\RightLabel{ $FboxA_R$ }
+\UnaryInfC{$ \textsf{dirty}(n,J) \wedge \textsf{E}(n) \textsf{vision}(n) \vdash [ \textsf{father}_n ] \Box_j D_j $}
+\DisplayProof
