@@ -309,7 +309,7 @@ case goal1
       have "set (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow> [[1 .. n]] . x \<notin> set J']) - set (map ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [x\<leftarrow> [[1 .. n]] . x \<notin> set J]) =
       image ((\<lambda>x. (x \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) ((set [x\<leftarrow> [[1 .. n]] . x \<notin> set J']) - set [x\<leftarrow> [[1 .. n]] . x \<notin> set J])"
       proof -
-        have "\<forall>F f. F \<noteq> {} \<or> (f\<Colon>Formula) \<notin> F"
+        have "\<forall>F f. F \<noteq> {} \<or> (f :: Formula) \<notin> F"
           by blast
         hence f1: "set (map ((\<lambda>cs. (cs \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [n\<leftarrow> [[1 .. n]] . n \<notin> set J']) - set (map ((\<lambda>cs. (cs \<^sub>F) \<rightarrow>\<^sub>F \<bottom>\<^sub>F) \<circ> nat_to_string) [n\<leftarrow> [[1 .. n]] . n \<notin> set J]) \<noteq> {}"
           using "0" by blast
