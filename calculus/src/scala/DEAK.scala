@@ -2651,9 +2651,10 @@ def fold[A, B](f: A => B => B, x1: List[A], s: B): B = (f, x1, s) match {
 }
 
 def sup_set[A : equal](x0: set[A], a: set[A]): set[A] = (x0, a) match {
-  case (coset(xs), a) => coset[A](filter[A]((x: A) => ! (member[A](x, a)), xs))
+  case (coset(xs), a) =>
+    coset[A](filter[A](((x: A) => ! (member[A](x, a))), xs))
   case (seta(xs), a) =>
-    fold[A, set[A]]((aa: A) => (b: set[A]) => insert[A](aa, b), xs, a)
+    fold[A, set[A]](((aa: A) => (b: set[A]) => insert[A](aa, b)), xs, a)
 }
 
 abstract sealed class nibble
@@ -2686,24 +2687,24 @@ def image[A, B](f: A => B, x1: set[A]): set[B] = (f, x1) match {
 def freevars_Formula(x0: Formula): set[Formula] = x0 match {
   case Formula_Atprop(vara) =>
     image[Atprop,
-           Formula]((a: Atprop) => Formula_Atprop(a), freevars_Atprop(vara))
+           Formula](((a: Atprop) => Formula_Atprop(a)), freevars_Atprop(vara))
   case Formula_Bin(var1, uu, var2) =>
     sup_set[Formula](freevars_Formula(var1), freevars_Formula(var2))
   case Formula_Freevar(vara) =>
     insert[Formula](Formula_Freevar(vara), bot_set[Formula])
   case Formula_Action_Formula(uv, act1, form1) =>
     sup_set[Formula](image[Action,
-                            Formula]((a: Action) => Formula_Action(a),
+                            Formula](((a: Action) => Formula_Action(a)),
                                       freevars_Action(act1)),
                       freevars_Formula(form1))
   case Formula_Agent_Formula(uw, ag1, form1) =>
     sup_set[Formula](image[Agent,
-                            Formula]((a: Agent) => Formula_Agent(a),
+                            Formula](((a: Agent) => Formula_Agent(a)),
                                       freevars_Agent(ag1)),
                       freevars_Formula(form1))
   case Formula_Precondition(act1) =>
     image[Action,
-           Formula]((a: Action) => Formula_Action(a), freevars_Action(act1))
+           Formula](((a: Action) => Formula_Action(a)), freevars_Action(act1))
   case Formula_Zer(act1) => bot_set[Formula]
   case Formula_Agent(ag1) =>
     insert[Formula](Formula_Freevar(List('a', 'g')), bot_set[Formula])
@@ -2711,9 +2712,9 @@ def freevars_Formula(x0: Formula): set[Formula] = x0 match {
     insert[Formula](Formula_Freevar(List('a', 'c', 't')), bot_set[Formula])
 }
 
-def comp[A, B, C](f: A => B, g: C => A): C => B = (x: C) => f(g(x))
+def comp[A, B, C](f: A => B, g: C => A): C => B = ((x: C) => f(g(x)))
 
-def id[A]: A => A = (x: A) => x
+def id[A]: A => A = ((x: A) => x)
 
 def foldr[A, B](f: A => B => B, x1: List[A]): B => B = (f, x1) match {
   case (f, Nil) => id[B]
@@ -2723,7 +2724,7 @@ def foldr[A, B](f: A => B => B, x1: List[A]): B => B = (f, x1) match {
 def freevars_Structure(x0: Structure): set[Structure] = x0 match {
   case Structure_Formula(vara) =>
     image[Formula,
-           Structure]((a: Formula) => Structure_Formula(a),
+           Structure](((a: Formula) => Structure_Formula(a)),
                        freevars_Formula(vara))
   case Structure_Bin(var1, uu, var2) =>
     sup_set[Structure](freevars_Structure(var1), freevars_Structure(var2))
@@ -2731,27 +2732,27 @@ def freevars_Structure(x0: Structure): set[Structure] = x0 match {
     insert[Structure](Structure_Freevar(vara), bot_set[Structure])
   case Structure_Action_Structure(uv, act1, struct) =>
     sup_set[Structure](image[Action,
-                              Structure]((x: Action) =>
-   Structure_Formula(Formula_Action(x)),
+                              Structure](((x: Action) =>
+   Structure_Formula(Formula_Action(x))),
   freevars_Action(act1)),
                         freevars_Structure(struct))
   case Structure_Agent_Structure(uw, ag1, struct) =>
     sup_set[Structure](image[Agent,
-                              Structure]((x: Agent) =>
-   Structure_Formula(Formula_Agent(x)),
+                              Structure](((x: Agent) =>
+   Structure_Formula(Formula_Agent(x))),
   freevars_Agent(ag1)),
                         freevars_Structure(struct))
   case Structure_Phi(act1) =>
     image[Action,
-           Structure]((x: Action) => Structure_Formula(Formula_Action(x)),
+           Structure](((x: Action) => Structure_Formula(Formula_Action(x))),
                        freevars_Action(act1))
   case Structure_Bigcomma(list) =>
     (foldr[Structure,
             set[Structure]](comp[set[Structure],
                                   (set[Structure]) => set[Structure],
-                                  Structure]((a: set[Structure]) =>
-       (b: set[Structure]) => sup_set[Structure](a, b),
-      (a: Structure) => freevars_Structure(a)),
+                                  Structure](((a: set[Structure]) =>
+       (b: set[Structure]) => sup_set[Structure](a, b)),
+      ((a: Structure) => freevars_Structure(a))),
                              list)).apply(bot_set[Structure])
   case Structure_Zer(v) => bot_set[Structure]
 }
@@ -2759,7 +2760,7 @@ def freevars_Structure(x0: Structure): set[Structure] = x0 match {
 def freevars_Sequent(x0: Sequent): set[Sequent] = x0 match {
   case Sequenta(var1, var2) =>
     image[Structure,
-           Sequent]((a: Structure) => Sequent_Structure(a),
+           Sequent](((a: Structure) => Sequent_Structure(a)),
                      sup_set[Structure](freevars_Structure(var1),
  freevars_Structure(var2)))
   case Sequent_Structure(v) => bot_set[Sequent]
@@ -3295,9 +3296,9 @@ def list_ex[A](p: A => Boolean, x1: List[A]): Boolean = (p, x1) match {
 }
 
 def m_clash[A : equal, B : equal](x: (A, B), y: List[(A, B)]): Boolean =
-  list_ex[(A, B)]((a: (A, B)) =>
+  list_ex[(A, B)](((a: (A, B)) =>
                     eq[A](fsta[A, B](a), fsta[A, B](x)) &&
-                      ! (eq[B](snda[A, B](a), snda[A, B](x))),
+                      ! (eq[B](snda[A, B](a), snda[A, B](x)))),
                    y)
 
 def merge[A : equal, B : equal](x0: List[(A, B)], y: List[(A, B)]): List[(A, B)]
@@ -3306,11 +3307,11 @@ def merge[A : equal, B : equal](x0: List[(A, B)], y: List[(A, B)]): List[(A, B)]
   case (Nil, y) => y
   case (x :: xs, y) =>
     (if (m_clash[A, B](x, y))
-      merge[A, B](filter[(A, B)]((a: (A, B)) =>
-                                   ! (eq[A](fsta[A, B](a), fsta[A, B](x))),
+      merge[A, B](filter[(A, B)](((a: (A, B)) =>
+                                   ! (eq[A](fsta[A, B](a), fsta[A, B](x)))),
                                   xs),
-                   filter[(A, B)]((a: (A, B)) =>
-                                    ! (eq[A](fsta[A, B](a), fsta[A, B](x))),
+                   filter[(A, B)](((a: (A, B)) =>
+                                    ! (eq[A](fsta[A, B](a), fsta[A, B](x)))),
                                    y))
       else x :: merge[A, B](xs, y))
 }
@@ -3326,11 +3327,11 @@ def match_Formula(xa0: Formula, x: Formula): List[(Formula, Formula)] = (xa0, x)
        case Formula_Atprop(m) =>
          map[(Atprop, Atprop),
               (Formula,
-                Formula)]((a: (Atprop, Atprop)) =>
+                Formula)](((a: (Atprop, Atprop)) =>
                             {
                               val (xa, y): (Atprop, Atprop) = a;
                               (Formula_Atprop(xa), Formula_Atprop(y))
-                            },
+                            }),
                            match_Atprop(rule, m))
        case Formula_Bin(_, _, _) => Nil
        case Formula_Freevar(_) => Nil
@@ -3363,11 +3364,11 @@ def match_Formula(xa0: Formula, x: Formula): List[(Formula, Formula)] = (xa0, x)
            merge[Formula,
                   Formula](map[(Action, Action),
                                 (Formula,
-                                  Formula)]((a: (Action, Action)) =>
+                                  Formula)](((a: (Action, Action)) =>
       {
         val (xa, y): (Action, Action) = a;
         (Formula_Action(xa), Formula_Action(y))
-      },
+      }),
      match_Action(act1, act2)),
                             match_Formula(form1, form2))
            else Nil)
@@ -3389,11 +3390,11 @@ def match_Formula(xa0: Formula, x: Formula): List[(Formula, Formula)] = (xa0, x)
            merge[Formula,
                   Formula](map[(Agent, Agent),
                                 (Formula,
-                                  Formula)]((a: (Agent, Agent)) =>
+                                  Formula)](((a: (Agent, Agent)) =>
       {
         val (xa, y): (Agent, Agent) = a;
         (Formula_Agent(xa), Formula_Agent(y))
-      },
+      }),
      match_Agent(act1, act2)),
                             match_Formula(form1, form2))
            else Nil)
@@ -3415,11 +3416,11 @@ def match_Formula(xa0: Formula, x: Formula): List[(Formula, Formula)] = (xa0, x)
        case Formula_Precondition(act2) =>
          map[(Action, Action),
               (Formula,
-                Formula)]((a: (Action, Action)) =>
+                Formula)](((a: (Action, Action)) =>
                             {
                               val (xa, y): (Action, Action) = a;
                               (Formula_Action(xa), Formula_Action(y))
-                            },
+                            }),
                            match_Action(act1, act2))
        case Formula_Zer(_) => Nil
      })
@@ -3440,11 +3441,11 @@ def match_Structure(xa0: Structure, x: Structure): List[(Structure, Structure)]
        case Structure_Formula(form) =>
          map[(Formula, Formula),
               (Structure,
-                Structure)]((a: (Formula, Formula)) =>
+                Structure)](((a: (Formula, Formula)) =>
                               {
                                 val (xa, y): (Formula, Formula) = a;
                                 (Structure_Formula(xa), Structure_Formula(y))
-                              },
+                              }),
                              match_Formula(rule, form))
        case Structure_Freevar(_) => Nil
        case Structure_Phi(_) => Nil
@@ -3474,12 +3475,12 @@ def match_Structure(xa0: Structure, x: Structure): List[(Structure, Structure)]
            merge[Structure,
                   Structure](map[(Action, Action),
                                   (Structure,
-                                    Structure)]((a: (Action, Action)) =>
+                                    Structure)](((a: (Action, Action)) =>
           {
             val (xa, y): (Action, Action) = a;
             (Structure_Formula(Formula_Action(xa)),
               Structure_Formula(Formula_Action(y)))
-          },
+          }),
          match_Action(act1, act2)),
                               match_Structure(struct1, struct2))
            else Nil)
@@ -3499,12 +3500,12 @@ def match_Structure(xa0: Structure, x: Structure): List[(Structure, Structure)]
            merge[Structure,
                   Structure](map[(Agent, Agent),
                                   (Structure,
-                                    Structure)]((a: (Agent, Agent)) =>
+                                    Structure)](((a: (Agent, Agent)) =>
           {
             val (xa, y): (Agent, Agent) = a;
             (Structure_Formula(Formula_Agent(xa)),
               Structure_Formula(Formula_Agent(y)))
-          },
+          }),
          match_Agent(act1, act2)),
                               match_Structure(struct1, struct2))
            else Nil)
@@ -3526,12 +3527,12 @@ def match_Structure(xa0: Structure, x: Structure): List[(Structure, Structure)]
        case Structure_Phi(act2) =>
          map[(Action, Action),
               (Structure,
-                Structure)]((a: (Action, Action)) =>
+                Structure)](((a: (Action, Action)) =>
                               {
                                 val (xa, y): (Action, Action) = a;
                                 (Structure_Formula(Formula_Action(xa)),
                                   Structure_Formula(Formula_Action(y)))
-                              },
+                              }),
                              match_Action(act1, act2))
        case Structure_Zer(_) => Nil
      })
@@ -3544,11 +3545,11 @@ def match_Sequent(uu: Sequent, uv: Sequent): List[(Sequent, Sequent)] = (uu, uv)
   case (Sequenta(var11, var12), Sequenta(var21, var22)) =>
     map[(Structure, Structure),
          (Sequent,
-           Sequent)]((a: (Structure, Structure)) =>
+           Sequent)](((a: (Structure, Structure)) =>
                        {
                          val (x, y): (Structure, Structure) = a;
                          (Sequent_Structure(x), Sequent_Structure(y))
-                       },
+                       }),
                       merge[Structure,
                              Structure](match_Structure(var11, var21),
  match_Structure(var12, var22)))
@@ -3607,7 +3608,7 @@ final case class Minus() extends polarity
 final case class N() extends polarity
 
 abstract sealed class multiset[A]
-final case class multiset_of[A](a: List[A]) extends multiset[A]
+final case class mset[A](a: List[A]) extends multiset[A]
 
 def ant(x0: Sequent): Structure = x0 match {
   case Sequenta(x, y) => x
@@ -3637,134 +3638,134 @@ def ruleRuleStructAct(x: Locale, xa1: RuleStructAct): ruleder = (x, xa1) match {
     ruledera(Sequenta(Structure_Action_Structure(Structure_BackA(),
           Action_Freevar(List('a')), Structure_Zer(Structure_Neutral())),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, A_mon_L()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_BackA(),
           Action_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                          Structure_Freevar(List('Y')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Action_Structure(Structure_BackA(),
             Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                          Structure_Comma(),
                          Structure_Action_Structure(Structure_BackA(),
              Action_Freevar(List('a')), Structure_Freevar(List('Y')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, Mon_A_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                           Structure_Freevar(List('Y'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Action_Structure(Structure_ForwA(),
              Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                           Structure_Comma(),
                           Structure_Action_Structure(Structure_ForwA(),
-              Action_Freevar(List('a')), Structure_Freevar(List('Y'))))))))
+              Action_Freevar(List('a')), Structure_Freevar(List('Y')))))))))
   case (x, Nec_A_L()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a')), Structure_Zer(Structure_Neutral())),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FS_A_L()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                          Structure_Freevar(List('Z')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Action_Structure(Structure_ForwA(),
             Action_Freevar(List('a')), Structure_Freevar(List('Y'))),
                          Structure_ImpR(),
                          Structure_Action_Structure(Structure_ForwA(),
              Action_Freevar(List('a')), Structure_Freevar(List('Z')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FS_A_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a')),
            Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                           Structure_Freevar(List('Z'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Action_Structure(Structure_ForwA(),
              Action_Freevar(List('a')), Structure_Freevar(List('Y'))),
                           Structure_ImpR(),
                           Structure_Action_Structure(Structure_ForwA(),
-              Action_Freevar(List('a')), Structure_Freevar(List('Z'))))))))
+              Action_Freevar(List('a')), Structure_Freevar(List('Z')))))))))
   case (x, A_mon_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Action_Structure(Structure_BackA(),
            Action_Freevar(List('a')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                           Structure_Freevar(List('Y'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Action_Structure(Structure_BackA(),
              Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                           Structure_Comma(),
                           Structure_Action_Structure(Structure_BackA(),
-              Action_Freevar(List('a')), Structure_Freevar(List('Y'))))))))
+              Action_Freevar(List('a')), Structure_Freevar(List('Y')))))))))
   case (x, A_FS_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Action_Structure(Structure_BackA(),
            Action_Freevar(List('a')),
            Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                           Structure_Freevar(List('Z'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Action_Structure(Structure_BackA(),
              Action_Freevar(List('a')), Structure_Freevar(List('Y'))),
                           Structure_ImpR(),
                           Structure_Action_Structure(Structure_BackA(),
-              Action_Freevar(List('a')), Structure_Freevar(List('Z'))))))))
+              Action_Freevar(List('a')), Structure_Freevar(List('Z')))))))))
   case (x, Nec_A_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a')), Structure_Zer(Structure_Neutral()))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, Mon_A_L()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                          Structure_Freevar(List('Y')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Action_Structure(Structure_ForwA(),
             Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                          Structure_Comma(),
                          Structure_Action_Structure(Structure_ForwA(),
              Action_Freevar(List('a')), Structure_Freevar(List('Y')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, A_FS_L()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_BackA(),
           Action_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                          Structure_Freevar(List('Z')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Action_Structure(Structure_BackA(),
             Action_Freevar(List('a')), Structure_Freevar(List('Y'))),
                          Structure_ImpR(),
                          Structure_Action_Structure(Structure_BackA(),
              Action_Freevar(List('a')), Structure_Freevar(List('Z')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, A_nec_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Action_Structure(Structure_BackA(),
            Action_Freevar(List('a')), Structure_Zer(Structure_Neutral()))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
 }
 
 def ruleRuleKnowledge(x: Locale, xa1: RuleKnowledge): ruleder = (x, xa1) match {
@@ -3773,34 +3774,34 @@ def ruleRuleKnowledge(x: Locale, xa1: RuleKnowledge): ruleder = (x, xa1) match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(a) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) =>
+                   ((_: Sequent) =>
                      Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
                 Structure_Agent_Structure(Structure_ForwK(), a,
-   Structure_Freevar(List('Y')))))))
+   Structure_Freevar(List('Y'))))))))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
 }
 
@@ -3809,54 +3810,54 @@ def ruleRuleStructEA(x: Locale, xa1: RuleStructEA): ruleder = (x, xa1) match {
     ruledera(Sequenta(Structure_Freevar(List('Y')),
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a')), Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
            Structure_Bin(Structure_Phi(Action_Freevar(List('a'))),
                           Structure_ImpR(),
                           Structure_Action_Structure(Structure_ForwA(),
-              Action_Freevar(List('a')), Structure_Freevar(List('X'))))))))
+              Action_Freevar(List('a')), Structure_Freevar(List('X')))))))))
   case (x, CompA_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Y')),
                        Structure_Bin(Structure_Phi(Action_Freevar(List('a'))),
                                       Structure_ImpR(),
                                       Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
            Structure_Action_Structure(Structure_ForwA(),
                                        Action_Freevar(List('a')),
                                        Structure_Action_Structure(Structure_BackA(),
                            Action_Freevar(List('a')),
-                           Structure_Freevar(List('X'))))))))
+                           Structure_Freevar(List('X')))))))))
   case (x, Balance()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a')), Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, CompA_L()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Phi(Action_Freevar(List('a'))),
                                      Structure_Comma(),
                                      Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Action_Structure(Structure_ForwA(),
                                       Action_Freevar(List('a')),
                                       Structure_Action_Structure(Structure_BackA(),
                           Action_Freevar(List('a')),
                           Structure_Freevar(List('X')))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, Reduce_L()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Phi(Action_Freevar(List('a'))),
                          Structure_Comma(),
                          Structure_Action_Structure(Structure_ForwA(),
              Action_Freevar(List('a')), Structure_Freevar(List('X')))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
 }
 
 def bigcomma_cons_R2(x0: Sequent): Option[List[Sequent]] = x0 match {
@@ -3944,42 +3945,42 @@ def bigcomma_cons_L(x0: Sequent): Option[List[Sequent]] = x0 match {
 def ruleRuleBigcomma(x: Locale, xa1: RuleBigcomma): ruleder = (x, xa1) match {
   case (x, Bigcomma_Nil_R2()) =>
     ruledera(Sequenta(Structure_Freevar(List('Y')), Structure_Bigcomma(Nil)),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, Bigcomma_Nil_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Y')),
                        Structure_Zer(Structure_Neutral())),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
-           Structure_Bigcomma(Nil)))))
+           Structure_Bigcomma(Nil))))))
   case (x, Bigcomma_Nil_L2()) =>
     ruledera(Sequenta(Structure_Bigcomma(Nil), Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, Bigcomma_Nil_L()) =>
     ruledera(Sequenta(Structure_Zer(Structure_Neutral()),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bigcomma(Nil),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, Bigcomma_Cons_R2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (a: Sequent) => bigcomma_cons_R2(a))
+              ((a: Sequent) => bigcomma_cons_R2(a)))
   case (x, Bigcomma_Cons_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (a: Sequent) => bigcomma_cons_R(a))
+              ((a: Sequent) => bigcomma_cons_R(a)))
   case (x, Bigcomma_Cons_L2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (a: Sequent) => bigcomma_cons_L2(a))
+              ((a: Sequent) => bigcomma_cons_L2(a)))
   case (x, Bigcomma_Cons_L()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (a: Sequent) => bigcomma_cons_L(a))
+              ((a: Sequent) => bigcomma_cons_L(a)))
 }
 
 def find[A](uu: A => Boolean, x1: List[A]): Option[A] = (uu, x1) match {
@@ -3992,10 +3993,10 @@ def relAKACheck(fun: Action => Agent => List[Action],
       Boolean
   =
   (find[(Sequent,
-          Sequent)]((x: (Sequent, Sequent)) =>
+          Sequent)](((x: (Sequent, Sequent)) =>
                       equal_Sequenta(fsta[Sequent, Sequent](x),
                                       Sequent_Structure(Structure_Formula(Formula_Action(Action_Freevar(List('a',
-                              'l', 'p', 'h', 'a')))))),
+                              'l', 'p', 'h', 'a'))))))),
                      mlist)
      match {
      case None => false
@@ -4008,9 +4009,9 @@ def relAKACheck(fun: Action => Agent => List[Action],
      case Some((_, Sequent_Structure(Structure_Bin(_, _, _)))) => false
      case Some((_, Sequent_Structure(Structure_Formula(Formula_Action(alpha)))))
        => (find[(Sequent,
-                  Sequent)]((x: (Sequent, Sequent)) =>
+                  Sequent)](((x: (Sequent, Sequent)) =>
                               equal_Sequenta(fsta[Sequent, Sequent](x),
-      Sequent_Structure(Structure_Formula(Formula_Agent(Agent_Freevar(List('a')))))),
+      Sequent_Structure(Structure_Formula(Formula_Agent(Agent_Freevar(List('a'))))))),
                              mlist)
              match {
              case None => false
@@ -4031,10 +4032,10 @@ def relAKACheck(fun: Action => Agent => List[Action],
                               case Formula_Action_Formula(_, _, _) => false
                               case Formula_Agent(ad) =>
                                 (find[(Sequent,
-Sequent)]((x: (Sequent, Sequent)) =>
+Sequent)](((x: (Sequent, Sequent)) =>
             equal_Sequenta(fsta[Sequent, Sequent](x),
                             Sequent_Structure(Structure_Formula(Formula_Action(Action_Freevar(List('b',
-                    'e', 't', 'a')))))),
+                    'e', 't', 'a'))))))),
            mlist)
                                    match {
                                    case None => false
@@ -4053,8 +4054,8 @@ Sequent)]((x: (Sequent, Sequent)) =>
                                      => false
                                    case Some((_,
        Sequent_Structure(Structure_Formula(Formula_Action(beta)))))
-                                     => (find[Action]((x: Action) =>
-                equal_Actiona(x, beta),
+                                     => (find[Action](((x: Action) =>
+                equal_Actiona(x, beta)),
                (fun(alpha))(ad))
    match {
    case None => false
@@ -4132,9 +4133,8 @@ Sequent)]((x: (Sequent, Sequent)) =>
    })
 
 def union[A : equal]: (List[A]) => (List[A]) => List[A] =
-  (a: List[A]) =>
-    (b: List[A]) =>
-      fold[A, List[A]]((aa: A) => (ba: List[A]) => inserta[A](aa, ba), a, b)
+  ((a: List[A]) => (b: List[A]) =>
+    fold[A, List[A]](((aa: A) => (ba: List[A]) => inserta[A](aa, ba)), a, b))
 
 def swapout_R_aux(relAKA: Action => Agent => List[Action], uv: List[Action],
                    seq: Sequent, x3: Sequent):
@@ -4153,11 +4153,11 @@ def swapout_R_aux(relAKA: Action => Agent => List[Action], uv: List[Action],
                                    Sequent)].apply(match_Sequent(seq,
                           replaceAll[Sequent](map[(Structure, Structure),
            (Sequent,
-             Sequent)]((a: (Structure, Structure)) =>
+             Sequent)](((a: (Structure, Structure)) =>
                          {
                            val (xa, ya): (Structure, Structure) = a;
                            (Sequent_Structure(xa), Sequent_Structure(ya))
-                         },
+                         }),
                         (Structure_Formula(Formula_Action(Action_Freevar(List('b',
                                        'e', 't', 'a')))),
                           Structure_Formula(Formula_Action(b))) ::
@@ -4169,11 +4169,11 @@ def swapout_R_aux(relAKA: Action => Agent => List[Action], uv: List[Action],
      x)),
        seq))).apply(map[(Structure, Structure),
                          (Sequent,
-                           Sequent)]((a: (Structure, Structure)) =>
+                           Sequent)](((a: (Structure, Structure)) =>
                                        {
  val (xa, ya): (Structure, Structure) = a;
  (Sequent_Structure(xa), Sequent_Structure(ya))
-                                       },
+                                       }),
                                       (Structure_Formula(Formula_Action(Action_Freevar(List('b',
              'e', 't', 'a')))),
 Structure_Formula(Formula_Action(b))) ::
@@ -4185,11 +4185,11 @@ Structure_Formula(Formula_Action(b))) ::
                    x)))))
            Some[List[Sequent]](replaceAll[Sequent](map[(Structure, Structure),
                 (Sequent,
-                  Sequent)]((a: (Structure, Structure)) =>
+                  Sequent)](((a: (Structure, Structure)) =>
                               {
                                 val (xa, ya): (Structure, Structure) = a;
                                 (Sequent_Structure(xa), Sequent_Structure(ya))
-                              },
+                              }),
                              (Structure_Formula(Formula_Action(Action_Freevar(List('b',
     'e', 't', 'a')))),
                                Structure_Formula(Formula_Action(b))) ::
@@ -4233,10 +4233,10 @@ def betaList(fun: Action => Agent => List[Action],
       List[Action]
   =
   (find[(Sequent,
-          Sequent)]((x: (Sequent, Sequent)) =>
+          Sequent)](((x: (Sequent, Sequent)) =>
                       equal_Sequenta(fsta[Sequent, Sequent](x),
                                       Sequent_Structure(Structure_Formula(Formula_Action(Action_Freevar(List('a',
-                              'l', 'p', 'h', 'a')))))),
+                              'l', 'p', 'h', 'a'))))))),
                      mlist)
      match {
      case None => Nil
@@ -4249,9 +4249,9 @@ def betaList(fun: Action => Agent => List[Action],
      case Some((_, Sequent_Structure(Structure_Bin(_, _, _)))) => Nil
      case Some((_, Sequent_Structure(Structure_Formula(Formula_Action(alpha)))))
        => (find[(Sequent,
-                  Sequent)]((x: (Sequent, Sequent)) =>
+                  Sequent)](((x: (Sequent, Sequent)) =>
                               equal_Sequenta(fsta[Sequent, Sequent](x),
-      Sequent_Structure(Structure_Formula(Formula_Agent(Agent_Freevar(List('a')))))),
+      Sequent_Structure(Structure_Formula(Formula_Agent(Agent_Freevar(List('a'))))))),
                              mlist)
              match {
              case None => Nil
@@ -4317,11 +4317,11 @@ def swapout_R(relAKA: Action => Agent => List[Action], seq: Sequent,
                    betaList(relAKA,
                              map[(Structure, Structure),
                                   (Sequent,
-                                    Sequent)]((a: (Structure, Structure)) =>
+                                    Sequent)](((a: (Structure, Structure)) =>
         {
           val (xa, ya): (Structure, Structure) = a;
           (Sequent_Structure(xa), Sequent_Structure(ya))
-        },
+        }),
        match_Structure(Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
            Structure_Agent_Structure(Structure_ForwK(),
@@ -4357,11 +4357,11 @@ def swapout_L_aux(relAKA: Action => Agent => List[Action], uu: List[Action],
                                    Sequent)].apply(match_Sequent(seq,
                           replaceAll[Sequent](map[(Structure, Structure),
            (Sequent,
-             Sequent)]((a: (Structure, Structure)) =>
+             Sequent)](((a: (Structure, Structure)) =>
                          {
                            val (xa, ya): (Structure, Structure) = a;
                            (Sequent_Structure(xa), Sequent_Structure(ya))
-                         },
+                         }),
                         (Structure_Formula(Formula_Action(Action_Freevar(List('b',
                                        'e', 't', 'a')))),
                           Structure_Formula(Formula_Action(b))) ::
@@ -4373,11 +4373,11 @@ def swapout_L_aux(relAKA: Action => Agent => List[Action], uu: List[Action],
      x)),
        seq))).apply(map[(Structure, Structure),
                          (Sequent,
-                           Sequent)]((a: (Structure, Structure)) =>
+                           Sequent)](((a: (Structure, Structure)) =>
                                        {
  val (xa, ya): (Structure, Structure) = a;
  (Sequent_Structure(xa), Sequent_Structure(ya))
-                                       },
+                                       }),
                                       (Structure_Formula(Formula_Action(Action_Freevar(List('b',
              'e', 't', 'a')))),
 Structure_Formula(Formula_Action(b))) ::
@@ -4389,11 +4389,11 @@ Structure_Formula(Formula_Action(b))) ::
                    x)))))
            Some[List[Sequent]](replaceAll[Sequent](map[(Structure, Structure),
                 (Sequent,
-                  Sequent)]((a: (Structure, Structure)) =>
+                  Sequent)](((a: (Structure, Structure)) =>
                               {
                                 val (xa, ya): (Structure, Structure) = a;
                                 (Sequent_Structure(xa), Sequent_Structure(ya))
-                              },
+                              }),
                              (Structure_Formula(Formula_Action(Action_Freevar(List('b',
     'e', 't', 'a')))),
                                Structure_Formula(Formula_Action(b))) ::
@@ -4445,11 +4445,11 @@ def swapout_L(relAKA: Action => Agent => List[Action], seq: Sequent,
                    betaList(relAKA,
                              map[(Structure, Structure),
                                   (Sequent,
-                                    Sequent)]((a: (Structure, Structure)) =>
+                                    Sequent)](((a: (Structure, Structure)) =>
         {
           val (xa, ya): (Structure, Structure) = a;
           (Sequent_Structure(xa), Sequent_Structure(ya))
-        },
+        }),
        match_Structure(Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
            Structure_Agent_Structure(Structure_ForwK(),
@@ -4474,81 +4474,81 @@ def ruleRuleSwapout(x: Locale, xa1: RuleSwapout): ruleder = (x, xa1) match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(rel) =>
          ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
                Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                Structure_Agent_Structure(Structure_ForwK(),
   Agent_Freevar(List('a')), Structure_Freevar(List('X')))),
                             Structure_Freevar(List('Y', 'l', 'i', 's', 't'))),
-                   (a: Sequent) =>
+                   ((a: Sequent) =>
                      swapout_L(rel, Sequenta(Structure_Agent_Structure(Structure_ForwK(),
                                 Agent_Freevar(List('a')),
                                 Structure_Action_Structure(Structure_ForwA(),
                     Action_Freevar(List('b', 'e', 't', 'a')),
                     Structure_Freevar(List('X')))),
       Structure_Freevar(List('Y'))),
-                                a))
+                                a)))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
   case (x, Swapout_R()) =>
     (x match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(rel) =>
          ruledera(Sequenta(Structure_Freevar(List('Y', 'l', 'i', 's', 't')),
                             Structure_Action_Structure(Structure_ForwA(),
                 Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                 Structure_Agent_Structure(Structure_ForwK(),
    Agent_Freevar(List('a')), Structure_Freevar(List('X'))))),
-                   (a: Sequent) =>
+                   ((a: Sequent) =>
                      swapout_R(rel, Sequenta(Structure_Freevar(List('Y')),
       Structure_Agent_Structure(Structure_ForwK(), Agent_Freevar(List('a')),
                                  Structure_Action_Structure(Structure_ForwA(),
                      Action_Freevar(List('b', 'e', 't', 'a')),
                      Structure_Freevar(List('X'))))),
-                                a))
+                                a)))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
 }
 
@@ -4557,134 +4557,134 @@ def ruleRuleStructK(x: Locale, xa1: RuleStructK): ruleder = (x, xa1) match {
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Agent_Structure(Structure_BackK(),
           Agent_Freevar(List('a')), Structure_Zer(Structure_Neutral()))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, Nec_K_L()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
          Agent_Freevar(List('a')), Structure_Zer(Structure_Neutral())),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, K_mon_L()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_BackK(),
          Agent_Freevar(List('a')),
          Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                         Structure_Freevar(List('Y')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Agent_Structure(Structure_BackK(),
            Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                          Structure_Comma(),
                          Structure_Agent_Structure(Structure_BackK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('Y')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, Mon_K_L()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
          Agent_Freevar(List('a')),
          Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                         Structure_Freevar(List('Y')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Agent_Structure(Structure_ForwK(),
            Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                          Structure_Comma(),
                          Structure_Agent_Structure(Structure_ForwK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('Y')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, FS_K_L()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
          Agent_Freevar(List('a')),
          Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                         Structure_Freevar(List('Z')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Agent_Structure(Structure_ForwK(),
            Agent_Freevar(List('a')), Structure_Freevar(List('Y'))),
                          Structure_ImpR(),
                          Structure_Agent_Structure(Structure_ForwK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('Z')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FS_K_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Agent_Structure(Structure_ForwK(),
           Agent_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                          Structure_Freevar(List('Z'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Agent_Structure(Structure_ForwK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('Y'))),
                           Structure_ImpR(),
                           Structure_Agent_Structure(Structure_ForwK(),
-             Agent_Freevar(List('a')), Structure_Freevar(List('Z'))))))))
+             Agent_Freevar(List('a')), Structure_Freevar(List('Z')))))))))
   case (x, Mon_K_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Agent_Structure(Structure_ForwK(),
           Agent_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                          Structure_Freevar(List('Y'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Agent_Structure(Structure_ForwK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                           Structure_Comma(),
                           Structure_Agent_Structure(Structure_ForwK(),
-             Agent_Freevar(List('a')), Structure_Freevar(List('Y'))))))))
+             Agent_Freevar(List('a')), Structure_Freevar(List('Y')))))))))
   case (x, K_mon_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Agent_Structure(Structure_BackK(),
           Agent_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                          Structure_Freevar(List('Y'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Agent_Structure(Structure_BackK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                           Structure_Comma(),
                           Structure_Agent_Structure(Structure_BackK(),
-             Agent_Freevar(List('a')), Structure_Freevar(List('Y'))))))))
+             Agent_Freevar(List('a')), Structure_Freevar(List('Y')))))))))
   case (x, K_FS_L()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_BackK(),
          Agent_Freevar(List('a')),
          Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                         Structure_Freevar(List('Z')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Agent_Structure(Structure_BackK(),
            Agent_Freevar(List('a')), Structure_Freevar(List('Y'))),
                          Structure_ImpR(),
                          Structure_Agent_Structure(Structure_BackK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('Z')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, Nec_K_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Agent_Structure(Structure_ForwK(),
           Agent_Freevar(List('a')), Structure_Zer(Structure_Neutral()))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, K_FS_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Agent_Structure(Structure_BackK(),
           Agent_Freevar(List('a')),
           Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpR(),
                          Structure_Freevar(List('Z'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Agent_Structure(Structure_BackK(),
             Agent_Freevar(List('a')), Structure_Freevar(List('Y'))),
                           Structure_ImpR(),
                           Structure_Agent_Structure(Structure_BackK(),
-             Agent_Freevar(List('a')), Structure_Freevar(List('Z'))))))))
+             Agent_Freevar(List('a')), Structure_Freevar(List('Z')))))))))
   case (x, K_nec_L()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_BackK(),
          Agent_Freevar(List('a')), Structure_Zer(Structure_Neutral())),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
 }
 
 def ruleRuleDispAct(x: Locale, xa1: RuleDispAct): ruleder = (x, xa1) match {
@@ -4692,38 +4692,38 @@ def ruleRuleDispAct(x: Locale, xa1: RuleDispAct): ruleder = (x, xa1) match {
     ruledera(Sequenta(Structure_Action_Structure(Structure_BackA(),
           Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Action_Structure(Structure_ForwA(),
                                        Action_Freevar(List('a')),
-                                       Structure_Freevar(List('Y')))))))
+                                       Structure_Freevar(List('Y'))))))))
   case (x, Forw_back_A2()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Action_Structure(Structure_BackA(),
                                        Action_Freevar(List('a')),
-                                       Structure_Freevar(List('Y')))))))
+                                       Structure_Freevar(List('Y'))))))))
   case (x, Forw_back_A()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Action_Structure(Structure_BackA(),
            Action_Freevar(List('a')), Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Action_Structure(Structure_ForwA(),
                                       Action_Freevar(List('a')),
                                       Structure_Freevar(List('X'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, Back_forw_A2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a')), Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Action_Structure(Structure_BackA(),
                                       Action_Freevar(List('a')),
                                       Structure_Freevar(List('X'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
 }
 
 def swapin(fun: Action => Agent => List[Action], m: Sequent, s: Sequent):
@@ -4737,17 +4737,17 @@ def ruleRuleSwapin(x: Locale, xa1: RuleSwapin): ruleder = (x, xa1) match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(rel) =>
-         ruleder_cond((a: Sequent) =>
+         ruleder_cond(((a: Sequent) =>
                         swapin(rel, Sequenta(Structure_Bin(Structure_Phi(Action_Freevar(List('a',
               'l', 'p', 'h', 'a'))),
                     Structure_Comma(),
@@ -4757,7 +4757,7 @@ def ruleRuleSwapin(x: Locale, xa1: RuleSwapin): ruleder = (x, xa1) match {
                                    Action_Freevar(List('b', 'e', 't', 'a')),
                                    Structure_Freevar(List('X'))))),
       Structure_Freevar(List('Y'))),
-                                a),
+                                a)),
                        Sequenta(Structure_Bin(Structure_Phi(Action_Freevar(List('a',
  'l', 'p', 'h', 'a'))),
        Structure_Comma(),
@@ -4766,41 +4766,41 @@ def ruleRuleSwapin(x: Locale, xa1: RuleSwapin): ruleder = (x, xa1) match {
                       Action_Freevar(List('b', 'e', 't', 'a')),
                       Structure_Freevar(List('X'))))),
                                  Structure_Freevar(List('Y'))),
-                       (_: Sequent) =>
+                       ((_: Sequent) =>
                          Some[List[Sequent]](List(Sequenta(Structure_Action_Structure(Structure_ForwA(),
        Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
        Structure_Agent_Structure(Structure_ForwK(), Agent_Freevar(List('a')),
                                   Structure_Freevar(List('X')))),
-                    Structure_Freevar(List('Y'))))))
+                    Structure_Freevar(List('Y')))))))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
   case (x, Swapin_R()) =>
     (x match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(rel) =>
-         ruleder_cond((a: Sequent) =>
+         ruleder_cond(((a: Sequent) =>
                         swapin(rel, Sequenta(Structure_Freevar(List('Y')),
       Structure_Bin(Structure_Phi(Action_Freevar(List('a', 'l', 'p', 'h',
                'a'))),
@@ -4810,7 +4810,7 @@ def ruleRuleSwapin(x: Locale, xa1: RuleSwapin): ruleder = (x, xa1) match {
         Structure_Action_Structure(Structure_ForwA(),
                                     Action_Freevar(List('b', 'e', 't', 'a')),
                                     Structure_Freevar(List('X')))))),
-                                a),
+                                a)),
                        Sequenta(Structure_Freevar(List('Y')),
                                  Structure_Bin(Structure_Phi(Action_Freevar(List('a',
   'l', 'p', 'h', 'a'))),
@@ -4819,24 +4819,24 @@ def ruleRuleSwapin(x: Locale, xa1: RuleSwapin): ruleder = (x, xa1) match {
                                    Structure_Action_Structure(Structure_ForwA(),
                        Action_Freevar(List('b', 'e', 't', 'a')),
                        Structure_Freevar(List('X')))))),
-                       (_: Sequent) =>
+                       ((_: Sequent) =>
                          Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
                     Structure_Action_Structure(Structure_ForwA(),
         Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
         Structure_Agent_Structure(Structure_ForwK(), Agent_Freevar(List('a')),
-                                   Structure_Freevar(List('X'))))))))
+                                   Structure_Freevar(List('X')))))))))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
 }
 
@@ -4846,184 +4846,184 @@ def ruleRuleStruct(x: Locale, xa1: RuleStruct): ruleder = (x, xa1) match {
                                      Structure_ImpL(),
                                      Structure_Freevar(List('Z'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, ImpL_I()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_ImpL(),
                                      Structure_Freevar(List('Y'))),
                        Structure_Zer(Structure_Neutral())),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, W_impL_L()) =>
     ruledera(Sequenta(Structure_Freevar(List('Y')),
                        Structure_Bin(Structure_Freevar(List('Z')),
                                       Structure_ImpL(),
                                       Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, ImpR_I2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('Y')),
                          Structure_ImpR(), Structure_Freevar(List('X'))),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, E_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Bin(Structure_Freevar(List('Y', '2')),
                                       Structure_Comma(),
                                       Structure_Freevar(List('Y', '1')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Freevar(List('Y', '1')), Structure_Comma(),
-                          Structure_Freevar(List('Y', '2')))))))
+                          Structure_Freevar(List('Y', '2'))))))))
   case (x, IW_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, IW_L()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, A_L2()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
            Structure_Comma(), Structure_Freevar(List('Y'))),
                                      Structure_Comma(),
                                      Structure_Freevar(List('Z'))),
                        Structure_Freevar(List('W'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_Comma(),
                          Structure_Bin(Structure_Freevar(List('Y')),
 Structure_Comma(), Structure_Freevar(List('Z')))),
-           Structure_Freevar(List('W'))))))
+           Structure_Freevar(List('W')))))))
   case (x, E_L()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X', '2')),
                                      Structure_Comma(),
                                      Structure_Freevar(List('X', '1'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X',
         '1')),
                          Structure_Comma(), Structure_Freevar(List('X', '2'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, A_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('W')),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_Comma(),
                                       Structure_Bin(Structure_Freevar(List('Y')),
              Structure_Comma(), Structure_Freevar(List('Z'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('W')),
            Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
 Structure_Comma(), Structure_Freevar(List('Y'))),
-                          Structure_Comma(), Structure_Freevar(List('Z')))))))
+                          Structure_Comma(), Structure_Freevar(List('Z'))))))))
   case (x, W_impR_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Y')),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_ImpR(),
                                       Structure_Freevar(List('Z')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, C_L()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_Comma(), Structure_Freevar(List('X'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, C_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Freevar(List('Y')), Structure_Comma(),
-                          Structure_Freevar(List('Y')))))))
+                          Structure_Freevar(List('Y'))))))))
   case (x, ImpR_I()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('Y')),
                                      Structure_ImpR(),
                                      Structure_Freevar(List('X'))),
                        Structure_Zer(Structure_Neutral())),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, W_impR_L()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('Z')),
                                      Structure_ImpR(),
                                      Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, A_L()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_Comma(),
                                      Structure_Bin(Structure_Freevar(List('Y')),
             Structure_Comma(), Structure_Freevar(List('Z')))),
                        Structure_Freevar(List('W'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
                                        Structure_Comma(),
                                        Structure_Freevar(List('Y'))),
                          Structure_Comma(), Structure_Freevar(List('Z'))),
-           Structure_Freevar(List('W'))))))
+           Structure_Freevar(List('W')))))))
   case (x, A_R2()) =>
     ruledera(Sequenta(Structure_Freevar(List('W')),
                        Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
             Structure_Comma(), Structure_Freevar(List('Y'))),
                                       Structure_Comma(),
                                       Structure_Freevar(List('Z')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('W')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
                           Structure_Bin(Structure_Freevar(List('Y')),
- Structure_Comma(), Structure_Freevar(List('Z'))))))))
+ Structure_Comma(), Structure_Freevar(List('Z')))))))))
   case (x, I_impR2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
            Structure_Bin(Structure_Freevar(List('X')), Structure_ImpR(),
-                          Structure_Freevar(List('Y')))))))
+                          Structure_Freevar(List('Y'))))))))
   case (x, I_impL()) =>
     ruledera(Sequenta(Structure_Zer(Structure_Neutral()),
                        Structure_Bin(Structure_Freevar(List('Y')),
                                       Structure_ImpL(),
                                       Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, I_impR()) =>
     ruledera(Sequenta(Structure_Zer(Structure_Neutral()),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_ImpR(),
                                       Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, ImpL_I2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_ImpL(), Structure_Freevar(List('Y'))),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, I_impL2()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
            Structure_Bin(Structure_Freevar(List('Y')), Structure_ImpL(),
-                          Structure_Freevar(List('X')))))))
+                          Structure_Freevar(List('X'))))))))
 }
 
 def pre_r(a: Action, x1: Sequent): Boolean = (a, x1) match {
@@ -5078,18 +5078,18 @@ def ruleRuleOpAct(x: Locale, xa1: RuleOpAct): ruleder = (x, xa1) match {
                         Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                         Formula_Freevar(List('A')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Action_Structure(Structure_ForwA(),
                                       Action_Freevar(List('a', 'l', 'p', 'h',
                    'a')),
                                       Structure_Formula(Formula_Freevar(List('A')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, One_R()) =>
     ruledera(Sequenta(Structure_Phi(Action_Freevar(List('a', 'l', 'p', 'h',
                  'a'))),
                        Structure_Formula(Formula_Precondition(Action_Freevar(List('a',
    'l', 'p', 'h', 'a'))))),
-              (_: Sequent) => Some[List[Sequent]](Nil))
+              ((_: Sequent) => Some[List[Sequent]](Nil)))
   case (x, BdiamA_R()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_BackA(),
           Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
@@ -5097,65 +5097,65 @@ def ruleRuleOpAct(x: Locale, xa1: RuleOpAct): ruleder = (x, xa1) match {
                        Structure_Formula(Formula_Action_Formula(Formula_BdiamA(),
                          Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                          Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Formula(Formula_Freevar(List('A')))))))
+           Structure_Formula(Formula_Freevar(List('A'))))))))
   case (x, FboxA_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Formula(Formula_Action_Formula(Formula_FboxA(),
                          Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                          Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Action_Structure(Structure_ForwA(),
                                        Action_Freevar(List('a', 'l', 'p', 'h',
                     'a')),
-                                       Structure_Formula(Formula_Freevar(List('A'))))))))
+                                       Structure_Formula(Formula_Freevar(List('A')))))))))
   case (x, Pre_L()) =>
     (x match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case PreFormula(alpha, f) =>
-         ruleder_cond((a: Sequent) => pre_l(alpha, a),
+         ruleder_cond(((a: Sequent) => pre_l(alpha, a)),
                        Sequenta(Structure_Freevar(List('X')),
                                  Structure_Freevar(List('Y'))),
-                       (_: Sequent) =>
+                       ((_: Sequent) =>
                          Some[List[Sequent]](List(Sequenta(Structure_Formula(f),
-                    Structure_Freevar(List('Y'))))))
+                    Structure_Freevar(List('Y')))))))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
   case (x, BboxA_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Formula(Formula_Action_Formula(Formula_BboxA(),
                          Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                          Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Action_Structure(Structure_BackA(),
                                        Action_Freevar(List('a', 'l', 'p', 'h',
                     'a')),
-                                       Structure_Formula(Formula_Freevar(List('A'))))))))
+                                       Structure_Formula(Formula_Freevar(List('A')))))))))
   case (x, BboxA_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Action_Formula(Formula_BboxA(),
                         Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
@@ -5163,9 +5163,9 @@ def ruleRuleOpAct(x: Locale, xa1: RuleOpAct): ruleder = (x, xa1) match {
                        Structure_Action_Structure(Structure_BackA(),
            Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
            Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FboxA_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Action_Formula(Formula_FboxA(),
                         Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
@@ -5173,62 +5173,62 @@ def ruleRuleOpAct(x: Locale, xa1: RuleOpAct): ruleder = (x, xa1) match {
                        Structure_Action_Structure(Structure_ForwA(),
            Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
            Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, Pre_R()) =>
     (x match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case PreFormula(alpha, f) =>
-         ruleder_cond((a: Sequent) => pre_r(alpha, a),
+         ruleder_cond(((a: Sequent) => pre_r(alpha, a)),
                        Sequenta(Structure_Freevar(List('X')),
                                  Structure_Freevar(List('Y'))),
-                       (_: Sequent) =>
+                       ((_: Sequent) =>
                          Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
-                    Structure_Formula(f)))))
+                    Structure_Formula(f))))))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
   case (x, BdiamA_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Action_Formula(Formula_BdiamA(),
                         Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                         Formula_Freevar(List('A')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Action_Structure(Structure_BackA(),
                                       Action_Freevar(List('a', 'l', 'p', 'h',
                    'a')),
                                       Structure_Formula(Formula_Freevar(List('A')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, One_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Precondition(Action_Freevar(List('a',
   'l', 'p', 'h', 'a')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Phi(Action_Freevar(List('a',
      'l', 'p', 'h', 'a'))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FdiamA_R()) =>
     ruledera(Sequenta(Structure_Action_Structure(Structure_ForwA(),
           Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
@@ -5236,9 +5236,9 @@ def ruleRuleOpAct(x: Locale, xa1: RuleOpAct): ruleder = (x, xa1) match {
                        Structure_Formula(Formula_Action_Formula(Formula_FdiamA(),
                          Action_Freevar(List('a', 'l', 'p', 'h', 'a')),
                          Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Formula(Formula_Freevar(List('A')))))))
+           Structure_Formula(Formula_Freevar(List('A'))))))))
 }
 
 def ruleRuleGrish(x: Locale, xa1: RuleGrish): ruleder = (x, xa1) match {
@@ -5248,46 +5248,46 @@ def ruleRuleGrish(x: Locale, xa1: RuleGrish): ruleder = (x, xa1) match {
                                       Structure_ImpR(),
                                       Structure_Bin(Structure_Freevar(List('Y')),
              Structure_Comma(), Structure_Freevar(List('Z'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('W')),
            Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
 Structure_ImpR(), Structure_Freevar(List('Y'))),
-                          Structure_Comma(), Structure_Freevar(List('Z')))))))
+                          Structure_Comma(), Structure_Freevar(List('Z'))))))))
   case (x, Grishin_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('W')),
                        Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
             Structure_ImpR(), Structure_Freevar(List('Y'))),
                                       Structure_Comma(),
                                       Structure_Freevar(List('Z')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('W')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_ImpR(),
                           Structure_Bin(Structure_Freevar(List('Y')),
- Structure_Comma(), Structure_Freevar(List('Z'))))))))
+ Structure_Comma(), Structure_Freevar(List('Z')))))))))
   case (x, Grishin_L()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
            Structure_ImpR(), Structure_Freevar(List('Y'))),
                                      Structure_Comma(),
                                      Structure_Freevar(List('Z'))),
                        Structure_Freevar(List('W'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_ImpR(),
                          Structure_Bin(Structure_Freevar(List('Y')),
 Structure_Comma(), Structure_Freevar(List('Z')))),
-           Structure_Freevar(List('W'))))))
+           Structure_Freevar(List('W')))))))
   case (x, Grishin_L2()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_ImpR(),
                                      Structure_Bin(Structure_Freevar(List('Y')),
             Structure_Comma(), Structure_Freevar(List('Z')))),
                        Structure_Freevar(List('W'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Bin(Structure_Freevar(List('X')),
                                        Structure_ImpR(),
                                        Structure_Freevar(List('Y'))),
                          Structure_Comma(), Structure_Freevar(List('Z'))),
-           Structure_Freevar(List('W'))))))
+           Structure_Freevar(List('W')))))))
 }
 
 def ruleRuleDispK(x: Locale, xa1: RuleDispK): ruleder = (x, xa1) match {
@@ -5295,38 +5295,38 @@ def ruleRuleDispK(x: Locale, xa1: RuleDispK): ruleder = (x, xa1) match {
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Agent_Structure(Structure_ForwK(),
           Agent_Freevar(List('a')), Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Agent_Structure(Structure_BackK(),
                                      Agent_Freevar(List('a')),
                                      Structure_Freevar(List('X'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, Back_forw_K()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_BackK(),
          Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Agent_Structure(Structure_ForwK(),
                                       Agent_Freevar(List('a')),
-                                      Structure_Freevar(List('Y')))))))
+                                      Structure_Freevar(List('Y'))))))))
   case (x, Forw_back_K2()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
          Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Agent_Structure(Structure_BackK(),
                                       Agent_Freevar(List('a')),
-                                      Structure_Freevar(List('Y')))))))
+                                      Structure_Freevar(List('Y'))))))))
   case (x, Forw_back_K()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Agent_Structure(Structure_BackK(),
           Agent_Freevar(List('a')), Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
                                      Agent_Freevar(List('a')),
                                      Structure_Freevar(List('X'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
 }
 
 def ruleRuleDisp(x: Locale, xa1: RuleDisp): ruleder = (x, xa1) match {
@@ -5335,73 +5335,73 @@ def ruleRuleDisp(x: Locale, xa1: RuleDisp): ruleder = (x, xa1) match {
                        Structure_Bin(Structure_Freevar(List('Z')),
                                       Structure_ImpL(),
                                       Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_Comma(), Structure_Freevar(List('Y'))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, Comma_impR_disp2()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_Comma(),
                                      Structure_Freevar(List('Y'))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Y')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_ImpR(),
-                          Structure_Freevar(List('Z')))))))
+                          Structure_Freevar(List('Z'))))))))
   case (x, ImpL_comma_disp2()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_Comma(),
                                       Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('Z')),
                          Structure_ImpL(), Structure_Freevar(List('Y'))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, ImpR_comma_disp2()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_Comma(),
                                       Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_ImpR(), Structure_Freevar(List('Z'))),
-           Structure_Freevar(List('Y'))))))
+           Structure_Freevar(List('Y')))))))
   case (x, ImpR_comma_disp()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_ImpR(),
                                      Structure_Freevar(List('Z'))),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
-                          Structure_Freevar(List('Y')))))))
+                          Structure_Freevar(List('Y'))))))))
   case (x, ImpL_comma_disp()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('Z')),
                                      Structure_ImpL(),
                                      Structure_Freevar(List('Y'))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Freevar(List('X')), Structure_Comma(),
-                          Structure_Freevar(List('Y')))))))
+                          Structure_Freevar(List('Y'))))))))
   case (x, Comma_impR_disp()) =>
     ruledera(Sequenta(Structure_Freevar(List('Y')),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_ImpR(),
                                       Structure_Freevar(List('Z')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                          Structure_Comma(), Structure_Freevar(List('Y'))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, Comma_impL_disp2()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_Comma(),
                                      Structure_Freevar(List('Y'))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Bin(Structure_Freevar(List('Z')), Structure_ImpL(),
-                          Structure_Freevar(List('Y')))))))
+                          Structure_Freevar(List('Y'))))))))
 }
 
 def equal_option[A : equal](x0: Option[A], x1: Option[A]): Boolean = (x0, x1)
@@ -5449,79 +5449,79 @@ def ruleRuleZer(x: Locale, xa1: RuleZer): ruleder = (x, xa1) match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(seq) =>
-         ruleder_cond((a: Sequent) => equal_Sequenta(seq, a),
+         ruleder_cond(((a: Sequent) => equal_Sequenta(seq, a)),
                        Sequenta(Structure_Freevar(List('X')),
                                  Structure_Freevar(List('Y'))),
-                       (_: Sequent) => Some[List[Sequent]](Nil))
+                       ((_: Sequent) => Some[List[Sequent]](Nil)))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
   case (x, Partial()) =>
     (x match {
        case CutFormula(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(struct) =>
-         ruleder_cond((a: Sequent) =>
+         ruleder_cond(((a: Sequent) =>
                         {
                           val (Sequenta(lhs, rhs)): Sequent = a;
                           equal_Structurea(struct, lhs) ||
                             equal_Structurea(struct, rhs)
-                        },
+                        }),
                        Sequenta(Structure_Freevar(List('X')),
                                  Structure_Freevar(List('Y'))),
-                       (_: Sequent) => Some[List[Sequent]](Nil))
+                       ((_: Sequent) => Some[List[Sequent]](Nil)))
        case RelAKA(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
   case (x, Id()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Atprop(Atprop_Freevar(List('p')))),
                        Structure_Formula(Formula_Atprop(Atprop_Freevar(List('p'))))),
-              (_: Sequent) => Some[List[Sequent]](Nil))
+              ((_: Sequent) => Some[List[Sequent]](Nil)))
   case (x, Atom()) =>
-    ruleder_cond((a: Sequent) => atom(a),
+    ruleder_cond(((a: Sequent) => atom(a)),
                   Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                  (_: Sequent) => Some[List[Sequent]](Nil))
+                  ((_: Sequent) => Some[List[Sequent]](Nil)))
 }
 
 def ruleRuleOpK(x: Locale, xa1: RuleOpK): ruleder = (x, xa1) match {
@@ -5529,70 +5529,70 @@ def ruleRuleOpK(x: Locale, xa1: RuleOpK): ruleder = (x, xa1) match {
     ruledera(Sequenta(Structure_Formula(Formula_Agent_Formula(Formula_BdiamK(),
                        Agent_Freevar(List('a')), Formula_Freevar(List('A')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Agent_Structure(Structure_BackK(),
                                      Agent_Freevar(List('a')),
                                      Structure_Formula(Formula_Freevar(List('A')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FdiamK_R()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
          Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Formula(Formula_Agent_Formula(Formula_FdiamK(),
                         Agent_Freevar(List('a')), Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Formula(Formula_Freevar(List('A')))))))
+           Structure_Formula(Formula_Freevar(List('A'))))))))
   case (x, FboxK_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Formula(Formula_Agent_Formula(Formula_FboxK(),
                         Agent_Freevar(List('a')), Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Agent_Structure(Structure_ForwK(),
                                       Agent_Freevar(List('a')),
-                                      Structure_Formula(Formula_Freevar(List('A'))))))))
+                                      Structure_Formula(Formula_Freevar(List('A')))))))))
   case (x, BboxK_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Agent_Formula(Formula_BboxK(),
                        Agent_Freevar(List('a')), Formula_Freevar(List('A')))),
                        Structure_Agent_Structure(Structure_BackK(),
           Agent_Freevar(List('a')), Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, BboxK_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Formula(Formula_Agent_Formula(Formula_BboxK(),
                         Agent_Freevar(List('a')), Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Agent_Structure(Structure_BackK(),
                                       Agent_Freevar(List('a')),
-                                      Structure_Formula(Formula_Freevar(List('A'))))))))
+                                      Structure_Formula(Formula_Freevar(List('A')))))))))
   case (x, FboxK_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Agent_Formula(Formula_FboxK(),
                        Agent_Freevar(List('a')), Formula_Freevar(List('A')))),
                        Structure_Agent_Structure(Structure_ForwK(),
           Agent_Freevar(List('a')), Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, FdiamK_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Agent_Formula(Formula_FdiamK(),
                        Agent_Freevar(List('a')), Formula_Freevar(List('A')))),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Agent_Structure(Structure_ForwK(),
                                      Agent_Freevar(List('a')),
                                      Structure_Formula(Formula_Freevar(List('A')))),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, BdiamK_R()) =>
     ruledera(Sequenta(Structure_Agent_Structure(Structure_BackK(),
          Agent_Freevar(List('a')), Structure_Freevar(List('X'))),
                        Structure_Formula(Formula_Agent_Formula(Formula_BdiamK(),
                         Agent_Freevar(List('a')), Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Formula(Formula_Freevar(List('A')))))))
+           Structure_Formula(Formula_Freevar(List('A'))))))))
 }
 
 def ruleRuleCut(x: Locale, xa1: RuleCut): ruleder = (x, xa1) match {
@@ -5601,34 +5601,34 @@ def ruleRuleCut(x: Locale, xa1: RuleCut): ruleder = (x, xa1) match {
        case CutFormula(f) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) =>
+                   ((_: Sequent) =>
                      Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
                 Structure_Formula(f)),
-       Sequenta(Structure_Formula(f), Structure_Freevar(List('Y'))))))
+       Sequenta(Structure_Formula(f), Structure_Freevar(List('Y')))))))
        case Premise(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Part(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case RelAKA(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case PreFormula(_, _) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case LAgent(_) =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
        case Empty() =>
          ruledera(Sequenta(Structure_Freevar(List('X')),
                             Structure_Freevar(List('Y'))),
-                   (_: Sequent) => None)
+                   ((_: Sequent) => None))
      })
 }
 
@@ -5636,143 +5636,143 @@ def ruleRuleOp(x: Locale, xa1: RuleOp): ruleder = (x, xa1) match {
   case (x, Bot_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Formula(Formula_Zer(Formula_Bot()))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
-           Structure_Zer(Structure_Neutral())))))
+           Structure_Zer(Structure_Neutral()))))))
   case (x, Top_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Zer(Formula_Top())),
                        Structure_Freevar(List('X'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Zer(Structure_Neutral()),
-           Structure_Freevar(List('X'))))))
+           Structure_Freevar(List('X')))))))
   case (x, DImpR_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
              Formula_DImpR(), Formula_Freevar(List('B')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Formula(Formula_Freevar(List('A'))),
                          Structure_ImpR(),
                          Structure_Formula(Formula_Freevar(List('B')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, ImpL_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Formula(Formula_Bin(Formula_Freevar(List('B')),
               Formula_ImpL(), Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Formula(Formula_Freevar(List('B'))),
                           Structure_ImpL(),
-                          Structure_Formula(Formula_Freevar(List('A'))))))))
+                          Structure_Formula(Formula_Freevar(List('A')))))))))
   case (x, DImpL_R()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('Y')),
                                      Structure_ImpL(),
                                      Structure_Freevar(List('X'))),
                        Structure_Formula(Formula_Bin(Formula_Freevar(List('B')),
               Formula_DImpL(), Formula_Freevar(List('A'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
            Structure_Freevar(List('X'))),
   Sequenta(Structure_Freevar(List('Y')),
-            Structure_Formula(Formula_Freevar(List('B')))))))
+            Structure_Formula(Formula_Freevar(List('B'))))))))
   case (x, And_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
              Formula_And(), Formula_Freevar(List('B')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Formula(Formula_Freevar(List('A'))),
                          Structure_Comma(),
                          Structure_Formula(Formula_Freevar(List('B')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, ImpR_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
               Formula_ImpR(), Formula_Freevar(List('B'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Formula(Formula_Freevar(List('A'))),
                           Structure_ImpR(),
-                          Structure_Formula(Formula_Freevar(List('B'))))))))
+                          Structure_Formula(Formula_Freevar(List('B')))))))))
   case (x, Or_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
              Formula_Or(), Formula_Freevar(List('B')))),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_Comma(),
                                       Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
            Structure_Freevar(List('X'))),
   Sequenta(Structure_Formula(Formula_Freevar(List('B'))),
-            Structure_Freevar(List('Y'))))))
+            Structure_Freevar(List('Y')))))))
   case (x, Or_R()) =>
     ruledera(Sequenta(Structure_Freevar(List('Z')),
                        Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
               Formula_Or(), Formula_Freevar(List('B'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('Z')),
            Structure_Bin(Structure_Formula(Formula_Freevar(List('A'))),
                           Structure_Comma(),
-                          Structure_Formula(Formula_Freevar(List('B'))))))))
+                          Structure_Formula(Formula_Freevar(List('B')))))))))
   case (x, ImpR_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
              Formula_ImpR(), Formula_Freevar(List('B')))),
                        Structure_Bin(Structure_Freevar(List('X')),
                                       Structure_ImpR(),
                                       Structure_Freevar(List('Y')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Formula(Formula_Freevar(List('A')))),
   Sequenta(Structure_Formula(Formula_Freevar(List('B'))),
-            Structure_Freevar(List('Y'))))))
+            Structure_Freevar(List('Y')))))))
   case (x, DImpL_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Bin(Formula_Freevar(List('B')),
              Formula_DImpL(), Formula_Freevar(List('A')))),
                        Structure_Freevar(List('Z'))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Bin(Structure_Formula(Formula_Freevar(List('B'))),
                          Structure_ImpL(),
                          Structure_Formula(Formula_Freevar(List('A')))),
-           Structure_Freevar(List('Z'))))))
+           Structure_Freevar(List('Z')))))))
   case (x, And_R()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_Comma(),
                                      Structure_Freevar(List('Y'))),
                        Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
               Formula_And(), Formula_Freevar(List('B'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Formula(Formula_Freevar(List('A')))),
   Sequenta(Structure_Freevar(List('Y')),
-            Structure_Formula(Formula_Freevar(List('B')))))))
+            Structure_Formula(Formula_Freevar(List('B'))))))))
   case (x, DImpR_R()) =>
     ruledera(Sequenta(Structure_Bin(Structure_Freevar(List('X')),
                                      Structure_ImpR(),
                                      Structure_Freevar(List('Y'))),
                        Structure_Formula(Formula_Bin(Formula_Freevar(List('A')),
               Formula_DImpR(), Formula_Freevar(List('B'))))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Formula(Formula_Freevar(List('A'))),
            Structure_Freevar(List('X'))),
   Sequenta(Structure_Freevar(List('Y')),
-            Structure_Formula(Formula_Freevar(List('B')))))))
+            Structure_Formula(Formula_Freevar(List('B'))))))))
   case (x, ImpL_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Bin(Formula_Freevar(List('B')),
              Formula_ImpL(), Formula_Freevar(List('A')))),
                        Structure_Bin(Structure_Freevar(List('Y')),
                                       Structure_ImpL(),
                                       Structure_Freevar(List('X')))),
-              (_: Sequent) =>
+              ((_: Sequent) =>
                 Some[List[Sequent]](List(Sequenta(Structure_Freevar(List('X')),
            Structure_Formula(Formula_Freevar(List('A')))),
   Sequenta(Structure_Formula(Formula_Freevar(List('B'))),
-            Structure_Freevar(List('Y'))))))
+            Structure_Freevar(List('Y')))))))
   case (x, Top_R()) =>
     ruledera(Sequenta(Structure_Zer(Structure_Neutral()),
                        Structure_Formula(Formula_Zer(Formula_Top()))),
-              (_: Sequent) => Some[List[Sequent]](Nil))
+              ((_: Sequent) => Some[List[Sequent]](Nil)))
   case (x, Bot_L()) =>
     ruledera(Sequenta(Structure_Formula(Formula_Zer(Formula_Bot())),
                        Structure_Zer(Structure_Neutral())),
-              (_: Sequent) => Some[List[Sequent]](Nil))
+              ((_: Sequent) => Some[List[Sequent]](Nil)))
 }
 
 def rule(l: Locale, x1: Rule): ruleder = (l, x1) match {
@@ -5796,11 +5796,11 @@ def rule(l: Locale, x1: Rule): ruleder = (l, x1) match {
   case (uu, RuleMacro(v, va)) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) => None)
+              ((_: Sequent) => None))
   case (uu, Fail()) =>
     ruledera(Sequenta(Structure_Freevar(List('X')),
                        Structure_Freevar(List('Y'))),
-              (_: Sequent) => None)
+              ((_: Sequent) => None))
 }
 
 def cond(x0: ruleder): Option[Sequent => Boolean] = x0 match {
@@ -5826,20 +5826,20 @@ def der(l: Locale, r: Rule, s: Sequent): (Rule, List[Sequent]) =
          (cond(rule(l, r)) match {
             case None =>
               (r, map[Sequent,
-                       Sequent]((a: Sequent) =>
+                       Sequent](((a: Sequent) =>
                                   replaceAll[Sequent](match_Sequent(fst(rule(l,
                                       r)),
                              s),
-               a),
+               a)),
                                  conclusion))
             case Some(condition) =>
               (if (condition(s))
                 (r, map[Sequent,
-                         Sequent]((a: Sequent) =>
+                         Sequent](((a: Sequent) =>
                                     replaceAll[Sequent](match_Sequent(fst(rule(l,
 r)),
                                s),
-                 a),
+                 a)),
                                    conclusion))
                 else (Fail(), Nil))
           })
@@ -5869,76 +5869,77 @@ def extract[A](p: A => Boolean, x1: List[A]): Option[(List[A], (A, List[A]))] =
 
 def ruleList: List[Rule] =
   map[RuleBigcomma,
-       Rule]((a: RuleBigcomma) => RuleBigcommaa(a),
+       Rule](((a: RuleBigcomma) => RuleBigcommaa(a)),
               List(Bigcomma_Nil_R(), Bigcomma_Cons_R(), Bigcomma_Cons_L2(),
                     Bigcomma_Nil_L2(), Bigcomma_Cons_R2(), Bigcomma_Cons_L(),
                     Bigcomma_Nil_R2(), Bigcomma_Nil_L())) ++
-    (map[RuleCut, Rule]((a: RuleCut) => RuleCuta(a), List(SingleCut())) ++
+    (map[RuleCut, Rule](((a: RuleCut) => RuleCuta(a)), List(SingleCut())) ++
       (map[RuleDisp,
-            Rule]((a: RuleDisp) => RuleDispa(a),
+            Rule](((a: RuleDisp) => RuleDispa(a)),
                    List(Comma_impL_disp(), Comma_impR_disp2(),
                          ImpL_comma_disp2(), ImpR_comma_disp2(),
                          ImpR_comma_disp(), ImpL_comma_disp(),
                          Comma_impR_disp(), Comma_impL_disp2())) ++
         (map[RuleDispAct,
-              Rule]((a: RuleDispAct) => RuleDispActa(a),
+              Rule](((a: RuleDispAct) => RuleDispActa(a)),
                      List(Back_forw_A(), Forw_back_A2(), Forw_back_A(),
                            Back_forw_A2())) ++
           (map[RuleDispK,
-                Rule]((a: RuleDispK) => RuleDispKa(a),
+                Rule](((a: RuleDispK) => RuleDispKa(a)),
                        List(Back_forw_K2(), Back_forw_K(), Forw_back_K2(),
                              Forw_back_K())) ++
             (map[RuleGrish,
-                  Rule]((a: RuleGrish) => RuleGrisha(a),
+                  Rule](((a: RuleGrish) => RuleGrisha(a)),
                          List(Grishin_R2(), Grishin_R(), Grishin_L(),
                                Grishin_L2())) ++
               (map[RuleKnowledge,
-                    Rule]((a: RuleKnowledge) => RuleKnowledgea(a),
+                    Rule](((a: RuleKnowledge) => RuleKnowledgea(a)),
                            List(Refl_ForwK())) ++
                 (map[RuleOp,
-                      Rule]((a: RuleOp) => RuleOpa(a),
+                      Rule](((a: RuleOp) => RuleOpa(a)),
                              List(Bot_R(), Top_L(), DImpR_L(), ImpL_R(),
                                    DImpL_R(), And_L(), ImpR_R(), Or_L(), Or_R(),
                                    ImpR_L(), DImpL_L(), And_R(), DImpR_R(),
                                    ImpL_L(), Top_R(), Bot_L())) ++
                   (map[RuleOpAct,
-                        Rule]((a: RuleOpAct) => RuleOpActa(a),
+                        Rule](((a: RuleOpAct) => RuleOpActa(a)),
                                List(FdiamA_L(), One_R(), BdiamA_R(), FboxA_R(),
                                      Pre_L(), BboxA_R(), BboxA_L(), FboxA_L(),
                                      Pre_R(), BdiamA_L(), One_L(),
                                      FdiamA_R())) ++
                     (map[RuleOpK,
-                          Rule]((a: RuleOpK) => RuleOpKa(a),
+                          Rule](((a: RuleOpK) => RuleOpKa(a)),
                                  List(BdiamK_L(), FdiamK_R(), FboxK_R(),
                                        BboxK_L(), BboxK_R(), FboxK_L(),
                                        FdiamK_L(), BdiamK_R())) ++
                       (map[RuleStruct,
-                            Rule]((a: RuleStruct) => RuleStructa(a),
+                            Rule](((a: RuleStruct) => RuleStructa(a)),
                                    List(W_impL_R(), ImpL_I(), W_impL_L(),
  ImpR_I2(), E_R(), IW_R(), IW_L(), A_L2(), E_L(), A_R(), W_impR_R(), C_L(),
  C_R(), ImpR_I(), W_impR_L(), A_L(), A_R2(), I_impR2(), I_impL(), I_impR(),
  ImpL_I2(), I_impL2())) ++
                         (map[RuleStructAct,
-                              Rule]((a: RuleStructAct) => RuleStructActa(a),
+                              Rule](((a: RuleStructAct) => RuleStructActa(a)),
                                      List(A_nec_L(), A_mon_L(), Mon_A_R(),
    Nec_A_L(), FS_A_L(), FS_A_R(), A_mon_R(), A_FS_R(), Nec_A_R(), Mon_A_L(),
    A_FS_L(), A_nec_R())) ++
                           (map[RuleStructEA,
-                                Rule]((a: RuleStructEA) => RuleStructEAa(a),
+                                Rule](((a: RuleStructEA) => RuleStructEAa(a)),
                                        List(Reduce_R(), CompA_R(), Balance(),
      CompA_L(), Reduce_L())) ++
                             (map[RuleStructK,
-                                  Rule]((a: RuleStructK) => RuleStructKa(a),
+                                  Rule](((a: RuleStructK) => RuleStructKa(a)),
  List(K_nec_R(), Nec_K_L(), K_mon_L(), Mon_K_L(), FS_K_L(), FS_K_R(), Mon_K_R(),
        K_mon_R(), K_FS_L(), Nec_K_R(), K_FS_R(), K_nec_L())) ++
                               (map[RuleSwapin,
-                                    Rule]((a: RuleSwapin) => RuleSwapina(a),
+                                    Rule](((a: RuleSwapin) => RuleSwapina(a)),
    List(Swapin_L(), Swapin_R())) ++
                                 (map[RuleSwapout,
-                                      Rule]((a: RuleSwapout) => RuleSwapouta(a),
+                                      Rule](((a: RuleSwapout) =>
+      RuleSwapouta(a)),
      List(Swapout_L(), Swapout_R())) ++
                                   map[RuleZer,
-                                       Rule]((a: RuleZer) => RuleZera(a),
+                                       Rule](((a: RuleZer) => RuleZera(a)),
       List(Prem(), Partial(), Id(), Atom())))))))))))))))))
 
 def pred_list[A](p: A => Boolean, x1: List[A]): Boolean = (p, x1) match {
@@ -5961,8 +5962,8 @@ def fresh_name(list: List[List[Char]]): List[Char] =
 
 def less_eq_set[A : equal](a: set[A], b: set[A]): Boolean = (a, b) match {
   case (coset(Nil), seta(Nil)) => false
-  case (a, coset(ys)) => pred_list[A]((y: A) => ! (member[A](y, a)), ys)
-  case (seta(xs), b) => pred_list[A]((x: A) => member[A](x, b), xs)
+  case (a, coset(ys)) => pred_list[A](((y: A) => ! (member[A](y, a))), ys)
+  case (seta(xs), b) => pred_list[A](((x: A) => member[A](x, b)), xs)
 }
 
 def equal_set[A : equal](a: set[A], b: set[A]): Boolean =
@@ -5973,161 +5974,161 @@ def collectPremises(x0: Prooftree): List[Sequent] = x0 match {
   case Prooftreea(uu, RuleMacro(uv, pt), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleBigcommaa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleCuta(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleDispa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleDispActa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleDispKa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleGrisha(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleKnowledgea(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleOpa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleOpActa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleOpKa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleStructa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleStructActa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleStructEAa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleStructKa(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleSwapina(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleSwapouta(v), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleZera(Atom()), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleZera(Id()), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleZera(Partial()), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, Fail(), list) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             list)).apply(Nil)
   case Prooftreea(uw, RuleZera(vb), v :: va) =>
     (foldr[Prooftree,
             List[Sequent]](comp[List[Sequent], (List[Sequent]) => List[Sequent],
-                                 Prooftree]((a: List[Sequent]) =>
-      (b: List[Sequent]) => a ++ b,
-     (a: Prooftree) => collectPremises(a)),
+                                 Prooftree](((a: List[Sequent]) =>
+      (b: List[Sequent]) => a ++ b),
+     ((a: Prooftree) => collectPremises(a))),
                             v :: va)).apply(Nil)
 }
 
 def collectPremisesToLocale(pt: Prooftree): List[Locale] =
-  map[Sequent, Locale]((a: Sequent) => Premise(a), collectPremises(pt))
+  map[Sequent, Locale](((a: Sequent) => Premise(a)), collectPremises(pt))
 
 def isProofTree(loc: List[Locale], x1: Prooftree): Boolean = (loc, x1) match {
   case (loc, Prooftreea(s, RuleMacro(n, pt), ptlist)) =>
@@ -6135,336 +6136,338 @@ def isProofTree(loc: List[Locale], x1: Prooftree): Boolean = (loc, x1) match {
       (isProofTree(loc ++ collectPremisesToLocale(pt), pt) &&
         (equal_set[Sequent](seta[Sequent](collectPremises(pt)),
                              seta[Sequent](map[Prooftree,
-        Sequent]((a: Prooftree) => concl(a), ptlist))) &&
+        Sequent](((a: Prooftree) => concl(a)), ptlist))) &&
           (foldr[Prooftree,
                   Boolean](comp[Boolean, Boolean => Boolean,
-                                 Prooftree]((a: Boolean) =>
-      (b: Boolean) => a && b,
-     (a: Prooftree) => isProofTree(loc, a)),
+                                 Prooftree](((a: Boolean) => (b: Boolean) =>
+      a && b),
+     ((a: Prooftree) => isProofTree(loc, a))),
                             ptlist)).apply(true)))
   case (loc, Prooftreea(s, RuleBigcommaa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleBigcommaa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleBigcommaa(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleBigcommaa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleCuta(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleCuta(v), s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleCuta(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleCuta(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleDispa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleDispa(v), s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleDispa(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleDispa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleDispActa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleDispActa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleDispActa(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleDispActa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleDispKa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleDispKa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleDispKa(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleDispKa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleGrisha(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleGrisha(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleGrisha(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleGrisha(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleKnowledgea(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleKnowledgea(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleKnowledgea(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleKnowledgea(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleOpa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleOpa(v), s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleOpa(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleOpa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleOpActa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleOpActa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleOpActa(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleOpActa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleOpKa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleOpKa(v), s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleOpKa(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleOpKa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleStructa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleStructa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleStructa(v), s))))),
+  ! (equal_Rule(Fail(),
+                 fsta[Rule, List[Sequent]](der(x, RuleStructa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleStructActa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleStructActa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleStructActa(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleStructActa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleStructEAa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleStructEAa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleStructEAa(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleStructEAa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleStructKa(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleStructKa(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleStructKa(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleStructKa(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleSwapina(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleSwapina(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleSwapina(v), s))))),
+  ! (equal_Rule(Fail(),
+                 fsta[Rule, List[Sequent]](der(x, RuleSwapina(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleSwapouta(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleSwapouta(v),
                    s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
   ! (equal_Rule(Fail(),
-                 fsta[Rule, List[Sequent]](der(x, RuleSwapouta(v), s))))),
+                 fsta[Rule, List[Sequent]](der(x, RuleSwapouta(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, RuleZera(v), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule,
                                        List[Sequent]](der(x, RuleZera(v), s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleZera(v), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, RuleZera(v), s)))))),
                         loc)).apply(false)
   case (loc, Prooftreea(s, Fail(), l)) =>
     (foldr[Prooftree,
             Boolean](comp[Boolean, Boolean => Boolean,
-                           Prooftree]((a: Boolean) => (b: Boolean) => a && b,
-                                       (a: Prooftree) => isProofTree(loc, a)),
+                           Prooftree](((a: Boolean) => (b: Boolean) => a && b),
+                                       ((a: Prooftree) => isProofTree(loc, a))),
                       l)).apply(true) &&
       (foldr[Locale,
               Boolean](comp[Boolean, Boolean => Boolean,
-                             Locale]((a: Boolean) => (b: Boolean) => a || b,
-                                      (x: Locale) =>
+                             Locale](((a: Boolean) => (b: Boolean) => a || b),
+                                      ((x: Locale) =>
 equal_set[Sequent](seta[Sequent](snda[Rule, List[Sequent]](der(x, Fail(), s))),
                     seta[Sequent](map[Prooftree,
-                                       Sequent]((a: Prooftree) => concl(a),
+                                       Sequent](((a: Prooftree) => concl(a)),
          l))) &&
-  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, Fail(), s))))),
+  ! (equal_Rule(Fail(), fsta[Rule, List[Sequent]](der(x, Fail(), s)))))),
                         loc)).apply(false)
 }
 
@@ -6477,7 +6480,7 @@ def ms_lesseq_impl[A : equal](x0: List[A], ys: List[A]): Option[Boolean] =
   (x0, ys) match {
   case (Nil, ys) => Some[Boolean](! (nulla[A](ys)))
   case (x :: xs, ys) =>
-    (extract[A]((a: A) => eq[A](x, a), ys) match {
+    (extract[A](((a: A) => eq[A](x, a)), ys) match {
        case None => None
        case Some((ys1, (_, ys2))) => ms_lesseq_impl[A](xs, ys1 ++ ys2)
      })
@@ -6485,7 +6488,7 @@ def ms_lesseq_impl[A : equal](x0: List[A], ys: List[A]): Option[Boolean] =
 
 def equal_multiset[A : equal](x0: multiset[A], x1: multiset[A]): Boolean =
   (x0, x1) match {
-  case (multiset_of(xs), multiset_of(ys)) =>
+  case (mset(xs), mset(ys)) =>
     equal_option[Boolean](ms_lesseq_impl[A](xs, ys), Some[Boolean](false))
 }
 
@@ -6506,9 +6509,9 @@ def collect_freevars_Structure(x0: Structure): List[Structure] = x0 match {
     (foldr[Structure,
             List[Structure]](comp[List[Structure],
                                    (List[Structure]) => List[Structure],
-                                   Structure]((a: List[Structure]) =>
-        (b: List[Structure]) => a ++ b,
-       (a: Structure) => collect_freevars_Structure(a)),
+                                   Structure](((a: List[Structure]) =>
+        (b: List[Structure]) => a ++ b),
+       ((a: Structure) => collect_freevars_Structure(a))),
                               list)).apply(Nil)
 }
 
@@ -6523,17 +6526,18 @@ def is_display_rule(r: Rule): List[Rule] =
           case None => false
           case Some(Nil) => false
           case Some(h :: _) =>
-            equal_multiset[Structure](multiset_of[Structure](collect_freevars_Sequent(fst(rule(Empty(),
-                r)))),
-                                       multiset_of[Structure](collect_freevars_Sequent(h)))
+            equal_multiset[Structure](mset[Structure](collect_freevars_Sequent(fst(rule(Empty(),
+         r)))),
+                                       mset[Structure](collect_freevars_Sequent(h)))
         }))
     List(r) else Nil)
 
 def displayRules: List[Rule] =
   (foldr[Rule,
           List[Rule]](comp[List[Rule], (List[Rule]) => List[Rule],
-                            Rule]((a: List[Rule]) => (b: List[Rule]) => a ++ b,
-                                   (a: Rule) => is_display_rule(a)),
+                            Rule](((a: List[Rule]) => (b: List[Rule]) =>
+                                    a ++ b),
+                                   ((a: Rule) => is_display_rule(a))),
                        ruleList)).apply(Nil)
 
 def structure_Op_polarity(x0: Structure_Bin_Op): (polarity, polarity) = x0 match
@@ -6744,7 +6748,7 @@ def rulifyStructure(x0: Structure): Structure = x0 match {
     Structure_Action_Structure(c, rulifyAction(a), rulifyStructure(x))
   case Structure_Bigcomma(list) =>
     Structure_Bigcomma(map[Structure,
-                            Structure]((a: Structure) => rulifyStructure(a),
+                            Structure](((a: Structure) => rulifyStructure(a)),
 list))
   case Structure_Phi(a) => Structure_Phi(rulifyAction(a))
   case Structure_Freevar(v) => Structure_Freevar(v)
@@ -6847,244 +6851,266 @@ def replaceIntoProoftree(list: List[Prooftree], x1: Prooftree): Prooftree =
   case (v :: va, Prooftreea(s, RuleBigcommaa(vb), vc :: vd)) =>
     Prooftreea(s, RuleBigcommaa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleCuta(vb), vc :: vd)) =>
     Prooftreea(s, RuleCuta(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleDispa(vb), vc :: vd)) =>
     Prooftreea(s, RuleDispa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleDispActa(vb), vc :: vd)) =>
     Prooftreea(s, RuleDispActa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleDispKa(vb), vc :: vd)) =>
     Prooftreea(s, RuleDispKa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleGrisha(vb), vc :: vd)) =>
     Prooftreea(s, RuleGrisha(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleKnowledgea(vb), vc :: vd)) =>
     Prooftreea(s, RuleKnowledgea(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleOpa(vb), vc :: vd)) =>
     Prooftreea(s, RuleOpa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleOpActa(vb), vc :: vd)) =>
     Prooftreea(s, RuleOpActa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleOpKa(vb), vc :: vd)) =>
     Prooftreea(s, RuleOpKa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleStructa(vb), vc :: vd)) =>
     Prooftreea(s, RuleStructa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleStructActa(vb), vc :: vd)) =>
     Prooftreea(s, RuleStructActa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleStructEAa(vb), vc :: vd)) =>
     Prooftreea(s, RuleStructEAa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleStructKa(vb), vc :: vd)) =>
     Prooftreea(s, RuleStructKa(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleSwapina(vb), vc :: vd)) =>
     Prooftreea(s, RuleSwapina(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleSwapouta(vb), vc :: vd)) =>
     Prooftreea(s, RuleSwapouta(vb),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vc :: vd))
   case (v :: va, Prooftreea(s, RuleZera(Atom()), vb :: vc)) =>
     Prooftreea(s, RuleZera(Atom()),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vb :: vc))
   case (v :: va, Prooftreea(s, RuleZera(Id()), vb :: vc)) =>
     Prooftreea(s, RuleZera(Id()),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vb :: vc))
   case (v :: va, Prooftreea(s, RuleZera(Partial()), vb :: vc)) =>
     Prooftreea(s, RuleZera(Partial()),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vb :: vc))
   case (v :: va, Prooftreea(s, RuleMacro(vb, vc), vd :: ve)) =>
     Prooftreea(s, RuleMacro(vb, vc),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vd :: ve))
   case (v :: va, Prooftreea(s, Fail(), vb :: vc)) =>
     Prooftreea(s, Fail(),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vb :: vc))
   case (v :: va, Prooftreea(s, r, vb :: vc)) =>
     Prooftreea(s, r,
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replaceIntoProoftree(v :: va, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(v :: va, a)),
                                  vb :: vc))
   case (list, Prooftreea(s, RuleBigcommaa(v), va :: vb)) =>
     Prooftreea(s, RuleBigcommaa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleCuta(v), va :: vb)) =>
     Prooftreea(s, RuleCuta(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleDispa(v), va :: vb)) =>
     Prooftreea(s, RuleDispa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleDispActa(v), va :: vb)) =>
     Prooftreea(s, RuleDispActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleDispKa(v), va :: vb)) =>
     Prooftreea(s, RuleDispKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleGrisha(v), va :: vb)) =>
     Prooftreea(s, RuleGrisha(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleKnowledgea(v), va :: vb)) =>
     Prooftreea(s, RuleKnowledgea(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleOpa(v), va :: vb)) =>
     Prooftreea(s, RuleOpa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleOpActa(v), va :: vb)) =>
     Prooftreea(s, RuleOpActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleOpKa(v), va :: vb)) =>
     Prooftreea(s, RuleOpKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleStructa(v), va :: vb)) =>
     Prooftreea(s, RuleStructa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleStructActa(v), va :: vb)) =>
     Prooftreea(s, RuleStructActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleStructEAa(v), va :: vb)) =>
     Prooftreea(s, RuleStructEAa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleStructKa(v), va :: vb)) =>
     Prooftreea(s, RuleStructKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleSwapina(v), va :: vb)) =>
     Prooftreea(s, RuleSwapina(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleSwapouta(v), va :: vb)) =>
     Prooftreea(s, RuleSwapouta(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  va :: vb))
   case (list, Prooftreea(s, RuleZera(Atom()), v :: va)) =>
     Prooftreea(s, RuleZera(Atom()),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  v :: va))
   case (list, Prooftreea(s, RuleZera(Id()), v :: va)) =>
     Prooftreea(s, RuleZera(Id()),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  v :: va))
   case (list, Prooftreea(s, RuleZera(Partial()), v :: va)) =>
     Prooftreea(s, RuleZera(Partial()),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  v :: va))
   case (list, Prooftreea(s, RuleMacro(v, va), vb :: vc)) =>
     Prooftreea(s, RuleMacro(v, va),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  vb :: vc))
   case (list, Prooftreea(s, Fail(), v :: va)) =>
     Prooftreea(s, Fail(),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  v :: va))
   case (list, Prooftreea(s, r, v :: va)) =>
     Prooftreea(s, r,
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => replaceIntoProoftree(list, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replaceIntoProoftree(list, a)),
                                  v :: va))
 }
 
@@ -7092,165 +7118,165 @@ def expandProoftree(x0: Prooftree): Prooftree = x0 match {
   case Prooftreea(uu, RuleMacro(n, Prooftreea(s, r, l)), list) =>
     Prooftreea(s, r,
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
+                     Prooftree](((a: Prooftree) =>
                                   replaceIntoProoftree(map[Prooftree,
-                    Prooftree]((aa: Prooftree) => expandProoftree(aa), list),
-                a),
+                    Prooftree](((aa: Prooftree) => expandProoftree(aa)), list),
+                a)),
                                  map[Prooftree,
-                                      Prooftree]((a: Prooftree) =>
-           expandProoftree(a),
+                                      Prooftree](((a: Prooftree) =>
+           expandProoftree(a)),
           l)))
   case Prooftreea(s, RuleBigcommaa(v), list) =>
     Prooftreea(s, RuleBigcommaa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleCuta(v), list) =>
     Prooftreea(s, RuleCuta(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleDispa(v), list) =>
     Prooftreea(s, RuleDispa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleDispActa(v), list) =>
     Prooftreea(s, RuleDispActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleDispKa(v), list) =>
     Prooftreea(s, RuleDispKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleGrisha(v), list) =>
     Prooftreea(s, RuleGrisha(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleKnowledgea(v), list) =>
     Prooftreea(s, RuleKnowledgea(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleOpa(v), list) =>
     Prooftreea(s, RuleOpa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleOpActa(v), list) =>
     Prooftreea(s, RuleOpActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleOpKa(v), list) =>
     Prooftreea(s, RuleOpKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleStructa(v), list) =>
     Prooftreea(s, RuleStructa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleStructActa(v), list) =>
     Prooftreea(s, RuleStructActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleStructEAa(v), list) =>
     Prooftreea(s, RuleStructEAa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleStructKa(v), list) =>
     Prooftreea(s, RuleStructKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleSwapina(v), list) =>
     Prooftreea(s, RuleSwapina(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleSwapouta(v), list) =>
     Prooftreea(s, RuleSwapouta(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, RuleZera(v), list) =>
     Prooftreea(s, RuleZera(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
   case Prooftreea(s, Fail(), list) =>
     Prooftreea(s, Fail(),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => expandProoftree(a), list))
+                     Prooftree](((a: Prooftree) => expandProoftree(a)), list))
 }
 
 def rulifyProoftree(x0: Prooftree): Prooftree = x0 match {
   case Prooftreea(s, RuleMacro(str, pt), list) =>
     Prooftreea(rulifySequent(s), RuleMacro(str, rulifyProoftree(pt)),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleBigcommaa(v), list) =>
     Prooftreea(rulifySequent(s), RuleBigcommaa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleCuta(v), list) =>
     Prooftreea(rulifySequent(s), RuleCuta(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleDispa(v), list) =>
     Prooftreea(rulifySequent(s), RuleDispa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleDispActa(v), list) =>
     Prooftreea(rulifySequent(s), RuleDispActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleDispKa(v), list) =>
     Prooftreea(rulifySequent(s), RuleDispKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleGrisha(v), list) =>
     Prooftreea(rulifySequent(s), RuleGrisha(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleKnowledgea(v), list) =>
     Prooftreea(rulifySequent(s), RuleKnowledgea(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleOpa(v), list) =>
     Prooftreea(rulifySequent(s), RuleOpa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleOpActa(v), list) =>
     Prooftreea(rulifySequent(s), RuleOpActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleOpKa(v), list) =>
     Prooftreea(rulifySequent(s), RuleOpKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleStructa(v), list) =>
     Prooftreea(rulifySequent(s), RuleStructa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleStructActa(v), list) =>
     Prooftreea(rulifySequent(s), RuleStructActa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleStructEAa(v), list) =>
     Prooftreea(rulifySequent(s), RuleStructEAa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleStructKa(v), list) =>
     Prooftreea(rulifySequent(s), RuleStructKa(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleSwapina(v), list) =>
     Prooftreea(rulifySequent(s), RuleSwapina(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleSwapouta(v), list) =>
     Prooftreea(rulifySequent(s), RuleSwapouta(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, RuleZera(v), list) =>
     Prooftreea(rulifySequent(s), RuleZera(v),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
   case Prooftreea(s, Fail(), list) =>
     Prooftreea(rulifySequent(s), Fail(),
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) => rulifyProoftree(a), list))
+                     Prooftree](((a: Prooftree) => rulifyProoftree(a)), list))
 }
 
 def polarity_Sequent(s: Structure, x1: Sequent): polarity = (s, x1) match {
@@ -7456,154 +7482,154 @@ def collectCutFormulas(x0: Prooftree): List[Formula] = x0 match {
   case Prooftreea(uw, RuleMacro(ux, pt), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(collectCutFormulas(pt))
   case Prooftreea(uy, RuleBigcommaa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleDispa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleDispActa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleDispKa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleGrisha(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleKnowledgea(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleOpa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleOpActa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleOpKa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleStructa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleStructActa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleStructEAa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleStructKa(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleSwapina(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleSwapouta(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleZera(v), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, Fail(), list) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             list)).apply(Nil)
   case Prooftreea(uy, RuleCuta(v), Nil) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             Nil)).apply(Nil)
   case Prooftreea(uy, RuleCuta(va), List(v)) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             List(v))).apply(Nil)
   case Prooftreea(uy, RuleCuta(va), v :: vb :: vd :: ve) =>
     (foldr[Prooftree,
             List[Formula]](comp[List[Formula], (List[Formula]) => List[Formula],
-                                 Prooftree]((a: List[Formula]) =>
-      (b: List[Formula]) => a ++ b,
-     (a: Prooftree) => collectCutFormulas(a)),
+                                 Prooftree](((a: List[Formula]) =>
+      (b: List[Formula]) => a ++ b),
+     ((a: Prooftree) => collectCutFormulas(a))),
                             v :: vb :: vd :: ve)).apply(Nil)
 }
 
 def collectCutFormulasToLocale(pt: Prooftree): List[Locale] =
-  map[Formula, Locale]((a: Formula) => CutFormula(a), collectCutFormulas(pt))
+  map[Formula, Locale](((a: Formula) => CutFormula(a)), collectCutFormulas(pt))
 
 def isProofTreeWithCut(loc: List[Locale], pt: Prooftree): Boolean =
   isProofTree(loc ++ collectCutFormulasToLocale(pt), pt)
@@ -7726,8 +7752,8 @@ def replace_SFAtprop_into_PT(sfa: Structure, repl: Structure, x2: Prooftree):
   case (sfa, repl, Prooftreea(s, r, list)) =>
     Prooftreea(replace_SFAtprop_into_Sequent(sfa, repl, s), r,
                 map[Prooftree,
-                     Prooftree]((a: Prooftree) =>
-                                  replace_SFAtprop_into_PT(sfa, repl, a),
+                     Prooftree](((a: Prooftree) =>
+                                  replace_SFAtprop_into_PT(sfa, repl, a)),
                                  list))
 }
 

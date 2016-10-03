@@ -797,8 +797,8 @@ fun is_display_rule :: "Rule \<Rightarrow> Rule list" where
 "is_display_rule r = 
 (if (case (snd (rule Empty r) (fst (rule Empty r)) ) of Some list \<Rightarrow>
   (case list of h#rest \<Rightarrow>
-  multiset_of (collect_freevars_Sequent (fst (rule Empty r))) = 
-  multiset_of (collect_freevars_Sequent h ) | _ \<Rightarrow> False ) | _ \<Rightarrow> False )
+  mset (collect_freevars_Sequent (fst (rule Empty r))) = 
+  mset (collect_freevars_Sequent h ) | _ \<Rightarrow> False ) | _ \<Rightarrow> False )
 then [r] 
 else [])"
 

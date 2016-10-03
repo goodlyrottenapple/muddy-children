@@ -698,7 +698,7 @@ proof (induct a)
 (*(*uncommentL?Formula_Atprop-BEGIN*)*)(*uncommentL?Formula_Atprop-END*)
   case (Formula_Atprop x)
     show ?case
-      by (metis (full_types) freevars_replace_Formula_simp freevars_replace_Formula_simp2 match_Formula_simp old.prod.exhaust splitD)
+      by (metis (full_types) freevars_replace_Formula_simp freevars_replace_Formula_simp2 match_Formula_simp old.prod.exhaust case_prodD)
 next
 (*uncommentR?Formula_Atprop-BEGIN*)(*(*uncommentR?Formula_Atprop-END*)*)
 (*(*uncommentL?Formula_Bin-BEGIN*)*)(*uncommentL?Formula_Bin-END*)
@@ -709,7 +709,7 @@ next
     proof auto
       fix a b
       assume "(a, b) \<in> set (match z z)"
-      then have eq: "a = b" using match_Formula_simp by (metis (full_types) splitD)
+      then have eq: "a = b" using match_Formula_simp by (metis (full_types) case_prodD)
       have x: "a \<notin> freevars x \<longrightarrow> replace (a,b) x = x" and "a \<in> freevars x \<longrightarrow> replace (a,b) x = x"
         by (metis eq freevars_replace_Formula_simp) (metis freevars_replace_Formula_simp2 eq)
       thus "replace_Formula_aux a b x = x" by auto
@@ -759,7 +759,7 @@ next
     proof auto
       fix a b
       assume "(a, b) \<in> set (match z z)"
-      then have eq: "a = b" using match_Formula_simp by (metis (full_types) splitD)
+      then have eq: "a = b" using match_Formula_simp by (metis (full_types) case_prodD)
       from eq have "a \<notin> freevars y \<longrightarrow> replace (a,b) y = y" "a \<in> freevars y \<longrightarrow> replace (a,b) y = y"
         by (metis eq freevars_replace_Formula_simp) (metis freevars_replace_Formula_simp2 eq)
       thus "replace_Formula_aux a b y = y" by auto
@@ -789,7 +789,7 @@ next
     proof auto
       fix a b
       assume "(a, b) \<in> set (match z z)"
-      then have eq: "a = b" using match_Formula_simp by (metis (full_types) splitD)
+      then have eq: "a = b" using match_Formula_simp by (metis (full_types) case_prodD)
       from eq have "a \<notin> freevars y \<longrightarrow> replace (a,b) y = y" "a \<in> freevars y \<longrightarrow> replace (a,b) y = y"
         by (metis eq freevars_replace_Formula_simp) (metis freevars_replace_Formula_simp2 eq)
       thus "replace_Formula_aux a b y = y" by auto
@@ -1082,7 +1082,7 @@ next
     proof auto
       fix a b
       assume "(a, b) \<in> set (match z z)"
-      then have eq: "a = b" using match_Structure_simp by (metis (full_types) splitD)
+      then have eq: "a = b" using match_Structure_simp by (metis (full_types) case_prodD)
       have x: "a \<notin> freevars x \<longrightarrow> replace (a,b) x = x" and "a \<in> freevars x \<longrightarrow> replace (a,b) x = x"
         by (metis eq freevars_replace_Structure_simp) (metis freevars_replace_Structure_simp2 eq)
       thus "replace_Structure_aux a b x = x" by auto
@@ -1118,7 +1118,7 @@ next
     proof auto
       fix a b
       assume "(a, b) \<in> set (match z z)"
-      then have eq: "a = b" using match_Structure_simp by (metis (full_types) splitD)
+      then have eq: "a = b" using match_Structure_simp by (metis (full_types) case_prodD)
       from eq have "a \<notin> freevars y \<longrightarrow> replace (a,b) y = y" "a \<in> freevars y \<longrightarrow> replace (a,b) y = y"
         by (metis eq freevars_replace_Structure_simp) (metis freevars_replace_Structure_simp2 eq)
       thus "replace_Structure_aux a b y = y" by auto
@@ -1158,7 +1158,7 @@ next
     proof auto
       fix a b
       assume "(a, b) \<in> set (match z z)"
-      then have eq: "a = b" using match_Structure_simp by (metis (full_types) splitD)
+      then have eq: "a = b" using match_Structure_simp by (metis (full_types) case_prodD)
       from eq have "a \<notin> freevars y \<longrightarrow> replace (a,b) y = y" "a \<in> freevars y \<longrightarrow> replace (a,b) y = y"
         by (metis eq freevars_replace_Structure_simp) (metis freevars_replace_Structure_simp2 eq)
       thus "replace_Structure_aux a b y = y" by auto
