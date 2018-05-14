@@ -31,14 +31,14 @@
 \AxiomC{$ \textsf{dirty}(n,J') \vdash \textsf{dirty}(n,J') $}\RightLabel{ $\rightarrow_L$ }
 \BinaryInfC{$ (D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J') \vdash D_j \rightarrow \bot >> \textsf{dirty}(n,J') $}\RightLabel{ $\rightarrow_R$ }
 \UnaryInfC{$ (D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J') \vdash (D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J') $}\RightLabel{ $FboxK_L$ }
-\UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \vdash \{ j \} (D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J') $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \vdash \{ j \} (D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J') $}\RightLabel{ $Back\_forw\_K$ }
 \UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \vdash (D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J') $}
 \RightLabel{ $Id$ }
 \AxiomC{$ \textsf{E}(n)^k \textsf{vision}(n) \vdash \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $FboxK_L$ }
-\UnaryInfC{$ \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash \{ j \} \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash \{ j \} \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $Back\_forw\_K$ }
 \UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $\wedge_R$ }
 \BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) ; \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $K_mon_L$ }
-\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) ; \Box_j \textsf{E}(n)^k \textsf{vision}(n)) \vdash ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $Back_forw_K2$ }
+\UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j $}\}$}\, (\Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) ; \Box_j \textsf{E}(n)^k \textsf{vision}(n)) \vdash ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $Back\_forw\_K2$ }
 \UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) ; \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash \{ j \} ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $\wedge_L$ }
 \UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash \{ j \} ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \textsf{E}(n)^k \textsf{vision}(n) $}\RightLabel{ $FboxK_R$ }
 \UnaryInfC{$ \Box_j ((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \Box_j \textsf{E}(n)^k \textsf{vision}(n) \vdash \Box_j (((D_j \rightarrow \bot) \rightarrow \textsf{dirty}(n,J')) \wedge \textsf{E}(n)^k \textsf{vision}(n)) $}

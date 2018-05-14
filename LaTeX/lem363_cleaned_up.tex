@@ -94,15 +94,15 @@
 \UnaryInfC{$ D_j \rightarrow \bot \vdash D_j \rightarrow \bot $}
 \RightLabel{ $Prem$ }
 \AxiomC{$ [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \vdash [ \textsf{no}_n ]^k \Box_{j'} D_{j'} $}\RightLabel{ $FboxA_L$ }
-\UnaryInfC{$ [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \vdash \{ \textsf{father}_n \} [ \textsf{no}_n ]^k \Box_{j'} D_{j'} $}\RightLabel{ $Back_forw_A$ }
+\UnaryInfC{$ [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \vdash \{ \textsf{father}_n \} [ \textsf{no}_n ]^k \Box_{j'} D_{j'} $}\RightLabel{ $Back\_forw\_A$ }
 \UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \vdash [ \textsf{no}_n ]^k \Box_{j'} D_{j'} $}
 \RightLabel{ $Prem$ }
 \AxiomC{$ \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) $}\RightLabel{ $\wedge_R$ }
 \BinaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} ; \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) $}\RightLabel{ $FdiamA_R$ }
-\UnaryInfC{$ \{ \textsf{father}_n \} (\,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} ; \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) \vdash \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $Forw_back_A$ }
+\UnaryInfC{$ \{ \textsf{father}_n \} (\,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} ; \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) \vdash \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $Forw\_back\_A$ }
 \UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} ; \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $(;, >)$ }
 \UnaryInfC{$ \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} >> \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $A_FS_R$ }
-\UnaryInfC{$ \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, ([ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} >> \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot))) $}\RightLabel{ $Forw_back_A2$ }
+\UnaryInfC{$ \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, ([ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} >> \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot))) $}\RightLabel{ $Forw\_back\_A2$ }
 \UnaryInfC{$ \{ \textsf{father}_n \} \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} >> \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $FdiamA_L$ }
 \UnaryInfC{$ \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} >> \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $(;, >)$ }
 \UnaryInfC{$ [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} ; \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}\RightLabel{ $\wedge_L$ }
@@ -111,29 +111,29 @@
 \AxiomC{$ [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \langle \textsf{no}_n \rangle^k (\Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot)) $}
 \RightLabel{ $Id$ }
 \AxiomC{$ D_{j'} \vdash D_{j'} $}\RightLabel{ $FboxK_L$ }
-\UnaryInfC{$ \Box_{j'} D_{j'} \vdash \{ j' \} D_{j'} $}\RightLabel{ $Back_forw_K$ }
+\UnaryInfC{$ \Box_{j'} D_{j'} \vdash \{ j' \} D_{j'} $}\RightLabel{ $Back\_forw\_K$ }
 \UnaryInfC{$ \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, \Box_{j'} D_{j'} \vdash D_{j'} $}
 \RightLabel{ $\bot_L$ }
 \AxiomC{$ \bot \vdash I $}\RightLabel{ $\textrm{I} W_{R}$ }
 \UnaryInfC{$ \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, \{ j' \} I $}\RightLabel{ $\rightarrow_L$ }
-\BinaryInfC{$ D_{j'} \rightarrow \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, \Box_{j'} D_{j'} >> \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, \{ j' \} I $}\RightLabel{ $K_FS_R$ }
-\UnaryInfC{$ D_{j'} \rightarrow \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, (\Box_{j'} D_{j'} >> \{ j' \} I) $}\RightLabel{ $Forw_back_K2$ }
+\BinaryInfC{$ D_{j'} \rightarrow \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, \Box_{j'} D_{j'} >> \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, \{ j' \} I $}\RightLabel{ $K\_FS_R$ }
+\UnaryInfC{$ D_{j'} \rightarrow \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ j' $}\}$}\, (\Box_{j'} D_{j'} >> \{ j' \} I) $}\RightLabel{ $Forw\_back\_K2$ }
 \UnaryInfC{$ \{ j' \} D_{j'} \rightarrow \bot \vdash \Box_{j'} D_{j'} >> \{ j' \} I $}\RightLabel{ $FdiamK_L$ }
 \UnaryInfC{$ \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \Box_{j'} D_{j'} >> \{ j' \} I $}\RightLabel{ $(;, >)$ }
 \UnaryInfC{$ \Box_{j'} D_{j'} ; \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \{ j' \} I $}\RightLabel{ $\wedge_L$ }
-\UnaryInfC{$ \Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \{ j' \} I $}\RightLabel{ $Refl_FboxK$ }
+\UnaryInfC{$ \Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \{ j' \} I $}\RightLabel{ $Refl\_FboxK$ }
 \UnaryInfC{$ \Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash I $}\RightLabel{ $\bot_R$ }
 \UnaryInfC{$ \Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \bot $}\RightLabel{ $FdiamA_R$ }
 \UnaryInfC{$ \{ \textsf{no}_n \}^k \Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \langle \textsf{no}_n \rangle^k \bot $}\RightLabel{ $FdiamA_L$ }
 \UnaryInfC{$ \langle \textsf{no}_n \rangle^k (\Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot)) \vdash \langle \textsf{no}_n \rangle^k \bot $}
 \RightLabel{ $Prem$ }
-\AxiomC{$ \langle \textsf{no}_n \rangle^k \bot \vdash I $}\RightLabel{ $A_nec_R$ }
-\UnaryInfC{$ \langle \textsf{no}_n \rangle^k \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, I $}\RightLabel{ $Forw_back_A2$ }
+\AxiomC{$ \langle \textsf{no}_n \rangle^k \bot \vdash I $}\RightLabel{ $A\_nec_R$ }
+\UnaryInfC{$ \langle \textsf{no}_n \rangle^k \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, I $}\RightLabel{ $Forw\_back\_A2$ }
 \UnaryInfC{$ \{ \textsf{father}_n \} \langle \textsf{no}_n \rangle^k \bot \vdash I $}\RightLabel{ $\bot_R$ }
-\UnaryInfC{$ \{ \textsf{father}_n \} \langle \textsf{no}_n \rangle^k \bot \vdash \bot $}\RightLabel{ $Forw_back_A$ }
+\UnaryInfC{$ \{ \textsf{father}_n \} \langle \textsf{no}_n \rangle^k \bot \vdash \bot $}\RightLabel{ $Forw\_back\_A$ }
 \UnaryInfC{$ \langle \textsf{no}_n \rangle^k \bot \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \bot $}\RightLabel{ $Cut$ }
 \BinaryInfC{$ \langle \textsf{no}_n \rangle^k (\Box_{j'} D_{j'} \wedge \Diamond_{j'} (D_{j'} \rightarrow \bot)) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \bot $}\RightLabel{ $Cut$ }
-\BinaryInfC{$ [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \bot $}\RightLabel{ $Forw_back_A2$ }
+\BinaryInfC{$ [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \,\rotatebox[origin=c]{90}{$\{\rotatebox[origin=c]{-90}{$ \textsf{father}_n $}\}$}\, \bot $}\RightLabel{ $Forw\_back\_A2$ }
 \UnaryInfC{$ \{ \textsf{father}_n \} [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \bot $}\RightLabel{ $FdiamA_L$ }
 \UnaryInfC{$ \langle \textsf{father}_n \rangle ([ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot)) \vdash \bot $}\RightLabel{ $Cut$ }
 \BinaryInfC{$ [ \textsf{father}_n ] [ \textsf{no}_n ]^k \Box_{j'} D_{j'} \wedge \langle \textsf{father}_n \rangle \langle \textsf{no}_n \rangle^k \Diamond_{j'} (D_{j'} \rightarrow \bot) \vdash \bot $}\RightLabel{ $\rightarrow_L$ }
