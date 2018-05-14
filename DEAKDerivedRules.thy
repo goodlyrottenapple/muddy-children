@@ -1,5 +1,5 @@
 theory DEAKDerivedRules
-imports Main "calculus/src/isabelle/DEAK_SE"
+imports Main "calculus/src/isabelle/DEAK_SE" NatToString
 begin
 
 (* The Id rule where for every formula f, f \<^sub>S \<turnstile>\<^sub>S f \<^sub>S is derivable *)
@@ -67,18 +67,18 @@ done
 definition disj :: "Formula list \<Rightarrow> Formula" ("\<Or>\<^sub>F _" 300) where
 "disj list = foldr (Formula_Or) list \<bottom>\<^sub>F"
 
-lemma disj_unfold_1: "\<Or>\<^sub>F x#list = x \<or>\<^sub>F (\<Or>\<^sub>F list)" unfolding disj_def by simp
+lemma disj_unfold_1: "(\<Or>\<^sub>F (x#list)) = x \<or>\<^sub>F (\<Or>\<^sub>F list)" unfolding disj_def by simp
 
 definition conj :: "Formula list \<Rightarrow> Formula" ("\<And>\<^sub>F _" 300) where
 "conj list = foldr (Formula_And) list \<top>\<^sub>F"
 
-lemma conj_unfold_1: "\<And>\<^sub>F x#list = x \<and>\<^sub>F (\<And>\<^sub>F list)" unfolding conj_def by simp
+lemma conj_unfold_1: "(\<And>\<^sub>F (x#list)) = x \<and>\<^sub>F (\<And>\<^sub>F list)" unfolding conj_def by simp
 
-lemma conj_unfold_1a: "\<And>\<^sub>F (map f (x#list)) = (f x) \<and>\<^sub>F (\<And>\<^sub>F map f list)" unfolding conj_def by simp
+lemma conj_unfold_1a: "(\<And>\<^sub>F (map f (x#list))) = (f x) \<and>\<^sub>F (\<And>\<^sub>F map f list)" unfolding conj_def by simp
 
 lemma conj_unfold_2:
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
-  shows "loc \<turnstile>d (\<And>\<^sub>F list1@list2) \<^sub>S \<turnstile>\<^sub>S ((\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)) \<^sub>S"
+  shows "loc \<turnstile>d (\<And>\<^sub>F (list1@list2)) \<^sub>S \<turnstile>\<^sub>S ((\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)) \<^sub>S"
 apply (induct list1)
 apply(subst conj_def)+
 apply simp
@@ -87,10 +87,10 @@ apply (rule_tac derivable.And_R)
 apply (rule Id)
 apply (rule_tac derivable.IW_L)
 apply (rule_tac derivable.Top_R)
-proof -
-case goal1 
-  have 1: "(a # list1) @ list2 = a # (list1 @ list2)" by simp
-  show ?case unfolding 1
+proof goal_cases
+  case (1 a list1)
+  have 2: "(a # list1) @ list2 = a # (list1 @ list2)" by simp
+  show ?case unfolding 2
   apply(subst conj_unfold_1)
   apply(subst conj_unfold_1)
   apply (rule_tac derivable.C_L)
@@ -101,7 +101,7 @@ case goal1
   apply (rule_tac derivable.W_impL_L)
   apply (rule_tac f="(\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)" in derivable.SingleCut)
   using cut apply simp
-  using goal1 apply simp
+  using 1 apply simp
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impL_disp2)
   apply (rule_tac derivable.W_impL_L)
@@ -112,7 +112,7 @@ case goal1
 
   apply (rule_tac f="(\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)" in derivable.SingleCut)
   using cut apply simp
-  using goal1 apply simp
+  using 1 apply simp
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impR_disp2)
   apply (rule_tac derivable.W_impR_R)
@@ -123,7 +123,7 @@ qed
 
 lemma conj_unfold_2b:
   assumes cut: "\<And>f. CutFormula f \<in> set loc"
-  shows "loc \<turnstile>d ((\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)) \<^sub>S \<turnstile>\<^sub>S (\<And>\<^sub>F list1@list2) \<^sub>S"
+  shows "loc \<turnstile>d ((\<And>\<^sub>F list1) \<and>\<^sub>F (\<And>\<^sub>F list2)) \<^sub>S \<turnstile>\<^sub>S (\<And>\<^sub>F (list1@list2)) \<^sub>S"
 apply(induct list1)
 apply(subst conj_def)+
 apply simp
@@ -131,10 +131,10 @@ apply (rule_tac derivable.And_L)
 apply (rule_tac derivable.Comma_impL_disp2)
 apply (rule_tac derivable.W_impL_L)
 apply (rule_tac Id)
-proof -
-case goal1 
-  have 1: "(a # list1) @ list2 = a # (list1 @ list2)" by simp
-  show ?case unfolding 1
+proof goal_cases
+  case (1 a list1)
+  have 2: "(a # list1) @ list2 = a # (list1 @ list2)" by simp
+  show ?case unfolding 2
   apply(subst conj_unfold_1)
   apply(subst conj_unfold_1)
 
@@ -155,7 +155,7 @@ case goal1
   apply (rule_tac Id)
   apply (rule_tac Id)
 
-  using goal1 apply simp
+  using 1 apply simp
 
   apply (rule_tac derivable.And_L)
   apply (rule_tac derivable.Comma_impR_disp2)
@@ -261,8 +261,8 @@ by simp
 
 lemma conj_der1: "loc \<turnstile>d ( f )\<^sub>S \<turnstile>\<^sub>S X \<Longrightarrow> f \<in> set list \<Longrightarrow> loc \<turnstile>d ( \<And>\<^sub>F list )\<^sub>S \<turnstile>\<^sub>S X"
 apply(induct list)
-proof simp
-case goal1 
+proof (simp, goal_cases)
+  case (1 a list)
   thus ?case
   apply(cases "f \<in> set list")
   apply simp
@@ -271,14 +271,15 @@ case goal1
   apply (rule_tac derivable.Comma_impL_disp2)
   apply (rule_tac derivable.W_impL_L)
   apply simp
-  proof -
-  case goal1 then have "f = a" by simp
+  proof goal_cases
+    case 1 
+    then have "f = a" by simp
     thus ?case
     apply (subst conj_unfold_1)
     apply (rule_tac derivable.And_L)
     apply (rule_tac derivable.Comma_impR_disp2)
     apply (rule_tac derivable.W_impR_R)
-    using goal1 Id by simp
+    using 1 Id by simp
   qed
 qed
 
@@ -286,15 +287,15 @@ lemma conj_der1b: " \<forall>f \<in> set list. loc \<turnstile>d X  \<turnstile>
 apply(induct list)
 apply simp 
 using IW_L Top_R conj_def apply simp
-proof simp
-case goal1
+proof (simp, goal_cases)
+  case (1 a list)
   show ?case
   apply(subst conj_unfold_1)
   apply (rule_tac derivable.C_L)
   apply (rule_tac derivable.And_R)
   defer
-  using goal1 apply simp
-  using goal1 using IW_L Top_R conj_def by fastforce
+  using 1 apply simp
+  using 1 using IW_L Top_R conj_def by fastforce
 qed
 
 lemma conj_der2_aux: 
@@ -305,8 +306,8 @@ apply(subst (2) conj_def)
 apply simp
 apply (rule_tac derivable.IW_L)
 apply (rule_tac derivable.Top_R)
-proof -
-case goal1
+proof (simp, goal_cases)
+  case (1 a l' l)
   then have "loc \<turnstile>d (\<And>\<^sub>F l) \<^sub>S \<turnstile>\<^sub>S (\<And>\<^sub>F l') \<^sub>S" by simp
   thus ?case
   apply (rule_tac derivable.C_L)
@@ -315,7 +316,7 @@ case goal1
   apply simp
   apply(rule_tac f=a in conj_der1)
   apply (rule Id)
-  using goal1 by simp
+  using 1 by simp
 qed
 
 lemma conj_der2: 
@@ -338,7 +339,7 @@ case Nil
 next
 case (Cons x xs)
   show ?case
-  apply (rule_tac f="(\<And>\<^sub>F x # xs)" in derivable.SingleCut)
+  apply (rule_tac f="(\<And>\<^sub>F (x#xs))" in derivable.SingleCut)
   using cut apply simp
   using conj_der2_aux cut Cons.prems(1) apply blast
   using Cons by simp
